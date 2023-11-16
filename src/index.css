@@ -1,0 +1,69 @@
+body {
+    background-size: cover ;
+    /*background-image: url('https://wallpaperaccess.com/full/1302782.jpg');*/
+    background-image: url('assets/img/bg.png');
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.hero-container{
+
+    background-image: url('assets/img/herobg.png');
+    background-position:top;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    min-width: 500px;
+    min-height: 480px;
+}
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    align-items: stretch;
+
+    height: 440px;
+
+    padding: 20px;
+}
+
+
+.grid-item {
+    height: fit-content;
+    text-align: center;
+}
+
+.sub-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+
+    height: fit-content;
+    text-align: center;
+}
+
+.list {
+    display: flex;
+    max-height: fit-content;
+    max-width: fit-content;
+
+    text-align: left;
+}
+
+.br {
+    width: 20px;
+    text-align: center;
+}
+
+fieldset input {
+    text-align: center;
+}
+
+
+
+
