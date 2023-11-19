@@ -1,19 +1,14 @@
 import React, {createContext, Dispatch, ReactNode, useReducer} from "react";
-import {HeroClassesDataAdapted, Heroes_Data_Initial_State, HeroesDataAdapted} from "../types";
-import {HeroesDataContextReducer, HeroesDataReducerActions, reducerActions} from "./context-reducer";
+import {HeroesData} from "../types";
+import {HeroesDataContextReducer, HeroesDataReducerActions} from "./heroes-data-context-reducer";
 
+export const Heroes_Data_Initial_State: HeroesData = {heroClasses: {}, heroes: {}, items: {}}
 
-export const HeroesDataContext = createContext<HeroesDataAdapted | null>(null)
+export const HeroesDataContext = createContext<HeroesData>(Heroes_Data_Initial_State)
 export const HeroesDataDispatchContext = createContext<Dispatch<HeroesDataReducerActions>>(() => {
 })
 
-export const HeroClassesDataContext = createContext<HeroClassesDataAdapted | null>(null)
-export const HeroClassesDispatchContext = createContext<Dispatch<HeroesDataReducerActions>>(() => {
-})
-
-export const CurrentPicksDispatchContext = createContext<Dispatch<reducerActions>>(() => {});
-
-export const useHeroesDaraContext = () => {
+export const useHeroesDataContext = () => {
     const context = React.useContext(HeroesDataContext);
     if (context === undefined) {
         throw new Error('not inside context provider')
@@ -21,7 +16,15 @@ export const useHeroesDaraContext = () => {
     return context;
 }
 
-export const GlobalContextProvider = ({children}: { children: ReactNode }) => {
+export const useHeroesDataDispatchContext = () => {
+    const context = React.useContext(HeroesDataDispatchContext);
+    if (context === undefined) {
+        throw new Error('not inside context provider')
+    }
+    return context;
+}
+
+export const HeroesDataContextProvider = ({children}: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(HeroesDataContextReducer, Heroes_Data_Initial_State);
 
     return (

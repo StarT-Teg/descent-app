@@ -95,9 +95,11 @@ export interface HeroClassesDataAdapted {
 export interface HeroClass {
     [HeroClassParametersEnum.archetype]: string,
     [HeroClassParametersEnum.className]: string,
-    skills: {
-        [key: string]: SkillClassDataAdapted
-    };
+    skills: ClassSkill;
+}
+
+export interface ClassSkill {
+    [key: string]: SkillClassDataAdapted,
 }
 
 export interface SkillClassDataAdapted {

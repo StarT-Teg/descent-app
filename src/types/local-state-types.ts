@@ -1,6 +1,11 @@
-import {HeroesDataAdapted} from "./google-sheet-data-adapted";
+import {HeroClassesDataAdapted, HeroesDataAdapted, ItemsDataAdapted} from "./google-sheet-data-adapted";
 
-export const Heroes_Data_Initial_State: HeroesDataAdapted = {}
+export interface HeroesData {
+    heroes: HeroesDataAdapted;
+    heroClasses: HeroClassesDataAdapted;
+    items: ItemsDataAdapted;
+}
+
 
 export enum HeroPlayersEnum {
     hero1 = 'hero1',
@@ -14,9 +19,24 @@ export enum OverlordPlayerEnum {
 }
 
 export type CurrentPlayersPicks = {
-    [key in HeroPlayersEnum]: HeroesDataAdapted;
+    [key in HeroPlayersEnum]?: HeroPlayerPicks;
 }
 
 export type CurrentOverlordPicks = {
     [OverlordPlayerEnum.overlord]: {};
+}
+
+export interface HeroPlayerPicks {
+    currentBR: number;
+
+    heroName?: string;
+    heroClassName?: string;
+    heroSubclassName?: string;
+    heroItems?: string[];
+    heroSkills?: string[];
+
+    heroAvailableClasses?: string[];
+    heroAvailableSubclasses?: string[];
+    heroAvailableSubclassSkills?: string[];
+    heroAvailableSkills?: string[];
 }

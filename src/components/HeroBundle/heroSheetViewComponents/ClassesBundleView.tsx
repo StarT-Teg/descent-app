@@ -1,18 +1,33 @@
 import React from "react";
 
-export const ClassesBundleView = (props) => {
+export interface ClassesBundleViewProps {
+    classList?: string[],
+    subclassList?: string[],
+    handleChangeClassName(className: string): void,
+    handleChangeSubclassName(subClassName: string): void,
+    className: string,
+    subclassName: string,
+    heroPosition: string,
+}
+
+export const ClassesBundleView = (props: ClassesBundleViewProps) => {
 
     const {
-        classList,
-        subclassList,
+        classList = [],
+        subclassList = [],
         handleChangeClassName,
         handleChangeSubclassName,
         className,
         subclassName,
-        classVisibility,
-        subclassVisibility,
         heroPosition,
     } = props;
+
+    console.log('classList: ',     classList
+    )
+
+
+    const isClassPickAvailable = !!classList.length;
+    const isSubClassPickAvailable = !!subclassList.length;
 
     return (
         <div className="sub-grid">
@@ -22,14 +37,14 @@ export const ClassesBundleView = (props) => {
                 <input
                     type="text"
                     list={`${heroPosition}-class-list`}
-                    disabled={classVisibility}
-                    placeholder={!classVisibility ? "" : "Choose hero"}
+                    disabled={!isClassPickAvailable}
+                    placeholder={isClassPickAvailable ? "" : "Choose hero"}
                     value={className}
                     onChange={(event) => handleChangeClassName(event.target.value)}
                 />
             </fieldset>
 
-            {subclassVisibility && (
+            {isSubClassPickAvailable && (
                 <fieldset>
                     <legend>Hero subclass</legend>
                     <input

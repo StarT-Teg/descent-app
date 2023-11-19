@@ -1,10 +1,17 @@
 import React from "react";
 
-export const HeroBundleView = (props) => {
+export interface HeroBundleViewProps {
+    handleChangeHeroName(newHeroName: string): void,
+    heroNames: string[],
+    heroPosition: string,
+    type?: string,
+}
+
+export const HeroBundleView = (props: HeroBundleViewProps) => {
 
     const {
         handleChangeHeroName,
-        heroNames,
+        heroNames = [],
         type = '',
         heroPosition
     } = props;

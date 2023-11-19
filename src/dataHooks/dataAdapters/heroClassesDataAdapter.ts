@@ -26,7 +26,7 @@ export const heroClassesDataAdapter = (data: ExcelDataRaw) => {
                             xpCost,
                             fatigueCost,
                             skillDescription,
-                            br
+                            br,
                         }
                     },
                 }

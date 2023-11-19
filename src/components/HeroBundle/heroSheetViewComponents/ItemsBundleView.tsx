@@ -2,12 +2,21 @@ import React from "react";
 import plusImage from "../../../assets/img/plus.png";
 import minusImage from "../../../assets/img/minus.png";
 
-export const ItemsBundleView = (props) => {
+export interface ItemsBundleViewProps {
+    itemList: string[],
+    heroItems?: string[],
+    handleAddItem(itemName: string, itemIndex?: number): void,
+    handleRemoveItem(itemIndex?: number): void,
+    heroPosition: string,
+}
+
+export const ItemsBundleView = (props: ItemsBundleViewProps) => {
 
     const {
+        itemList,
         heroItems,
-        handlerAddItem,
-        handlerRemoveItem,
+        handleAddItem,
+        handleRemoveItem,
         heroPosition
     } = props;
 
@@ -15,16 +24,18 @@ export const ItemsBundleView = (props) => {
         <div className="sub-grid">
             <fieldset>
                 <legend>Items</legend>
-                {heroItems.map((item, index) => {
+                {!!heroItems?.length && heroItems.map((item, index) => {
                     return (
-                        <div className="list" key={`${heroPosition}-item-${index}`}>
+                        <div className="list" key={`${heroPosition}-item-view-${index}`}>
                             <input type="image" src={minusImage} alt='remove' name="removeItem"
-                                   onClick={() => handlerRemoveItem(item)}
+                                   onClick={() => handleRemoveItem(index)}
                                    style={{width: "15px", height: "15px", alignSelf: "center", paddingRight: "5px"}}/>
                             {/*{brBeautifier(props.allItems[item]?.br, "br" + index)}*/}
                             <input type="text" value={item} list={`${heroPosition}-item-list`}
-                                   onChange={(event) => handlerAddItem(event.target.value, index)}
-                                   key={`${heroPosition}-item-list`}
+                                   onChange={(event) => {
+                                       console.log('event.target.value: ', event.target.value)
+                                       handleAddItem(event.target.value, index)
+                                   }}
                                    style={{flexShrink: 2}}
                             />
                         </div>
@@ -32,13 +43,13 @@ export const ItemsBundleView = (props) => {
                 })}
 
                 <input type="image" src={plusImage} alt='add' name={`${heroPosition}-addItem-button`}
-                       onClick={() => handlerAddItem()}
+                       onClick={() => handleAddItem('')}
                        style={{margin: "5px", width: "50px", height: "50px", alignSelf: "center"}}/>
             </fieldset>
 
             <datalist id={`${heroPosition}-item-list`}>
-                {Object.keys(props.allItems).sort().map((item, index) => {
-                    return <option key={`${heroPosition}-item-${index}`} value={item}/>
+                {itemList.sort().map((item, index) => {
+                    return <option key={`${heroPosition}-option-item-${index}`} value={item}/>
                 })}
             </datalist>
         </div>

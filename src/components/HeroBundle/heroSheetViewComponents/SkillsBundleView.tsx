@@ -1,9 +1,18 @@
 import React from "react";
+import {HeroPlayersEnum} from "../../../types";
 
-export const SkillsBundleView = (props) => {
+export interface SkillsBundleViewProps {
+    pickedSkills?: string[]
+    availableSkillsList?: string[],
+    heroPosition: HeroPlayersEnum,
+    onCheckboxChange(skillName: string): void,
+}
+
+export const SkillsBundleView = (props: SkillsBundleViewProps) => {
 
     const {
-        skills,
+        pickedSkills = [],
+        availableSkillsList = [],
         heroPosition,
         onCheckboxChange
     } = props;
@@ -14,8 +23,7 @@ export const SkillsBundleView = (props) => {
             <fieldset>
                 <legend>Skills</legend>
 
-                {Object.keys(skills).map((skill, index) => {
-                        // console.log(props.skills[skill]?.br);
+                {availableSkillsList.map((skill: string, index) => {
                         return (
                             <div className="list" key={`${heroPosition}-skillBlock-${index}`}>
                                 {/*{brBeautifier(props.skills[skill]?.br, "br" + index)}*/}
@@ -23,7 +31,7 @@ export const SkillsBundleView = (props) => {
                                        // defaultChecked={skills[skill]?.['xp cost'] === 0}
                                        key={`${heroPosition}-skill-${skill}-${index}`}
                                        onChange={() => onCheckboxChange(skill)}
-                                       checked={skills[skill].checked}
+                                       checked={pickedSkills.includes(skill)}
                                 />
                                 {/*<label htmlFor={skill} key={"label" + index}> {skill} </label>*/}
                                 <input type="text" readOnly value={skill}
