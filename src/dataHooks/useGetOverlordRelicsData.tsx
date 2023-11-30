@@ -11,5 +11,6 @@ export const useGetOverlordRelicsData = () => {
     return useQuery('overlordRelicsData', query, {
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
     })
 }

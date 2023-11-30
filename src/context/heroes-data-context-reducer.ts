@@ -1,4 +1,4 @@
-import {HeroesData} from "../types";
+import {HeroesData} from "../types/shared";
 
 export interface HeroesDataReducerActions {
     payload: HeroesData,

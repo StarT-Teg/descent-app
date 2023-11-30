@@ -1,4 +1,4 @@
-import {CurrentPlayersPicks} from "../types";
+import {CurrentPlayersPicks} from "../types/shared";
 
 export interface CurrentHeroesPicksReducerActions {
     actionType: CurrentHeroesPicksReducerActionsEnum

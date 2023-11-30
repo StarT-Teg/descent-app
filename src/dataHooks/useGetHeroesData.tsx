@@ -11,5 +11,6 @@ export const useGetHeroesData = () => {
     return useQuery('heroesData', query, {
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
     })
 }

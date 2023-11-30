@@ -1,9 +1,50 @@
 import {
+    CampaignsDataParametersEnum,
     HeroClassParametersEnum,
     HeroParametersEnum,
-    ItemDataParametersEnum, MonstersDataParametersEnum,
+    ItemDataParametersEnum, MonstersDataParametersEnum, OverlordDeckDataParametersEnum,
     OverlordRelicDataParametersEnum
 } from "./google-sheet-data-raw";
+
+export interface CampaignsDataAdapted {
+    [key: string]: {
+        [key: string]: MissionDataAdapted,
+    };
+}
+
+export interface MissionDataAdapted {
+    [CampaignsDataParametersEnum.campaignName]: string,
+    [CampaignsDataParametersEnum.act]: number,
+    [CampaignsDataParametersEnum.missionName]: string,
+    'encounters'?: {
+        [key in number]: EncounterData;
+    }
+}
+
+export interface EncounterData {
+    [CampaignsDataParametersEnum.encounterNumber]: number,
+    [CampaignsDataParametersEnum.lieutenants]: string[],
+    [CampaignsDataParametersEnum.monsters]: string[],
+    [CampaignsDataParametersEnum.openGroups]: MonsterTraitNamesEnum[],
+}
+
+export interface OverlordDecksDataAdapted {
+    [key: string]: OverlordDeck;
+}
+
+export interface OverlordDeck {
+    [key: string]: OverlordDeckSkill;
+}
+
+export interface OverlordDeckSkill {
+    [OverlordDeckDataParametersEnum.skillName]: string;
+    [OverlordDeckDataParametersEnum.type]: string;
+    [OverlordDeckDataParametersEnum.br]: number;
+    [OverlordDeckDataParametersEnum.xpCost]: number;
+    [OverlordDeckDataParametersEnum.text]: string;
+    [OverlordDeckDataParametersEnum.className]: string;
+    [OverlordDeckDataParametersEnum.quantity]: number;
+}
 
 export enum MonsterTypesEnum {
     master = 'master',
@@ -24,7 +65,7 @@ export enum MonsterTraitNamesEnum {
 }
 
 export interface MonstersDataAdapted {
-    [key: string] : {
+    [key: string]: {
         'act1'?: {
             [key in MonsterTypesEnum]: MonsterData;
         }
@@ -55,18 +96,18 @@ export interface MonsterData {
 
 
 export interface OverlordRelicsDataAdapted {
-    [key: string] : {
+    [key: string]: {
         [OverlordRelicDataParametersEnum.name]: string;
         [OverlordRelicDataParametersEnum.dice]?: string;
         [OverlordRelicDataParametersEnum.properties]?: string;
         [OverlordRelicDataParametersEnum.traits]?: string;
         [OverlordRelicDataParametersEnum.surgeAbilities]?: string;
-        [ItemDataParametersEnum.br]: string;
+        [OverlordRelicDataParametersEnum.br]: string;
     }
 }
 
 export interface ItemsDataAdapted {
-    [key: string] : {
+    [key: string]: {
         [ItemDataParametersEnum.act]: string;
         [ItemDataParametersEnum.shoppingAct]?: string;
         [ItemDataParametersEnum.name]: string;
@@ -83,13 +124,13 @@ export interface ItemsDataAdapted {
 }
 
 export interface HeroesDataAdapted {
-    [key: string] : {
+    [key: string]: {
         [key in HeroParametersEnum]: string;
     }
 }
 
 export interface HeroClassesDataAdapted {
-    [index: string] : HeroClass
+    [index: string]: HeroClass
 }
 
 export interface HeroClass {

@@ -10,7 +10,7 @@ export interface ClassesBundleViewProps {
     heroPosition: string,
 }
 
-export const ClassesBundleView = (props: ClassesBundleViewProps) => {
+export const HeroSheetClasses = (props: ClassesBundleViewProps) => {
 
     const {
         classList = [],
@@ -22,16 +22,11 @@ export const ClassesBundleView = (props: ClassesBundleViewProps) => {
         heroPosition,
     } = props;
 
-    console.log('classList: ',     classList
-    )
-
-
     const isClassPickAvailable = !!classList.length;
     const isSubClassPickAvailable = !!subclassList.length;
 
     return (
         <div className="sub-grid">
-
             <fieldset>
                 <legend>Hero class</legend>
                 <input
@@ -56,27 +51,6 @@ export const ClassesBundleView = (props: ClassesBundleViewProps) => {
                     />
                 </fieldset>
             )}
-
-
-            {/*<p>Hero class:</p>*/}
-            {/*<input*/}
-            {/*    type="text"*/}
-            {/*    list="class-list"*/}
-            {/*    disabled={!props.visibilityClass}*/}
-            {/*    placeholder={props.visibilityClass ? "" : "Choose hero"}*/}
-            {/*    value={props.className}*/}
-            {/*    onChange={(event) => props.handleChangeClassName(event.target.value)}*/}
-            {/*/>*/}
-
-            {/*{props.visibilitySubclass ? (<input*/}
-            {/*    type="text"*/}
-            {/*    list="subclass-list"*/}
-            {/*    visibility={props.visibilitySubclass ? "" : "hidden"}*/}
-            {/*    placeholder="Choose subclass"*/}
-            {/*    value={props.subclassName}*/}
-            {/*    onChange={(event) => props.handleChangeSubclassName(event.target.value)}*/}
-            {/*/>) : ''}*/}
-
 
             <datalist id={`${heroPosition}-class-list`}>
                 {classList.map((name, index) => {

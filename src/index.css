@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'DescentFont';
+    src: local('DescentFont'), url(/src/assets/fonts/windlass.ttf) format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' */
+}
+
 body {
-    background-size: auto ;
+    background-size: cover ;
     /*background-image: url('https://wallpaperaccess.com/full/1302782.jpg');*/
     background-image: url('assets/img/bg.png');
 
@@ -9,16 +16,12 @@ body {
     align-items: flex-start;
 }
 
-.hero-container{
-
-    background-image: url('assets/img/herobg.png');
-    background-position:top;
-    background-size: contain;
-    background-repeat: no-repeat;
-
-    min-width: 500px;
-    min-height: 480px;
+#root {
+    width: 100%;
+    height: 100%;
 }
+
+
 .grid-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -30,20 +33,27 @@ body {
     padding: 20px;
 }
 
+.grid-container-mobile {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 15px;
+    padding: 20px;
+}
+
 
 .grid-item {
     height: fit-content;
     text-align: center;
 }
 
-.sub-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+/*.sub-grid {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1fr;*/
+/*    grid-template-rows: 1fr;*/
 
-    height: fit-content;
-    text-align: center;
-}
+/*    height: fit-content;*/
+/*    text-align: center;*/
+/*}*/
 
 .list {
     display: flex;
@@ -58,10 +68,22 @@ body {
     text-align: center;
 }
 
+fieldset {
+    display: grid;
+    justify-items: center;
+    grid-auto-flow: row;
+    grid-row-gap: 10px;
+}
+
 fieldset input {
+    width: 100%;
+    height: 40px;
+
+    font-size: 21px;
     text-align: center;
 }
 
-
-
+input {
+    font-family: DescentFont, sans-serif !important;
+}
 

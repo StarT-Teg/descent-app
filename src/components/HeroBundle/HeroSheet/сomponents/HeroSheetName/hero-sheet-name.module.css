@@ -1,0 +1,22 @@
+
+
+.sub-grid {
+
+}
+
+.legend {
+    font-family: DescentFont, sans-serif !important;
+}
+
+.singleSelect {
+    font-family: DescentFont, sans-serif !important;
+    width: 100%;
+}
+
+.heroType {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    grid-column-gap: 12px;
+
+    width: 100%;
+}

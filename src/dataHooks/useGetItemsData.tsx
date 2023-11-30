@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import {useQuery} from "react-query";
 import {itemsDataAdapter} from "./dataAdapters/itemsDataAdapter";
 
@@ -11,5 +11,6 @@ export const useGetItemsData = () => {
     return useQuery('itemsData', query, {
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
     })
 }

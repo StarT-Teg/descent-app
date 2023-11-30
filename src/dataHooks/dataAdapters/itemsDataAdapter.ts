@@ -1,4 +1,4 @@
-import {ExcelDataRaw, ItemDataParametersEnum, ItemsDataAdapted} from "../../types";
+import {ExcelDataRaw, ItemDataParametersEnum, ItemsDataAdapted} from "../../types/shared";
 
 export const itemsDataAdapter = (data: ExcelDataRaw) => {
     return data.values.reduce((acc: ItemsDataAdapted, row, rowIndex) => {

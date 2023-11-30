@@ -1,21 +1,23 @@
 import React from "react";
-import {HeroBundleView} from "../heroSheetViewComponents/HeroBundleView";
-import {ItemsBundleView} from "../heroSheetViewComponents/ItemsBundleView";
-import {ClassesBundleView} from "../heroSheetViewComponents/ClassesBundleView";
-import {SkillsBundleView} from "../heroSheetViewComponents/SkillsBundleView";
-import {HeroPlayerPicks, HeroPlayersEnum} from "../../../types";
+import {HeroSheetName} from "./сomponents/HeroSheetName/HeroSheetName";
+import {HeroSheetItems} from "./сomponents/HeroSheetItems";
+import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
+import {HeroSheetSkills} from "./сomponents/HeroSheetSkills";
+import {HeroPlayerPicks, HeroPlayersEnum} from "../../../types/shared";
 import {useHeroesDataContext} from "../../../context/heroes-data-context";
 import {
     useHeroesCurrentPicksContext,
     useHeroesCurrentPicksDispatchContext
-} from "../../../context/player-picks-context";
-import {CurrentHeroesPicksReducerActionsEnum} from "../../../context/player-picks-context-reducer";
+} from "../../../context/heroes-picks-context";
+import {CurrentHeroesPicksReducerActionsEnum} from "../../../context/heroes-picks-context-reducer";
+import {Link, useParams} from "react-router-dom";
+import {isMobile} from 'react-device-detect';
+import styles from './hero-sheet.module.css'
 
-export interface HeroSheetInterface {
-    heroPlayerPosition: HeroPlayersEnum;
-}
+export default function HeroSheet() {
 
-export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
+    const { playerRole } = useParams();
+    const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
     const {heroes, heroClasses, items} = useHeroesDataContext()
     const playerPicks = useHeroesCurrentPicksContext(heroPlayerPosition) as HeroPlayerPicks;
@@ -61,6 +63,12 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
                     heroAvailableClasses.push(key);
                 }
             }
+        } else {
+            newHeroPicks.heroClassName = '';
+            newHeroPicks.heroSubclassName = '';
+            newHeroPicks.heroAvailableClasses = [];
+            newHeroPicks.heroAvailableSubclasses = [];
+            newHeroPicks.heroAvailableSkills = [];
         }
 
         if (!!newHeroPicks.heroClassName && !!heroClasses[newHeroPicks.heroClassName]) {
@@ -114,8 +122,10 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
             }}
 
         if (!!newHeroPicks.heroItems) {
-            newHeroPicks.heroItems.forEach((item) => {
-                currentBR += Number(items[item].br)
+            newHeroPicks.heroItems.forEach((itemName) => {
+                if(!!itemName) {
+                    currentBR += Number(items[itemName].br)
+                }
             })
         }
 
@@ -133,7 +143,7 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
 
         const newItems = heroItems.length ? [...heroItems] : [];
 
-        if (!!itemIndex) {
+        if (typeof itemIndex === "number") {
             newItems[itemIndex] = itemName;
         } else {
             newItems.push(itemName);
@@ -164,13 +174,15 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
     }
 
     return (
+        <div className={styles[isMobile ? 'hero-container-mobile' : 'hero-container']}>
 
-        <div className='hero-container'>
-            <div className='grid-container'>
+            <Link  to={`player/${HeroPlayersEnum.hero2}`}>button</Link>
 
+            <div className={isMobile ? 'grid-container-mobile' : 'grid-container'}>
                 <div className="sub-grid">
 
-                    <HeroBundleView
+                    <HeroSheetName
+                        selectedHeroName={heroName}
                         heroNames={heroNames}
                         handleChangeHeroName={(newHeroName) => {
                             handleChangePlayerPicks({heroName: newHeroName})
@@ -179,7 +191,7 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
                         heroPosition={heroPlayerPosition}
                     />
 
-                    <ItemsBundleView
+                    <HeroSheetItems
                         itemList={itemList}
                         heroItems={heroItems}
                         handleAddItem={handleAddItem}
@@ -191,7 +203,7 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
 
                 <div className="sub-grid">
 
-                    <ClassesBundleView
+                    <HeroSheetClasses
                         className={heroClassName}
                         subclassName={heroSubclassName}
                         classList={heroAvailableClasses}
@@ -205,7 +217,7 @@ export default function HeroSheet({heroPlayerPosition}: HeroSheetInterface) {
                         heroPosition={heroPlayerPosition}
                     />
 
-                    <SkillsBundleView
+                    <HeroSheetSkills
                         pickedSkills={heroSkills}
                         availableSkillsList={heroAvailableSkills}
                         heroPosition={heroPlayerPosition}

@@ -2,6 +2,26 @@ export interface ExcelDataRaw {
     values: string[][];
 }
 
+export enum CampaignsDataParametersEnum {
+    campaignName= 'campaignName',
+    act = 'act',
+    missionName = 'missionName',
+    encounterNumber = 'encounterNumber',
+    lieutenants = 'lieutenants',
+    monsters = 'monsters',
+    openGroups = 'openGroups',
+}
+
+export enum OverlordDeckDataParametersEnum {
+    className = 'className',
+    skillName = 'skillName',
+    xpCost = 'xpCost',
+    quantity = 'quantity',
+    type = 'type',
+    text = 'text',
+    br = 'br',
+}
+
 export enum MonstersDataParametersEnum {
     name = 'name',
     type = 'type',

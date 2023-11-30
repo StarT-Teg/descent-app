@@ -11,5 +11,6 @@ export const useGetHeroClassesData = () => {
     return useQuery('heroClassesData', query, {
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
     })
 }

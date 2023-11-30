@@ -1,6 +1,7 @@
 import React from "react";
-import plusImage from "../../../assets/img/plus.png";
-import minusImage from "../../../assets/img/minus.png";
+import plusImage from "../../../../assets/img/plus.png";
+import minusImage from "../../../../assets/img/minus.png";
+
 
 export interface ItemsBundleViewProps {
     itemList: string[],
@@ -10,7 +11,7 @@ export interface ItemsBundleViewProps {
     heroPosition: string,
 }
 
-export const ItemsBundleView = (props: ItemsBundleViewProps) => {
+export const HeroSheetItems = (props: ItemsBundleViewProps) => {
 
     const {
         itemList,

@@ -1,5 +1,5 @@
 import React, {createContext, Dispatch, ReactNode, useReducer} from "react";
-import {HeroesData} from "../types";
+import {HeroesData} from "../types/shared";
 import {HeroesDataContextReducer, HeroesDataReducerActions} from "./heroes-data-context-reducer";
 
 export const Heroes_Data_Initial_State: HeroesData = {heroClasses: {}, heroes: {}, items: {}}

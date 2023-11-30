@@ -1,4 +1,4 @@
-import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../types";
+import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../types/shared";
 
 export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {
     return data.values.reduce((acc: OverlordRelicsDataAdapted, row, rowIndex) => {

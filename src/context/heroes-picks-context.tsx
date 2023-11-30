@@ -1,6 +1,6 @@
 import React, {createContext, Dispatch, ReactNode, useReducer} from "react";
-import {CurrentPlayersPicks, HeroPlayerPicks, HeroPlayersEnum} from "../types";
-import {CurrentHeroesPicksReducerActions, CurrentHeroesPicksContextReducer} from "./player-picks-context-reducer";
+import {CurrentPlayersPicks, HeroPlayerPicks, HeroPlayersEnum} from "../types/shared";
+import {CurrentHeroesPicksReducerActions, CurrentHeroesPicksContextReducer} from "./heroes-picks-context-reducer";
 
 const initialPlayerPicks: HeroPlayerPicks = {
     currentBR: 0,

@@ -6,6 +6,13 @@ export interface HeroesData {
     items: ItemsDataAdapted;
 }
 
+export enum navigationLinks {
+    hero1 = 'players/hero1',
+    hero2 = 'players/hero2',
+    hero3 = 'players/hero3',
+    hero4 = 'players/hero4',
+    overlord = 'players/overlord',
+}
 
 export enum HeroPlayersEnum {
     hero1 = 'hero1',

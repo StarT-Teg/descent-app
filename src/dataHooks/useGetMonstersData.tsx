@@ -14,5 +14,6 @@ export const useGetMonstersData = () => {
     return useQuery('monstersData', query, {
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
     })
 }
