@@ -1,4 +1,6 @@
 import React from "react";
+import Select from "react-select";
+import {SelectionOptionInterface} from "../../../../types/shared";
 
 export interface ClassesBundleViewProps {
     classList?: string[],
@@ -19,51 +21,56 @@ export const HeroSheetClasses = (props: ClassesBundleViewProps) => {
         handleChangeSubclassName,
         className,
         subclassName,
-        heroPosition,
     } = props;
 
     const isClassPickAvailable = !!classList.length;
     const isSubClassPickAvailable = !!subclassList.length;
 
+    const classOptions: SelectionOptionInterface[] = classList.sort().map(className => ({value: className, label: className}))
+    const selectedClassNameAdapted: SelectionOptionInterface | null = !!className ? {value: className, label: className} : null;
+
+    const subclassOptions: SelectionOptionInterface[] = subclassList.sort().map(subclassName => ({value: subclassName, label: subclassName}))
+    const selectedSubclassNameAdapted: SelectionOptionInterface | null = !!subclassName ? {value: subclassName, label: subclassName} : null;
+
+
     return (
         <div className="sub-grid">
             <fieldset>
                 <legend>Hero class</legend>
-                <input
-                    type="text"
-                    list={`${heroPosition}-class-list`}
-                    disabled={!isClassPickAvailable}
+                <Select
+                    className='input'
+                    classNamePrefix="select"
+                    value={selectedClassNameAdapted}
+                    options={classOptions}
+                    onChange={(value, actionMeta) => {
+                        handleChangeClassName(!!value ? value.value : '')
+                    }}
+                    isClearable
+                    isSearchable
+                    name="select-hero-class"
                     placeholder={isClassPickAvailable ? "" : "Choose hero"}
-                    value={className}
-                    onChange={(event) => handleChangeClassName(event.target.value)}
+                    isDisabled={!isClassPickAvailable}
                 />
             </fieldset>
 
             {isSubClassPickAvailable && (
                 <fieldset>
                     <legend>Hero subclass</legend>
-                    <input
-                        type="text"
-                        list={`${heroPosition}-subclass-list`}
+                    <Select
+                        className='input'
+                        classNamePrefix="select"
+                        value={selectedSubclassNameAdapted}
+                        options={subclassOptions}
+                        onChange={(value, actionMeta) => {
+                            handleChangeSubclassName(!!value ? value.value : '')
+                        }}
+                        isClearable
+                        isSearchable
+                        name="select-hero-subclass"
                         placeholder="Choose subclass"
-                        value={subclassName}
-                        onChange={(event) => handleChangeSubclassName(event.target.value)}
                     />
                 </fieldset>
             )}
-
-            <datalist id={`${heroPosition}-class-list`}>
-                {classList.map((name, index) => {
-                    return <option key={`${heroPosition}-className-${index}`} value={name}/>
-                })}
-            </datalist>
-
-            <datalist id={`${heroPosition}-subclass-list`}>
-                {subclassList.map((name, index) => {
-                    return <option key={`${heroPosition}-subclassName-${index}`} value={name}/>
-                })}
-            </datalist>
-
         </div>
 
     )

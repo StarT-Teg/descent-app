@@ -5,3 +5,4 @@ export * from "./useGetCampaignsData";
 export * from "./useGetHeroClassesData";
 export * from "./useGetOverlordDecksData";
 export * from "./useGetOverlordRelicsData";
+export * from './useGetAllGameSaves';

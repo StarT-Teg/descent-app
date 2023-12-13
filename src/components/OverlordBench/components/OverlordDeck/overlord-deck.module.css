@@ -1,0 +1,7 @@
+
+
+.checkbox {
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: space-around;
+}

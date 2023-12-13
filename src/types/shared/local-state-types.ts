@@ -1,9 +1,24 @@
-import {HeroClassesDataAdapted, HeroesDataAdapted, ItemsDataAdapted} from "./google-sheet-data-adapted";
+import {
+    HeroClassesDataAdapted,
+    HeroesDataAdapted,
+    ItemsDataAdapted, LieutenantsDataAdapted, MonstersDataAdapted,
+    OverlordCardsDataAdapted, OverlordRelicsDataAdapted
+} from "./google-sheet-data-adapted";
+import {OverlordBasicDecksEnum} from "./overlord-types";
 
-export interface HeroesData {
+export interface HeroesDataInterface {
     heroes: HeroesDataAdapted;
     heroClasses: HeroClassesDataAdapted;
     items: ItemsDataAdapted;
+}
+
+export interface OverlordDataInterface {
+    overlordCards: OverlordCardsDataAdapted;
+    plotCards: unknown;
+    lieutenants: LieutenantsDataAdapted;
+    relics: OverlordRelicsDataAdapted;
+    agents: unknown;
+    monsters: MonstersDataAdapted;
 }
 
 export enum navigationLinks {
@@ -25,12 +40,18 @@ export enum OverlordPlayerEnum {
     overlord = 'overlord'
 }
 
-export type CurrentPlayersPicks = {
-    [key in HeroPlayersEnum]?: HeroPlayerPicks;
+export type CurrentOverlordPicks = {
+    selectedCampaign?: string;
+    selectedAct?: number;
+    selectedMission?: string;
+    selectedEncounter?: number;
+    basicDeck?: OverlordBasicDecksEnum;
+    purchasedCards?: string[];
+    pickedCards?: string[];
 }
 
-export type CurrentOverlordPicks = {
-    [OverlordPlayerEnum.overlord]: {};
+export type CurrentPlayersPicks = {
+    [key in HeroPlayersEnum]?: HeroPlayerPicks;
 }
 
 export interface HeroPlayerPicks {

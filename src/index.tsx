@@ -2,10 +2,12 @@ import React from 'react';
 import './index.css';
 import {App} from "./App";
 import {QueryClient, QueryClientProvider} from "react-query";
-import {HeroesDataContextProvider} from "./context/heroes-data-context";
-import {HeroesPlayersPicksContextProvider} from "./context/heroes-picks-context";
+import {HeroesDataContextProvider} from "./context";
+import {HeroesPlayersPicksContextProvider} from "./context";
 import {BrowserRouter,} from "react-router-dom";
 import {createRoot} from 'react-dom/client';
+import {OverlordPlayerPicksContextProvider} from "./context";
+import {OverlordDataContextProvider} from "./context/overlord-data-context";
 
 const queryClient = new QueryClient();
 
@@ -16,11 +18,15 @@ root.render(
     <React.StrictMode>
     <HeroesDataContextProvider>
         <HeroesPlayersPicksContextProvider>
-            <QueryClientProvider client={queryClient}>
-                <BrowserRouter>
-                    <App/>
-                </BrowserRouter>
-            </QueryClientProvider>
+            <OverlordPlayerPicksContextProvider>
+                <OverlordDataContextProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <BrowserRouter>
+                            <App/>
+                        </BrowserRouter>
+                    </QueryClientProvider>
+                </OverlordDataContextProvider>
+            </OverlordPlayerPicksContextProvider>
         </HeroesPlayersPicksContextProvider>
     </HeroesDataContextProvider>
 </React.StrictMode>

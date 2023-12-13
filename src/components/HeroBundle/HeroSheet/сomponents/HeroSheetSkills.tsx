@@ -35,7 +35,10 @@ export const HeroSheetSkills = (props: SkillsBundleViewProps) => {
                                 />
                                 {/*<label htmlFor={skill} key={"label" + index}> {skill} </label>*/}
                                 <input type="text" readOnly value={skill}
-                                       key={`${heroPosition}-skill-${skill}-br-${index}`}/>
+                                       key={`${heroPosition}-skill-${skill}-br-${index}`}
+                                       onClick={() => onCheckboxChange(skill)}
+                                       className={'input'}
+                                />
                             </div>
                         )
                     }

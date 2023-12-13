@@ -1,7 +1,7 @@
-import {HeroesDataInterface} from "../types/shared";
+import {OverlordDataInterface} from "../types/shared";
 
-export interface HeroesDataReducerActions {
-    payload: HeroesDataInterface,
+export interface OverlordDataReducerActions {
+    payload: OverlordDataInterface,
     actionType: DataReducerActionsEnum.update
 }
 
@@ -9,7 +9,7 @@ export enum DataReducerActionsEnum {
     update = 'update'
 }
 
-export const HeroesDataContextReducer = (state: HeroesDataInterface, action: HeroesDataReducerActions): HeroesDataInterface => {
+export const OverlordDataContextReducer = (state: OverlordDataInterface, action: OverlordDataReducerActions): OverlordDataInterface => {
     switch (action.actionType) {
         case DataReducerActionsEnum.update:
             return {...action.payload};

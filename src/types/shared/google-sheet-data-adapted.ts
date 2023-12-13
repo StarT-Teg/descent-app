@@ -2,7 +2,10 @@ import {
     CampaignsDataParametersEnum,
     HeroClassParametersEnum,
     HeroParametersEnum,
-    ItemDataParametersEnum, MonstersDataParametersEnum, OverlordDeckDataParametersEnum,
+    ItemDataParametersEnum,
+    LieutenantDataParametersEnum,
+    MonstersDataParametersEnum,
+    OverlordDeckDataParametersEnum,
     OverlordRelicDataParametersEnum
 } from "./google-sheet-data-raw";
 
@@ -28,22 +31,73 @@ export interface EncounterData {
     [CampaignsDataParametersEnum.openGroups]: MonsterTraitNamesEnum[],
 }
 
-export interface OverlordDecksDataAdapted {
-    [key: string]: OverlordDeck;
-}
-
-export interface OverlordDeck {
+export interface OverlordCardsDataAdapted {
     [key: string]: OverlordDeckSkill;
 }
 
 export interface OverlordDeckSkill {
-    [OverlordDeckDataParametersEnum.skillName]: string;
+    [OverlordDeckDataParametersEnum.cardName]: string;
     [OverlordDeckDataParametersEnum.type]: string;
     [OverlordDeckDataParametersEnum.br]: number;
     [OverlordDeckDataParametersEnum.xpCost]: number;
     [OverlordDeckDataParametersEnum.text]: string;
     [OverlordDeckDataParametersEnum.className]: string;
     [OverlordDeckDataParametersEnum.quantity]: number;
+}
+
+export interface LieutenantsDataAdapted {
+    [lieutenantName: string]: LieutenantData;
+}
+
+export interface LieutenantData {
+    [LieutenantDataParametersEnum.name]: string;
+    [LieutenantDataParametersEnum.expansion]: string,
+    [LieutenantDataParametersEnum.description]: string,
+
+    'act1'?: LieutenantActData;
+    'act2'?: LieutenantActData;
+}
+
+export interface LieutenantActData {
+    stats: {
+        '2h': LieutenantStats;
+        '3h': LieutenantStats;
+        '4h': LieutenantStats;
+    };
+
+    [LieutenantDataParametersEnum.size]: number;
+    [LieutenantDataParametersEnum.strength]: number,
+    [LieutenantDataParametersEnum.knowledge]: number,
+    [LieutenantDataParametersEnum.willpower]: number,
+    [LieutenantDataParametersEnum.awareness]: number,
+
+    [LieutenantDataParametersEnum.attackType]: string,
+    [LieutenantDataParametersEnum.attackDice]: string,
+
+    [LieutenantDataParametersEnum.traits]: string,
+    [LieutenantDataParametersEnum.actions]: string,
+    [LieutenantDataParametersEnum.surgeAbilities]: string,
+
+    [LieutenantDataParametersEnum.br]: Number,
+}
+
+export interface LieutenantStats {
+    [LieutenantDataParametersEnum.movement]: number;
+    [LieutenantDataParametersEnum.wounds]: number;
+    [LieutenantDataParametersEnum.defenseDice]: string;
+    [LieutenantDataParametersEnum.br]: Number;
+}
+
+export interface MonstersDataAdapted {
+    [key: string]: {
+        'act1'?: {
+            [key in MonsterTypesEnum]: MonsterData;
+        }
+        'act2'?: {
+            [key in MonsterTypesEnum]: MonsterData;
+        }
+
+    }
 }
 
 export enum MonsterTypesEnum {
@@ -62,18 +116,6 @@ export enum MonsterTraitNamesEnum {
     mountain = 'mountain',
     water = 'water',
     wilderness = 'wilderness',
-}
-
-export interface MonstersDataAdapted {
-    [key: string]: {
-        'act1'?: {
-            [key in MonsterTypesEnum]: MonsterData;
-        }
-        'act2'?: {
-            [key in MonsterTypesEnum]: MonsterData;
-        }
-
-    }
 }
 
 export interface MonsterData {

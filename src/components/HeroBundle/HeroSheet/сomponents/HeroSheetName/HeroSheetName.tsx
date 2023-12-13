@@ -1,16 +1,15 @@
 import React from "react";
 import Select from "react-select";
 import styles from './hero-sheet-name.module.css'
-
-type OptionType = { [key: string]: any }
+import {SelectionOptionInterface} from "../../../../../types/shared";
 
 export interface HeroBundleViewProps {
     handleChangeHeroName(newHeroName: string): void,
 
     heroNames: string[],
-    heroPosition: string,
     selectedHeroName?: string;
     type?: string,
+    heroPosition?: string,
 }
 
 export const HeroSheetName = (props: HeroBundleViewProps) => {
@@ -20,11 +19,10 @@ export const HeroSheetName = (props: HeroBundleViewProps) => {
         heroNames = [],
         selectedHeroName,
         type = '',
-        heroPosition
     } = props;
 
-    const options: OptionType[] = heroNames.sort().map(heroName => ({value: heroName, label: heroName}))
-    const selectedHeroNameAdapted: OptionType | null = !!selectedHeroName ? {value: selectedHeroName, label: selectedHeroName} : null;
+    const options: SelectionOptionInterface[] = heroNames.sort().map(heroName => ({value: heroName, label: heroName}))
+    const selectedHeroNameAdapted: SelectionOptionInterface | null = !!selectedHeroName ? {value: selectedHeroName, label: selectedHeroName} : null;
 
     return (
 
@@ -35,7 +33,7 @@ export const HeroSheetName = (props: HeroBundleViewProps) => {
 
                 <div className={styles.heroType}>
                     <Select
-                        className={styles.singleSelect}
+                        className='input'
                         classNamePrefix="select"
                         value={selectedHeroNameAdapted}
                         options={options}

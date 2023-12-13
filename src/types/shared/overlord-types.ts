@@ -1,8 +1,8 @@
 
 
 export enum OverlordBasicDecksEnum {
-    'basic1',
-    'basic2'
+    'Basic I',
+    'Basic II'
 }
 
 

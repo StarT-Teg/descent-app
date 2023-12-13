@@ -4,12 +4,12 @@ import {HeroSheetItems} from "./сomponents/HeroSheetItems";
 import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
 import {HeroSheetSkills} from "./сomponents/HeroSheetSkills";
 import {HeroPlayerPicks, HeroPlayersEnum} from "../../../types/shared";
-import {useHeroesDataContext} from "../../../context/heroes-data-context";
 import {
     useHeroesCurrentPicksContext,
-    useHeroesCurrentPicksDispatchContext
-} from "../../../context/heroes-picks-context";
-import {CurrentHeroesPicksReducerActionsEnum} from "../../../context/heroes-picks-context-reducer";
+    useHeroesCurrentPicksDispatchContext,
+    useHeroesDataContext,
+    CurrentHeroesPicksReducerActionsEnum
+} from "../../../context";
 import {Link, useParams} from "react-router-dom";
 import {isMobile} from 'react-device-detect';
 import styles from './hero-sheet.module.css'
@@ -176,11 +176,10 @@ export default function HeroSheet() {
     return (
         <div className={styles[isMobile ? 'hero-container-mobile' : 'hero-container']}>
 
-            <Link  to={`player/${HeroPlayersEnum.hero2}`}>button</Link>
+            <Link  to={`/`}>Back</Link>
 
             <div className={isMobile ? 'grid-container-mobile' : 'grid-container'}>
                 <div className="sub-grid">
-
                     <HeroSheetName
                         selectedHeroName={heroName}
                         heroNames={heroNames}
@@ -190,15 +189,6 @@ export default function HeroSheet() {
                         type={heroName ? heroes[heroName]?.type : undefined}
                         heroPosition={heroPlayerPosition}
                     />
-
-                    <HeroSheetItems
-                        itemList={itemList}
-                        heroItems={heroItems}
-                        handleAddItem={handleAddItem}
-                        handleRemoveItem={handleRemoveItem}
-                        heroPosition={heroPlayerPosition}
-                    />
-
                 </div>
 
                 <div className="sub-grid">
@@ -228,6 +218,14 @@ export default function HeroSheet() {
                     />
 
                 </div>
+
+                <HeroSheetItems
+                    itemList={itemList}
+                    heroItems={heroItems}
+                    handleAddItem={handleAddItem}
+                    handleRemoveItem={handleRemoveItem}
+                    heroPosition={heroPlayerPosition}
+                />
             </div>
         </div>
 

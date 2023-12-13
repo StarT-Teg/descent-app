@@ -8,7 +8,7 @@ export const useGetOverlordDecksData = () => {
         .get(`https://sheets.googleapis.com/v4/spreadsheets/${process.env.REACT_APP_GOOGLE_SHEETS_ID}/values/Overlord Deck?valueRenderOption=FORMATTED_VALUE&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
         .then(response => overlordDecksDataAdapted(response.data));
 
-    return useQuery('overlordRelicsData', query, {
+    return useQuery('overlordDecksData', query, {
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,

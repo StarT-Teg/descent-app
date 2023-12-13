@@ -14,11 +14,33 @@ export enum CampaignsDataParametersEnum {
 
 export enum OverlordDeckDataParametersEnum {
     className = 'className',
-    skillName = 'skillName',
+    cardName = 'cardName',
     xpCost = 'xpCost',
     quantity = 'quantity',
     type = 'type',
     text = 'text',
+    br = 'br',
+}
+
+export enum LieutenantDataParametersEnum {
+    name = 'name',
+    act = 'act',
+    size = 'size',
+    expansion = 'expansion',
+    description = 'description',
+    movement = 'movement',
+    wounds = 'wounds',
+    defenseDice = 'defenseDice',
+    strength = 'strength',
+    willpower = 'willpower',
+    knowledge = 'knowledge',
+    awareness = 'awareness',
+    attackType = 'attackType',
+    attackDice = 'attackDice',
+    abilities = 'abilities',
+    actions = 'actions',
+    surgeAbilities = 'surgeAbilities',
+    traits = 'traits',
     br = 'br',
 }
 
