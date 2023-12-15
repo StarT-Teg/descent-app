@@ -3,13 +3,14 @@ export interface ExcelDataRaw {
 }
 
 export enum CampaignsDataParametersEnum {
-    campaignName= 'campaignName',
+    campaignName = 'campaignName',
     act = 'act',
     missionName = 'missionName',
     encounterNumber = 'encounterNumber',
     lieutenants = 'lieutenants',
     monsters = 'monsters',
-    openGroups = 'openGroups',
+    openGroupsAmount = 'openGroupsAmount',
+    openGroupsTraits = 'openGroupsTraits',
 }
 
 export enum OverlordDeckDataParametersEnum {

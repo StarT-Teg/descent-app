@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import styles from './hero-sheet-name.module.css'
-import {SelectionOptionInterface} from "../../../../../types/shared";
+import {SelectionOptionInterface} from "../../../../types/shared";
 
 export interface HeroBundleViewProps {
     handleChangeHeroName(newHeroName: string): void,

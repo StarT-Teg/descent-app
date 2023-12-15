@@ -10,8 +10,8 @@ import {
 } from "./google-sheet-data-raw";
 
 export interface CampaignsDataAdapted {
-    [key: string]: {
-        [key: string]: MissionDataAdapted,
+    [campaignName: string]: {
+        [missionName: string]: MissionDataAdapted,
     };
 }
 
@@ -28,7 +28,8 @@ export interface EncounterData {
     [CampaignsDataParametersEnum.encounterNumber]: number,
     [CampaignsDataParametersEnum.lieutenants]: string[],
     [CampaignsDataParametersEnum.monsters]: string[],
-    [CampaignsDataParametersEnum.openGroups]: MonsterTraitNamesEnum[],
+    [CampaignsDataParametersEnum.openGroupsAmount]: number,
+    [CampaignsDataParametersEnum.openGroupsTraits]: MonsterTraitNamesEnum[],
 }
 
 export interface OverlordCardsDataAdapted {
@@ -89,14 +90,10 @@ export interface LieutenantStats {
 }
 
 export interface MonstersDataAdapted {
-    [key: string]: {
-        'act1'?: {
+    [monsterName: string]: {
+        [act: string]: {
             [key in MonsterTypesEnum]: MonsterData;
         }
-        'act2'?: {
-            [key in MonsterTypesEnum]: MonsterData;
-        }
-
     }
 }
 
@@ -132,7 +129,9 @@ export interface MonsterData {
     [MonstersDataParametersEnum.actions]?: string;
     [MonstersDataParametersEnum.surgeAbilities]?: string;
     [MonstersDataParametersEnum.traits]?: MonsterTraitNamesEnum[];
-    [MonstersDataParametersEnum.groupSize]: string;
+    [MonstersDataParametersEnum.groupSize]: {
+        [numberOfHeroes: string]: number;
+    };
     [MonstersDataParametersEnum.br]: string;
 }
 

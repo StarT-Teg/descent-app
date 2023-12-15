@@ -10,9 +10,12 @@ export const useGetLieutenantsData = () => {
             return lieutenantsDataAdapter(response.data)
         });
 
-    return useQuery('monstersData', query, {
+    return useQuery('lieutenantsData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

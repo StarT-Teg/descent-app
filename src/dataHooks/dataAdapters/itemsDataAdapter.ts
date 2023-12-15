@@ -3,7 +3,6 @@ import {ExcelDataRaw, ItemDataParametersEnum, ItemsDataAdapted} from "../../type
 export const itemsDataAdapter = (data: ExcelDataRaw) => {
     return data.values.reduce((acc: ItemsDataAdapted, row, rowIndex) => {
         if (!!row[0] && rowIndex !== 0) {
-
             const item: { [key in ItemDataParametersEnum]: string } = {
                 [ItemDataParametersEnum.act]: row[0],
                 [ItemDataParametersEnum.shoppingAct]: row[1],
@@ -16,7 +15,7 @@ export const itemsDataAdapter = (data: ExcelDataRaw) => {
                 [ItemDataParametersEnum.properties]: row[9],
                 [ItemDataParametersEnum.traits]: row[11],
                 [ItemDataParametersEnum.surgeAbilities]: [row[13], row[15], row[17]].filter(str => !!str).join(';\n'),
-                [ItemDataParametersEnum.br]: row[20]
+                [ItemDataParametersEnum.br]: row[22]
             };
 
             return {...acc, [row[2]]: item}

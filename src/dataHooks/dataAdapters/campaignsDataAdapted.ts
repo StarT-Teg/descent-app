@@ -23,7 +23,8 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
 
             const lieutenants = getCleanArrayFromString(row[11]);
             const monsters = getCleanArrayFromString(row[12]);
-            const openGroups = [row[14], row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22], row[23]]
+            const openGroupsAmount = Number(row[13]);
+            const openGroupsTraits = [row[14], row[15], row[16], row[17], row[18], row[19], row[20], row[21], row[22], row[23]]
                 .reduce((acc: MonsterTraitNamesEnum[], item, index) => {
                     if (!!item) {
                         return [...acc, monsterTraitsArray[index]]
@@ -44,7 +45,8 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                                 encounterNumber,
                                 lieutenants,
                                 monsters,
-                                openGroups,
+                                openGroupsAmount,
+                                openGroupsTraits,
                             }
                         }
                     }

@@ -9,8 +9,11 @@ export const useGetOverlordDecksData = () => {
         .then(response => overlordDecksDataAdapted(response.data));
 
     return useQuery('overlordDecksData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

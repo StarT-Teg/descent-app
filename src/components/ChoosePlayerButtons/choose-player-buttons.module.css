@@ -4,7 +4,4 @@
     display: grid;
     grid-auto-flow: row;
     grid-row-gap: 15px;
-
-    width: fit-content;
-    margin: 50px auto;
 }

@@ -1,27 +1,20 @@
-import {useGetCampaignsData} from "../../../../dataHooks";
-import {
-    OverlordCurrentPicksReducerActionsEnum,
-    useOverlordCurrentPicksContext,
-    useOverlordPlayerPicksDispatchContext
-} from "../../../../context";
-import {CurrentOverlordPicks, SelectionOptionInterface} from "../../../../types/shared";
+import {CampaignPicksInterface, SelectionOptionInterface} from "../../../../types/shared";
 import {toSelectOption} from "../../../../helpers";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Select from "react-select";
+import {useOverlordDataContext} from "../../../../context/overlord-data-context";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
+import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 
 
 export const CampaignSetup = () => {
 
-    const {data: campaignData} = useGetCampaignsData();
-    const overlordPicksContext = useOverlordCurrentPicksContext();
-    const dispatch = useOverlordPlayerPicksDispatchContext();
+    const {campaignsData} = useOverlordDataContext();
 
-    const selectedCampaign: SelectionOptionInterface | undefined | null = toSelectOption(overlordPicksContext.selectedCampaign);
-    const selectedAct: SelectionOptionInterface | undefined | null = toSelectOption(overlordPicksContext.selectedAct, `Act ${overlordPicksContext.selectedAct}`);
-    const selectedMission: SelectionOptionInterface | undefined | null = toSelectOption(overlordPicksContext.selectedMission);
-    const selectedEncounter: SelectionOptionInterface | undefined | null = toSelectOption(overlordPicksContext.selectedEncounter);
+    const {campaignPicks} = useGameSaveContext();
+    const dispatch = useGameSaveDispatchContext();
 
-    const availableCampaigns = Object.keys(campaignData || {}).map((campaignName) => ({
+    const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => ({
         value: campaignName,
         label: campaignName
     }))
@@ -29,19 +22,24 @@ export const CampaignSetup = () => {
     const [availableMissions, setAvailableMissions] = useState<SelectionOptionInterface[] | undefined>(undefined);
     const availableEncounters = [{value: 1, label: 'Encounter 1'}, {value: 2, label: 'Encounter 2'}]
 
-    const dispatchOverlordPicks = (overlordPicks: CurrentOverlordPicks) => {
-        dispatch({overlordPicks: overlordPicks, actionType: OverlordCurrentPicksReducerActionsEnum.changePicks})
-    }
+    const selectedCampaign: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedCampaign);
+    const selectedAct: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedAct, `Act ${campaignPicks.selectedAct}`);
+    const selectedMission: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedMission);
+    const selectedEncounter: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedEncounter, `Encounter ${campaignPicks?.selectedEncounter}`);
 
-    useEffect(() => {
+    const dispatchCampaignPicks = (dispatchCampaignPicks: CampaignPicksInterface) => {
 
-        const newOverlordPicks: CurrentOverlordPicks = {}
+        const newCampaignPicks: CampaignPicksInterface = {
+            ...campaignPicks,
+            ...dispatchCampaignPicks,
+        }
 
-        if (!!campaignData && !!selectedCampaign) {
+        if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
+            const campaignName = newCampaignPicks.selectedCampaign;
 
-            if (!!selectedAct) {
-                const availableMissions = Object.keys(campaignData[selectedCampaign.value]).reduce((acc: SelectionOptionInterface[], missionName) => {
-                    if (campaignData[selectedCampaign.value][missionName].act === selectedAct.value) {
+            if (!!newCampaignPicks.selectedAct) {
+                const availableMissions = Object.keys(campaignsData[campaignName]).reduce((acc: SelectionOptionInterface[], missionName) => {
+                    if (campaignsData[campaignName][missionName].act === newCampaignPicks.selectedAct) {
                         return (
                             [...acc, {
                                 value: missionName,
@@ -52,38 +50,46 @@ export const CampaignSetup = () => {
                     return acc;
                 }, [])
                 setAvailableMissions(availableMissions)
+
             } else {
-                const availableMissions = Object.keys(campaignData[selectedCampaign.value]).map((missionName) => ({
+                const availableMissions = Object.keys(campaignsData[campaignName]).map((missionName) => ({
                     value: missionName,
                     label: missionName
                 }))
-                newOverlordPicks.selectedMission = undefined;
-                newOverlordPicks.selectedEncounter = undefined;
                 setAvailableMissions(availableMissions)
             }
 
-            if (!selectedMission) {
-                newOverlordPicks.selectedEncounter = undefined;
+            if (!!newCampaignPicks.selectedMission) {
+                const missionName = newCampaignPicks.selectedMission;
+
+                newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length === 1 ? 1 : newCampaignPicks?.selectedEncounter;
+                newCampaignPicks.selectedAct = campaignsData[campaignName][missionName].act;
+            } else {
+                newCampaignPicks.selectedEncounter = undefined;
             }
 
         } else {
-            newOverlordPicks.selectedAct = undefined;
-            newOverlordPicks.selectedMission = undefined;
-            newOverlordPicks.selectedEncounter = undefined;
+            newCampaignPicks.selectedCampaign = undefined;
+            newCampaignPicks.selectedAct = undefined;
+            newCampaignPicks.selectedMission = undefined;
+            newCampaignPicks.selectedEncounter = undefined;
             setAvailableMissions(undefined);
         }
 
-        dispatchOverlordPicks(newOverlordPicks)
-    }, [overlordPicksContext.selectedCampaign, overlordPicksContext.selectedAct, overlordPicksContext.selectedMission, overlordPicksContext.selectedEncounter])
+        dispatch({
+            payload: {campaignPicks: {...newCampaignPicks}},
+            actionType: GameSaveReducerActionTypeEnum.changeCampaignPicks
+        },)
+    }
 
     return (
         <>
             <Select
                 className={'input'}
-                value={toSelectOption(overlordPicksContext.selectedCampaign)}
+                value={toSelectOption(campaignPicks.selectedCampaign)}
                 options={availableCampaigns}
                 onChange={(value, actionMeta) => {
-                    dispatchOverlordPicks({selectedCampaign: value?.value})
+                    dispatchCampaignPicks({selectedCampaign: value?.value})
                 }}
                 isClearable
                 name="select-campaign"
@@ -95,7 +101,7 @@ export const CampaignSetup = () => {
                 value={selectedAct}
                 options={availableActs}
                 onChange={(value, actionMeta) => {
-                    dispatchOverlordPicks({selectedAct: value?.value})
+                    dispatchCampaignPicks({selectedAct: value?.value})
                 }}
                 isClearable
                 name="select-act"
@@ -107,26 +113,27 @@ export const CampaignSetup = () => {
                 value={selectedMission}
                 options={availableMissions}
                 onChange={(value, actionMeta) => {
-                    dispatchOverlordPicks({selectedMission: value?.value})
+                    dispatchCampaignPicks({selectedMission: value?.value})
                 }}
                 isClearable
                 name="select-mission"
                 placeholder={'Mission'}
             />
 
-            {Object.keys(campaignData?.[selectedCampaign?.value]?.[selectedMission?.value]?.encounters || {}).length > 1 && (
+            {Object.keys(campaignsData?.[selectedCampaign?.value]?.[selectedMission?.value]?.encounters || {}).length > 1 && (
                 <Select
                     className={'input'}
                     value={selectedEncounter}
                     options={availableEncounters}
                     onChange={(value, actionMeta) => {
-                        dispatchOverlordPicks({selectedEncounter: value?.value})
+                        dispatchCampaignPicks({selectedEncounter: value?.value})
                     }}
                     isClearable
                     name="select-mission"
                     placeholder={'Encounter'}
                 />
             )}
+
         </>
     )
 }

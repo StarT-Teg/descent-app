@@ -9,8 +9,11 @@ export const useGetOverlordRelicsData = () => {
         .then(response => overlordRelicsDataAdapter(response.data));
 
     return useQuery('overlordRelicsData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

@@ -1,0 +1,33 @@
+
+.root {
+
+}
+
+.hero-container {
+    /*background-image: url('/src/assets/img/buttons/hero/herobg.png');*/
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    border-radius: 4px;
+
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 480px;
+}
+
+.hero-container-mobile {
+    /*background-image: url('/src/assets/img/buttons/hero/herobg.png');*/
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    border-radius: 4px;
+
+    width: 100%;
+    height: auto;
+}
+
+.szh-accordion__item-content {
+    transition: all 200ms;
+}

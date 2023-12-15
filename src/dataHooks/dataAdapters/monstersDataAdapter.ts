@@ -1,6 +1,6 @@
 import {ExcelDataRaw, MonstersDataAdapted, MonstersDataParametersEnum, MonsterTraitNamesEnum} from "../../types/shared";
 
-export const monstersDataAdapter = (data: ExcelDataRaw) => {
+export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => {
 
     return data.values.reduce((acc: MonstersDataAdapted, row, rowIndex) => {
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
@@ -32,9 +32,9 @@ export const monstersDataAdapter = (data: ExcelDataRaw) => {
                         return acc
                     }, []),
                 [MonstersDataParametersEnum.groupSize]: {
-                    '2': row[35],
-                    '3': row[37],
-                    '4': row[39]
+                    '2': Number(row[35]),
+                    '3': Number(row[37]),
+                    '4': Number(row[39])
                 },
                 [MonstersDataParametersEnum.br]: row[42],
             };
@@ -42,11 +42,11 @@ export const monstersDataAdapter = (data: ExcelDataRaw) => {
 
 
             return {
-                ...acc, [monsterName]: {
+                ...acc,
+                [monsterName]: {
                     ...acc[monsterName],
                     ['act' + monsterAct]: {
-                        ...acc[monsterName]?.act1,
-                        ...acc[monsterName]?.act2,
+                        ...acc[monsterName]?.['act' + monsterAct],
                         [monsterType]: {
                             ...item
                         }

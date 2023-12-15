@@ -9,8 +9,11 @@ export const useGetCampaignsData = () => {
         .then(response => campaignsDataAdapted(response.data));
 
     return useQuery('campaignsData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

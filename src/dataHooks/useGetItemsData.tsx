@@ -9,8 +9,11 @@ export const useGetItemsData = () => {
         .then(response => itemsDataAdapter(response.data));
 
     return useQuery('itemsData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

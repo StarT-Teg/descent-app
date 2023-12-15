@@ -9,8 +9,11 @@ export const useGetHeroClassesData = () => {
         .then(response => heroClassesDataAdapter(response.data));
 
     return useQuery('heroClassesData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

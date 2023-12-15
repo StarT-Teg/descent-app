@@ -9,8 +9,11 @@ export const useGetHeroesData = () => {
         .then(response => heroesRawDataAdapter(response.data, 14));
 
     return useQuery('heroesData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }

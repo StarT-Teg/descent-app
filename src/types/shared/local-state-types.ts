@@ -1,8 +1,12 @@
 import {
+    CampaignsDataAdapted,
     HeroClassesDataAdapted,
     HeroesDataAdapted,
-    ItemsDataAdapted, LieutenantsDataAdapted, MonstersDataAdapted,
-    OverlordCardsDataAdapted, OverlordRelicsDataAdapted
+    ItemsDataAdapted,
+    LieutenantsDataAdapted,
+    MonstersDataAdapted,
+    OverlordCardsDataAdapted,
+    OverlordRelicsDataAdapted
 } from "./google-sheet-data-adapted";
 import {OverlordBasicDecksEnum} from "./overlord-types";
 
@@ -19,6 +23,7 @@ export interface OverlordDataInterface {
     relics: OverlordRelicsDataAdapted;
     agents: unknown;
     monsters: MonstersDataAdapted;
+    campaignsData: CampaignsDataAdapted;
 }
 
 export enum navigationLinks {
@@ -41,13 +46,10 @@ export enum OverlordPlayerEnum {
 }
 
 export type CurrentOverlordPicks = {
-    selectedCampaign?: string;
-    selectedAct?: number;
-    selectedMission?: string;
-    selectedEncounter?: number;
     basicDeck?: OverlordBasicDecksEnum;
     purchasedCards?: string[];
     pickedCards?: string[];
+    pickedMonsters?: string[];
 }
 
 export type CurrentPlayersPicks = {
@@ -55,8 +57,6 @@ export type CurrentPlayersPicks = {
 }
 
 export interface HeroPlayerPicks {
-    currentBR: number;
-
     heroName?: string;
     heroClassName?: string;
     heroSubclassName?: string;
@@ -67,4 +67,18 @@ export interface HeroPlayerPicks {
     heroAvailableSubclasses?: string[];
     heroAvailableSubclassSkills?: string[];
     heroAvailableSkills?: string[];
+}
+
+export interface CampaignPicksInterface {
+    selectedCampaign?: string;
+    selectedAct?: number;
+    selectedMission?: string;
+    selectedEncounter?: number;
+    pickedMonsters?: string[];
+}
+
+export interface GameSavePicks {
+    heroesPicks: CurrentPlayersPicks;
+    overlordPicks: CurrentOverlordPicks;
+    campaignPicks: CampaignPicksInterface;
 }

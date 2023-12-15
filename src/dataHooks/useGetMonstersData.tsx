@@ -9,8 +9,11 @@ export const useGetMonstersData = () => {
         .then(response => monstersDataAdapter(response.data));
 
     return useQuery('monstersData', query, {
+        enabled: false,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     })
 }
