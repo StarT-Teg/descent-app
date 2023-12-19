@@ -1,13 +1,4 @@
 import React, {useEffect, useLayoutEffect, useState} from "react";
-import {
-    useGetCampaignsData,
-    useGetHeroClassesData,
-    useGetHeroesData,
-    useGetItemsData,
-    useGetMonstersData,
-    useGetOverlordDecksData,
-    useGetOverlordRelicsData
-} from "./dataHooks";
 import {DataReducerActionsEnum, useHeroesDataDispatchContext} from "./context";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import {Route, Routes,} from "react-router-dom";
@@ -16,96 +7,69 @@ import {ChoosePlayerButtons} from "./components/ChoosePlayerButtons/ChoosePlayer
 import {OverlordBench} from "./components/OverlordBench/OverlordBench";
 import uuid from "react-uuid";
 import {useOverlordDataDispatchContext} from "./context/overlord-data-context";
-import {useGetLieutenantsData} from "./dataHooks/useGetLieutenantsData";
 import {Header} from "./components/Header/Header";
+import {useGetData} from "./dataHooks/useGetData";
+import {useGetGameSave} from "./dataHooks";
+import {useGameSaveDispatchContext} from "./context/game-save-context";
+import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
 
 export const App = () => {
 
     const localStorageSaveKey = 'descent-save-game-uuid';
-    const saveGameUuid: string | null = localStorage.getItem(localStorageSaveKey);
+    const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(localStorageSaveKey));
 
-    const {
-        data: heroesData,
-        refetch: heroesDataRefetch,
-        isSuccess: heroesDataSuccess,
-        isLoading: heroesDataIsLoading
-    } = useGetHeroesData();
-    const {
-        data: heroClassesData,
-        refetch: heroClassesRefetch,
-        isSuccess: heroClassesDataSuccess,
-        isLoading: heroClassesIsLoading
-    } = useGetHeroClassesData();
-    const {
-        data: itemsData,
-        refetch: itemsDataRefetch,
-        isSuccess: itemsDataSuccess,
-        isLoading: itemsDataLoading
-    } = useGetItemsData();
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
+    const {data, refetch: refetchData, isSuccess, isLoading: dataIsLoading} = useGetData()
     const {
-        data: overlordDecksData,
-        refetch: overlordDecksDataRefetch,
-        isSuccess: overlordDecksSuccess,
-        isLoading: overlordDecksLoading
-    } = useGetOverlordDecksData();
-    const {
-        data: monstersData,
-        refetch: monsterDataRefetch,
-        isSuccess: monstersDataSuccess,
-        isLoading: monstersDataLoading
-    } = useGetMonstersData();
-    const {
-        data: lieutenantsData,
-        refetch: lieutenantsDataRefetch,
-        isSuccess: lieutenantsDataSuccess,
-        isLoading: lieutenantsDataLoading
-    } = useGetLieutenantsData();
-    const {
-        data: relicsData,
-        refetch: relicsDataRefetch,
-        isSuccess: relicsDataSuccess,
-        isLoading: relicsDataLoading
-    } = useGetOverlordRelicsData();
-    const {
-        data: campaignData,
-        refetch: campaignDataRefetch,
-        isSuccess: campaignDataSuccess,
-        isLoading: campaignDataLoading
-    } = useGetCampaignsData();
+        data: saveGameData,
+        refetch: saveGameDataRefetch,
+        isLoading: saveIsLoading
+    } = useGetGameSave(saveGameUuid || '');
 
     const dispatchOverlordData = useOverlordDataDispatchContext()
     const dispatchHeroesData = useHeroesDataDispatchContext();
-
-
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isHeroesDataSuccess, setIsHeroesDataSuccess] = useState<boolean>(false);
-    const [isOverlordDataSuccess, setIsOverlordDataSuccess] = useState<boolean>(false);
+    const dispatchPlayersPick = useGameSaveDispatchContext();
 
     useEffect(() => {
-        setIsLoading(heroesDataIsLoading || heroClassesIsLoading || itemsDataLoading || overlordDecksLoading || monstersDataLoading || lieutenantsDataLoading || relicsDataLoading || campaignDataLoading)
-    }, [heroesDataIsLoading, heroClassesIsLoading, itemsDataLoading, overlordDecksLoading, monstersDataLoading, lieutenantsDataLoading, relicsDataLoading, campaignDataLoading])
-
-    useEffect(() => {
-        setIsHeroesDataSuccess(heroesDataSuccess && heroClassesDataSuccess && itemsDataSuccess)
-    }, [heroesDataSuccess, heroClassesDataSuccess, itemsDataSuccess])
-
-    useEffect(() => {
-        setIsOverlordDataSuccess(overlordDecksSuccess && monstersDataSuccess && lieutenantsDataSuccess && relicsDataSuccess && campaignDataSuccess)
-    }, [overlordDecksSuccess, monstersDataSuccess, lieutenantsDataSuccess, relicsDataSuccess, campaignDataSuccess])
+        setIsLoading(dataIsLoading || saveIsLoading)
+    }, [dataIsLoading, saveIsLoading])
 
     useEffect(() => {
         if (!!window && !!localStorage) {
             if (saveGameUuid === null) {
                 const newSaveUuid = uuid();
-                localStorage.setItem(localStorageSaveKey, newSaveUuid);
-            } else {
 
+                localStorage.setItem(localStorageSaveKey, newSaveUuid);
+                setSaveGameUuid(newSaveUuid);
+            } else {
+                saveGameDataRefetch().then()
             }
         }
-    }, [saveGameUuid])
+    }, [window, localStorage])
 
-    if (isHeroesDataSuccess) {
+    useEffect(() => {
+        if (Object.keys(saveGameData || {}).length > 0) {
+            dispatchPlayersPick({
+                actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
+                payload: saveGameData,
+            })
+        }
+    }, [saveGameData])
+
+    if (isSuccess) {
+
+        const {
+            heroesData,
+            heroClassesData,
+            itemsData,
+            overlordDecksData,
+            lieutenantsData,
+            relicsData,
+            monstersData,
+            campaignData
+        } = data;
+
         dispatchHeroesData({
             payload: {
                 heroes: heroesData || {},
@@ -113,9 +77,7 @@ export const App = () => {
                 items: itemsData || {},
             }, actionType: DataReducerActionsEnum.update
         })
-    }
 
-    if (isOverlordDataSuccess) {
         dispatchOverlordData({
             payload: {
                 overlordCards: overlordDecksData || {},
@@ -130,14 +92,7 @@ export const App = () => {
     }
 
     useLayoutEffect(() => {
-        heroesDataRefetch().then();
-        heroClassesRefetch().then();
-        overlordDecksDataRefetch().then();
-        lieutenantsDataRefetch().then();
-        relicsDataRefetch().then();
-        campaignDataRefetch().then();
-        monsterDataRefetch().then();
-        itemsDataRefetch().then();
+        refetchData().then();
     }, [])
 
     if (isLoading) {

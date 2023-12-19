@@ -41,10 +41,6 @@ export enum HeroPlayersEnum {
     hero4 = 'hero4',
 }
 
-export enum OverlordPlayerEnum {
-    overlord = 'overlord'
-}
-
 export type CurrentOverlordPicks = {
     basicDeck?: OverlordBasicDecksEnum;
     purchasedCards?: string[];

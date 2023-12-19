@@ -5,13 +5,24 @@ import React from "react";
 import {HeroButton} from "../shared/HeroButton/HeroButton";
 import {Initial_Player_Picks, useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
+import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 
 export const ChoosePlayerButtons = () => {
     const navigate = useNavigate();
 
-    const {heroesPicks} = useGameSaveContext();
+    const {overlordPicks, heroesPicks, campaignPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
-    // const {mutate} = useSetGameSave(); // "API keys are not supported by this API. Expected OAuth2 access token or other authentication credentials that assert a principal. See https://cloud.google.com/docs/authentication"
+
+    const localStorageSaveKey = 'descent-save-game-uuid';
+    const uuid = localStorage.getItem(localStorageSaveKey)!
+
+    const {mutate} = useSetGameSave();
+
+    const handleTest = () => {
+
+        mutate({data: {overlordPicks, heroesPicks, campaignPicks}, uuid});
+    }
+
 
     return (
         <div className={styles.content}>
@@ -40,6 +51,8 @@ export const ChoosePlayerButtons = () => {
             }}>
                 Overlord
             </button>
+
+            <button className={styles.button} onClick={handleTest}>test</button>
         </div>
     )
 }

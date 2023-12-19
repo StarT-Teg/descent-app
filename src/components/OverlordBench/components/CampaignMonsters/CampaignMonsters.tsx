@@ -72,7 +72,7 @@ export const CampaignMonsters = () => {
         }
 
         setOpenGroups(newOpenGroups);
-    }, [campaignsData, monsters, selectedCampaign, selectedMission, selectedEncounter, selectedAct])
+    }, [campaignsData, monsters, selectedCampaign, selectedMission, selectedEncounter, selectedAct, defaultMonsters])
 
     useEffect(() => {
         const newPickedMonstersList: string[] = [...pickedOpenGroups, ...defaultMonsters]

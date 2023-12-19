@@ -9,6 +9,17 @@ import {
     OverlordRelicDataParametersEnum
 } from "./google-sheet-data-raw";
 
+export interface GameDataInterface {
+    heroesData: HeroesDataAdapted,
+    heroClassesData: HeroClassesDataAdapted,
+    itemsData: ItemsDataAdapted,
+    overlordDecksData: OverlordCardsDataAdapted,
+    lieutenantsData: LieutenantsDataAdapted,
+    relicsData: OverlordRelicsDataAdapted,
+    monstersData: MonstersDataAdapted,
+    campaignData: CampaignsDataAdapted,
+}
+
 export interface CampaignsDataAdapted {
     [campaignName: string]: {
         [missionName: string]: MissionDataAdapted,

@@ -1,12 +1,11 @@
 import styles from './header.module.css'
 import {Link, Outlet} from "react-router-dom";
 import {useHeroesDataContext} from "../../context";
-import {CurrentOverlordPicks, HeroPlayerPicks} from "../../types/shared";
 import {useOverlordDataContext} from "../../context/overlord-data-context";
 import React, {SVGProps} from 'react';
 import {JSX} from 'react/jsx-runtime';
 import {useGameSaveContext} from "../../context/game-save-context";
-import {getMonsterGroupBr} from "../../helpers";
+import {getHeroBr, getOverlordBr} from "../../helpers";
 
 const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg
@@ -35,64 +34,10 @@ export const Header = () => {
         monsters,
     } = useOverlordDataContext();
 
-    console.log('overlordPicks: ', overlordPicks)
-
     const heroesAmount = Object.keys(heroesPicks).length;
 
-    const getHeroBr = (heroPicks: HeroPlayerPicks): number => {
-        let heroBr: number = 0;
-
-        if (!!heroPicks?.heroName) {
-            heroBr += parseFloat(heroes[heroPicks?.heroName].br);
-        }
-
-        if (!!heroPicks?.heroSkills?.length) {
-            Object.keys(heroClasses).forEach((className) => {
-                Object.keys(heroClasses[className].skills).forEach((skillName) => {
-                    if (heroPicks.heroSkills?.includes(skillName)) {
-                        console.log('skill Br: ', parseFloat(heroClasses[className].skills[skillName].br))
-                        heroBr += parseFloat(heroClasses[className].skills[skillName].br)
-                    }
-                })
-            })
-        }
-
-        if (!!heroPicks.heroItems?.length) {
-            Object.keys(items).forEach((itemName) => {
-                if (heroPicks.heroItems?.includes(itemName)) {
-                    console.log('item BR:', parseFloat(items[itemName].br))
-                    heroBr += parseFloat(items[itemName].br);
-                }
-            })
-        }
-
-        return Math.floor(heroBr);
-    }
-
-    const getOverlordBr = (overlordPicks: CurrentOverlordPicks) => {
-        let overlordBr = 0;
-
-        if (!Object.keys(overlordPicks).length) {
-            return overlordBr;
-        }
-
-        if (!!overlordPicks.pickedCards?.length) {
-            overlordPicks.pickedCards.forEach(cardName => {
-                overlordBr += overlordCards[cardName].br;
-            })
-        }
-
-        if (!!overlordPicks.pickedMonsters?.length && !!campaignPicks?.selectedAct) {
-            overlordPicks.pickedMonsters.forEach(monsterName => {
-                overlordBr += getMonsterGroupBr(monsters, monsterName, heroesAmount, `act${campaignPicks.selectedAct}`);
-            })
-        }
-
-        return overlordBr;
-    }
-
-    const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroData), 0)
-    const overlordBR = getOverlordBr(overlordPicks);
+    const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroes, heroClasses, items, heroData), 0)
+    const overlordBR = getOverlordBr(overlordCards, monsters, campaignPicks, overlordPicks, heroesAmount);
 
     return (
         <div className={styles.root} id='root'>
