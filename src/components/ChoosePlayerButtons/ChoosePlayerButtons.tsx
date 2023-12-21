@@ -1,35 +1,40 @@
 import styles from './choose-player-buttons.module.css'
-import {HeroPlayersEnum, navigationLinks} from "../../types/shared";
+import {HeroPlayersEnum} from "../../types/shared";
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import {HeroButton} from "../shared/HeroButton/HeroButton";
 import {Initial_Player_Picks, useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
-import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 
 export const ChoosePlayerButtons = () => {
     const navigate = useNavigate();
 
-    const {overlordPicks, heroesPicks, campaignPicks} = useGameSaveContext();
+    const {heroesPicks, overlordPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
-    const localStorageSaveKey = 'descent-save-game-uuid';
-    const uuid = localStorage.getItem(localStorageSaveKey)!
+    console.log('overlordPicks:', overlordPicks)
 
-    const {mutate} = useSetGameSave();
+    // const localStorageSaveKey = 'descent-save-game-uuid';
+    // const uuid = localStorage.getItem(localStorageSaveKey)!
+    //
+    // const {mutate} = useSetGameSave();
 
-    const handleTest = () => {
-
-        mutate({data: {overlordPicks, heroesPicks, campaignPicks}, uuid});
-    }
+    // const handleTest = () => {
+    //
+    //     mutate({data: {campaignPicks}, uuid}, {
+    //         onSuccess: (res) => {
+    //             console.log(res)
+    //         }
+    //     });
+    // }
 
 
     return (
         <div className={styles.content}>
             {Object.keys(heroesPicks).map((heroPosition: string) => (
                     <HeroButton onClick={() => {
-                        navigate(`players/${heroPosition}`)
-                    }} buttonText={heroesPicks[heroPosition as HeroPlayersEnum]?.heroName || heroPosition}/>
+                        navigate(`${heroPosition}`)
+                    }}>{heroesPicks[heroPosition as HeroPlayersEnum]?.heroName || heroPosition}</HeroButton>
 
                 )
             )}
@@ -44,15 +49,15 @@ export const ChoosePlayerButtons = () => {
                         }
                     }
                 })
-            }} buttonText={'+'}/>}
+            }}>+</HeroButton>}
 
-            <button className={styles.button} onClick={() => {
-                navigate(navigationLinks.overlord)
+            <HeroButton theme='red' onClick={() => {
+                navigate('overlord')
             }}>
                 Overlord
-            </button>
+            </HeroButton>
 
-            <button className={styles.button} onClick={handleTest}>test</button>
+            {/*<button className={styles.button} onClick={handleTest}>test</button>*/}
         </div>
     )
 }

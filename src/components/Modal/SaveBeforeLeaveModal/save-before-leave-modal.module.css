@@ -1,0 +1,23 @@
+
+.root {
+    align-self: center;
+
+    margin: 0 auto;
+    padding: 20px;
+
+    width: calc(100vw - 40px);
+
+    box-sizing: border-box;
+
+    border: 10px solid;
+    border-image: url('/src/assets/img/buttons/overlord/border.png') 100 / 35px round;
+    background-image: url('/src/assets/img/bg/spotsBG.png');
+    background-clip: padding-box;
+    background-size: contain;
+}
+
+.buttonColumns {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 20px;
+}

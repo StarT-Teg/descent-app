@@ -1,6 +1,6 @@
 import {CampaignPicksInterface, SelectionOptionInterface} from "../../../../types/shared";
 import {toSelectOption} from "../../../../helpers";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Select from "react-select";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
@@ -22,17 +22,47 @@ export const CampaignSetup = () => {
     const [availableMissions, setAvailableMissions] = useState<SelectionOptionInterface[] | undefined>(undefined);
     const availableEncounters = [{value: 1, label: 'Encounter 1'}, {value: 2, label: 'Encounter 2'}]
 
-    const selectedCampaign: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedCampaign);
-    const selectedAct: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedAct, `Act ${campaignPicks.selectedAct}`);
-    const selectedMission: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedMission);
-    const selectedEncounter: SelectionOptionInterface | undefined | null = toSelectOption(campaignPicks?.selectedEncounter, `Encounter ${campaignPicks?.selectedEncounter}`);
+    const selectedCampaign: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedCampaign);
+    const selectedAct: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedAct, `Act ${campaignPicks.selectedAct}`);
+    const selectedMission: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedMission);
+    const selectedEncounter: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedEncounter, `Encounter ${campaignPicks?.selectedEncounter}`);
+
+    const bounceSavePicks = () => {
+    }
 
     const dispatchCampaignPicks = (dispatchCampaignPicks: CampaignPicksInterface) => {
-
         const newCampaignPicks: CampaignPicksInterface = {
             ...campaignPicks,
             ...dispatchCampaignPicks,
         }
+
+        if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
+            const campaignName = newCampaignPicks.selectedCampaign;
+
+            if (!!newCampaignPicks.selectedMission) {
+                const missionName = newCampaignPicks.selectedMission;
+
+                newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length === 1 ? 1 : newCampaignPicks?.selectedEncounter;
+                newCampaignPicks.selectedAct = campaignsData[campaignName][missionName].act;
+            } else {
+                newCampaignPicks.selectedEncounter = undefined;
+            }
+
+        } else {
+            newCampaignPicks.selectedCampaign = undefined;
+            newCampaignPicks.selectedAct = undefined;
+            newCampaignPicks.selectedMission = undefined;
+            newCampaignPicks.selectedEncounter = undefined;
+        }
+
+        dispatch({
+            payload: {campaignPicks: {...newCampaignPicks}},
+            actionType: GameSaveReducerActionTypeEnum.changeCampaignPicks
+        },)
+    }
+
+    useEffect(() => {
+        const newCampaignPicks: CampaignPicksInterface = {...campaignPicks}
 
         if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
             const campaignName = newCampaignPicks.selectedCampaign;
@@ -59,28 +89,11 @@ export const CampaignSetup = () => {
                 setAvailableMissions(availableMissions)
             }
 
-            if (!!newCampaignPicks.selectedMission) {
-                const missionName = newCampaignPicks.selectedMission;
-
-                newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length === 1 ? 1 : newCampaignPicks?.selectedEncounter;
-                newCampaignPicks.selectedAct = campaignsData[campaignName][missionName].act;
-            } else {
-                newCampaignPicks.selectedEncounter = undefined;
-            }
-
         } else {
-            newCampaignPicks.selectedCampaign = undefined;
-            newCampaignPicks.selectedAct = undefined;
-            newCampaignPicks.selectedMission = undefined;
-            newCampaignPicks.selectedEncounter = undefined;
             setAvailableMissions(undefined);
         }
+    }, [campaignPicks.selectedCampaign, campaignPicks.selectedAct, campaignPicks.selectedEncounter, campaignPicks.selectedMission])
 
-        dispatch({
-            payload: {campaignPicks: {...newCampaignPicks}},
-            actionType: GameSaveReducerActionTypeEnum.changeCampaignPicks
-        },)
-    }
 
     return (
         <>

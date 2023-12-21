@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {HeroSheetName} from "./сomponents/HeroSheetName/HeroSheetName";
 import {HeroSheetItems} from "./сomponents/HeroSheetItems";
 import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
@@ -32,102 +32,36 @@ export default function HeroSheet() {
         heroClassName = '',
         heroSubclassName = '',
         heroSkills = [],
-        heroAvailableClasses,
-        heroAvailableSubclasses,
-        heroAvailableSkills,
         heroItems = [],
     } = playerPicks;
 
+    const [heroAvailableClasses, setHeroAvailableClasses] = useState<string[] | undefined>(undefined);
+    const [heroAvailableSubclasses, setHeroAvailableSubclasses] = useState<string[] | undefined>(undefined);
+    const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(undefined);
+
+    const getClassListOfArchetype = (archetype: 'Warrior' | 'Mage' | 'Scout' | 'Healer') => (
+        Object.values(heroClasses).filter(classData => classData.archetype === archetype).map(classData => classData.className)
+    )
+
     const handleChangePlayerPicks = (newPick: Partial<HeroPlayerPicks>) => {
 
-        const heroAvailableClasses: string[] = [];
-        const heroAvailableSkills: string[] = [];
-        const heroAvailableSubclasses: string[] = [];
-        const heroAvailableSubclassSkills: string[] = [];
         const heroItems: string[] = newPick?.heroItems || [];
 
         const newHeroPicks: HeroPlayerPicks = {
             ...playerPicks,
             ...newPick,
-            heroAvailableClasses,
-            heroAvailableSkills,
-            heroAvailableSubclasses,
-            heroAvailableSubclassSkills,
             heroItems,
         };
 
-        if (!!newHeroPicks.heroName && !!heroes[newHeroPicks.heroName]) {
-            for (const key in heroClasses) {
-                if (heroClasses[key].archetype === heroes[newHeroPicks.heroName].type) {
-                    heroAvailableClasses.push(key);
-                }
-            }
-        } else {
+        if (!newHeroPicks?.heroName) {
             newHeroPicks.heroClassName = '';
             newHeroPicks.heroSubclassName = '';
-            newHeroPicks.heroAvailableClasses = [];
-            newHeroPicks.heroAvailableSubclasses = [];
-            newHeroPicks.heroAvailableSkills = [];
         }
 
-        if (!!newHeroPicks.heroClassName
-            && !!heroClasses[newHeroPicks.heroClassName]
-            && newHeroPicks.heroName
-            && heroClasses[newHeroPicks.heroClassName].archetype === heroes[newHeroPicks.heroName].type) {
-            for (const key in heroClasses[newHeroPicks.heroClassName].skills) {
-                heroAvailableSkills.push(key);
-            }
-
-            switch (newHeroPicks.heroClassName) {
-                case "Battlemage":
-                case "Ravager":
-                case "Crusader":
-                    for (const key in heroClasses) {
-                        if (heroClasses[key].archetype === 'Warrior') {
-                            heroAvailableSubclasses.push(key);
-                        }
-                    }
-                    break;
-                case "Steelcaster":
-                case "Trickster":
-                case "Heretic":
-                    for (const key in heroClasses) {
-                        if (heroClasses[key].archetype === 'Mage') {
-                            heroAvailableSubclasses.push(key);
-                        }
-                    }
-                    break;
-                case "Truthseer":
-                case "Raider":
-                case "Watchman":
-                    for (const key in heroClasses) {
-                        if (heroClasses[key].archetype === 'Scout') {
-                            heroAvailableSubclasses.push(key);
-                        }
-                    }
-                    break;
-                case "Lorekeeper":
-                case "Avenger":
-                case "Monk":
-                    for (const key in heroClasses) {
-                        if (heroClasses[key].archetype === 'Healer') {
-                            heroAvailableSubclasses.push(key);
-                        }
-                    }
-                    break;
-            }
-        } else {
+        if (!newHeroPicks.heroClassName) {
             newHeroPicks.heroClassName = '';
             newHeroPicks.heroSubclassName = '';
-            newHeroPicks.heroAvailableSubclasses = [];
-            newHeroPicks.heroAvailableSkills = [];
             newHeroPicks.heroSkills = [];
-        }
-
-        if (!!newHeroPicks.heroSubclassName && !!heroClasses[newHeroPicks.heroSubclassName]) {
-            for (const key in heroClasses[newHeroPicks.heroSubclassName].skills) {
-                heroAvailableSkills.push(key);
-            }
         }
 
         dispatchPlayersPick({
@@ -136,7 +70,6 @@ export default function HeroSheet() {
                 heroesPicks: {
                     ...gameSaveContext?.heroesPicks,
                     [heroPlayerPosition]: {
-                        // ...gameSaveContext.heroesPicks[heroPlayerPosition],
                         ...newHeroPicks,
                     }
                 }
@@ -144,42 +77,62 @@ export default function HeroSheet() {
         })
     }
 
-    // const handleAddItem = (itemName: string, itemIndex?: number) => {
-    //
-    //     const newItems = !!heroItems?.length ? [...heroItems] : [];
-    //
-    //     if (typeof itemIndex === "number") {
-    //         newItems[itemIndex] = itemName;
-    //     } else {
-    //         newItems.push(itemName);
-    //     }
-    //
-    //     dispatchPlayersPick({
-    //         actionType: CurrentHeroesPicksReducerActionsEnum.changePicks,
-    //         playersPicks: {
-    //             [heroPlayerPosition]: {
-    //                 ...playerPicks,
-    //                 heroItems: newItems,
-    //             }
-    //         }
-    //     })
-    // }
-    //
-    // const handleRemoveItem = (itemIndex: number) => {
-    //
-    //     const newItems = (!!heroItems?.length ? [...heroItems] : []);
-    //     newItems.splice(itemIndex, 1)
-    //
-    //     dispatchPlayersPick({
-    //         actionType: CurrentHeroesPicksReducerActionsEnum.changePicks,
-    //         playersPicks: {
-    //             [heroPlayerPosition]: {
-    //                 ...playerPicks,
-    //                 heroItems: newItems,
-    //             }
-    //         }
-    //     })
-    // }
+    useEffect(() => {
+        if (!!playerPicks?.heroName && !!heroes[playerPicks?.heroName]) {
+            setHeroAvailableClasses(
+                Object.values(heroClasses)
+                    .filter(classData => classData.archetype === heroes?.[playerPicks.heroName!]?.type)
+                    .map(classData => (classData.className))
+            )
+
+        } else {
+            setHeroAvailableClasses(undefined)
+            setHeroAvailableSubclasses(undefined)
+            setHeroAvailableSkills(undefined);
+        }
+
+        if (!!playerPicks.heroClassName
+            && !!heroClasses[playerPicks.heroClassName]
+            && playerPicks.heroName
+            && heroClasses[playerPicks.heroClassName].archetype === heroes[playerPicks.heroName].type) {
+
+            setHeroAvailableSkills(Object.keys(heroClasses[playerPicks.heroClassName].skills))
+
+            switch (playerPicks.heroClassName) {
+                case "Battlemage":
+                case "Ravager":
+                case "Crusader":
+                    setHeroAvailableSubclasses(getClassListOfArchetype('Warrior'))
+                    break;
+                case "Steelcaster":
+                case "Trickster":
+                case "Heretic":
+                    setHeroAvailableSubclasses(getClassListOfArchetype('Mage'))
+                    break;
+                case "Truthseer":
+                case "Raider":
+                case "Watchman":
+                    setHeroAvailableSubclasses(getClassListOfArchetype('Scout'))
+                    break;
+                case "Lorekeeper":
+                case "Avenger":
+                case "Monk":
+                    setHeroAvailableSubclasses(getClassListOfArchetype('Healer'))
+                    break;
+            }
+        } else {
+            setHeroAvailableSubclasses(undefined)
+            setHeroAvailableSkills(undefined)
+        }
+
+        if (!!playerPicks.heroSubclassName && !!heroClasses[playerPicks.heroSubclassName]) {
+            setHeroAvailableSkills(
+                Object.keys(heroClasses[playerPicks.heroClassName!].skills).concat(
+                    Object.keys(heroClasses[playerPicks.heroSubclassName].skills)
+                )
+            )
+        }
+    }, [playerPicks, heroClasses, heroes])
 
     return (
         <div className={styles[isMobile ? 'hero-container-mobile' : 'hero-container']}>

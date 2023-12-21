@@ -14,9 +14,6 @@ export const Initial_Player_Picks: HeroPlayerPicks = {
     heroClassName: '',
     heroSubclassName: '',
     heroSkills: [],
-    heroAvailableClasses: [],
-    heroAvailableSubclasses: [],
-    heroAvailableSkills: [],
     heroItems: [],
 }
 

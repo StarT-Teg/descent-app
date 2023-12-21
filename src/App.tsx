@@ -1,26 +1,30 @@
-import React, {useEffect, useLayoutEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DataReducerActionsEnum, useHeroesDataDispatchContext} from "./context";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
-import {Route, Routes,} from "react-router-dom";
+import {Route, Routes, useNavigate,} from "react-router-dom";
 import HeroSheet from "./components/HeroSheet/HeroSheet";
 import {ChoosePlayerButtons} from "./components/ChoosePlayerButtons/ChoosePlayerButtons";
 import {OverlordBench} from "./components/OverlordBench/OverlordBench";
-import uuid from "react-uuid";
 import {useOverlordDataDispatchContext} from "./context/overlord-data-context";
 import {Header} from "./components/Header/Header";
 import {useGetData} from "./dataHooks/useGetData";
 import {useGetGameSave} from "./dataHooks";
 import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
+import {useQuery} from "./helpers/useQuery";
+import {CreateGameParty} from "./components/CreateGameParty/CreateGameParty";
 
 export const App = () => {
 
     const localStorageSaveKey = 'descent-save-game-uuid';
     const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(localStorageSaveKey));
 
+    const navigate = useNavigate();
+    const query = useQuery();
+
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
-    const {data, refetch: refetchData, isSuccess, isLoading: dataIsLoading} = useGetData()
+    const {refetch: refetchData, isLoading: dataIsLoading} = useGetData()
     const {
         data: saveGameData,
         refetch: saveGameDataRefetch,
@@ -37,63 +41,72 @@ export const App = () => {
 
     useEffect(() => {
         if (!!window && !!localStorage) {
-            if (saveGameUuid === null) {
-                const newSaveUuid = uuid();
+            const uuid = localStorage.getItem(localStorageSaveKey);
 
-                localStorage.setItem(localStorageSaveKey, newSaveUuid);
-                setSaveGameUuid(newSaveUuid);
-            } else {
-                saveGameDataRefetch().then()
+            if (!!uuid) {
+                setSaveGameUuid(uuid);
+                saveGameDataRefetch().then();
             }
         }
     }, [window, localStorage])
 
     useEffect(() => {
-        if (Object.keys(saveGameData || {}).length > 0) {
+        if (!!saveGameData) {
+            console.log('saveGameData:', saveGameData)
             dispatchPlayersPick({
                 actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
                 payload: saveGameData,
             })
+            navigate('/players');
         }
     }, [saveGameData])
 
-    if (isSuccess) {
+    useEffect(() => {
+        refetchData().then((response => {
+            const data = response?.data;
 
-        const {
-            heroesData,
-            heroClassesData,
-            itemsData,
-            overlordDecksData,
-            lieutenantsData,
-            relicsData,
-            monstersData,
-            campaignData
-        } = data;
+            if (!!data) {
+                const {
+                    heroesData,
+                    heroClassesData,
+                    itemsData,
+                    overlordDecksData,
+                    lieutenantsData,
+                    relicsData,
+                    monstersData,
+                    campaignData
+                } = data;
 
-        dispatchHeroesData({
-            payload: {
-                heroes: heroesData || {},
-                heroClasses: heroClassesData || {},
-                items: itemsData || {},
-            }, actionType: DataReducerActionsEnum.update
-        })
+                dispatchHeroesData({
+                    payload: {
+                        heroes: heroesData || {},
+                        heroClasses: heroClassesData || {},
+                        items: itemsData || {},
+                    }, actionType: DataReducerActionsEnum.update
+                })
 
-        dispatchOverlordData({
-            payload: {
-                overlordCards: overlordDecksData || {},
-                plotCards: undefined,
-                lieutenants: lieutenantsData || {},
-                relics: relicsData || {},
-                agents: undefined,
-                monsters: monstersData || {},
-                campaignsData: campaignData || {}
-            }, actionType: DataReducerActionsEnum.update
-        })
-    }
-
-    useLayoutEffect(() => {
-        refetchData().then();
+                dispatchOverlordData({
+                    payload: {
+                        overlordCards: overlordDecksData || {},
+                        plotCards: undefined,
+                        lieutenants: lieutenantsData || {},
+                        relics: relicsData || {},
+                        agents: undefined,
+                        monsters: monstersData || {},
+                        campaignsData: campaignData || {}
+                    }, actionType: DataReducerActionsEnum.update
+                })
+            }
+        }));
     }, [])
+
+    useEffect(() => {
+        const inviteUuidQueryParam = query.get('inviteUuid');
+        if (!!inviteUuidQueryParam) {
+            localStorage.setItem(localStorageSaveKey, inviteUuidQueryParam);
+        }
+    }, [])
+
 
     if (isLoading) {
         return <LoadingSpinner/>
@@ -101,15 +114,23 @@ export const App = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<Header/>}>
+            <Route
+                path={'/:inviteUuid?'}
+                element={<CreateGameParty/>}/>
+
+            {/*<Route*/}
+            {/*    path={':inviteUuid?'}*/}
+            {/*    element={<ChoosePlayerButtons/>}/>*/}
+
+            <Route path="/players" element={<Header/>}>
                 <Route
-                    path={'/'}
+                    path={'/players'}
                     element={<ChoosePlayerButtons/>}/>
                 <Route
-                    path={'players/:playerRole'}
+                    path={'/players/:playerRole'}
                     element={<HeroSheet/>}/>
                 <Route
-                    path={'players/overlord'}
+                    path={'/players/overlord'}
                     element={<OverlordBench/>}/>
 
                 {/* Using path="*"" means "match anything", so this route

@@ -1,8 +1,8 @@
 import styles from './header.module.css'
-import {Link, Outlet} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useHeroesDataContext} from "../../context";
 import {useOverlordDataContext} from "../../context/overlord-data-context";
-import React, {SVGProps} from 'react';
+import React, {SVGProps, useEffect, useState} from 'react';
 import {JSX} from 'react/jsx-runtime';
 import {useGameSaveContext} from "../../context/game-save-context";
 import {getHeroBr, getOverlordBr} from "../../helpers";
@@ -34,17 +34,68 @@ export const Header = () => {
         monsters,
     } = useOverlordDataContext();
 
-    const heroesAmount = Object.keys(heroesPicks).length;
+    const [isBackArrowVisible, setIsBackArrowVisible] = useState<boolean>(false);
+    const [freeBr, setFreeBr] = useState<number>(0);
 
-    const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroes, heroClasses, items, heroData), 0)
-    const overlordBR = getOverlordBr(overlordCards, monsters, campaignPicks, overlordPicks, heroesAmount);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const getBrStylesForOrb = (currentBr: number): React.CSSProperties => {
+
+        const styles: React.CSSProperties = {}
+
+        if (-100 <= currentBr || currentBr <= 100) {
+            styles.height = `${Math.abs(currentBr)}%`
+        } else {
+            styles.height = '100%'
+        }
+
+        if (currentBr > 0) {
+            styles.background = 'radial-gradient(circle, rgba(53,61,173,1) 30%, rgba(22,52,91,0.9) 100%)'
+        }
+
+        return styles;
+    }
+
+    useEffect(() => {
+        const heroesAmount = Object.keys(heroesPicks).length;
+
+        const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroes, heroClasses, items, heroData), 0)
+        const overlordBR = getOverlordBr(overlordCards, monsters, campaignPicks, overlordPicks, heroesAmount);
+
+        setFreeBr(heroesBR - overlordBR)
+
+    }, [heroes, heroClasses, items, heroesPicks, overlordCards, monsters, campaignPicks.selectedCampaign, overlordPicks])
+
+    useEffect(() => {
+        setIsBackArrowVisible(location.pathname !== '/players')
+    }, [location])
 
     return (
-        <div className={styles.root} id='root'>
+        <div className={styles.root}>
             <div className={styles.header}>
-                <Link to={`/`}> <ArrowBackIcon className={styles.extraBackArrowIcon}/></Link>
-                heroes BR: {heroesBR}
-                overlord BR: {overlordBR}
+                {isBackArrowVisible && (
+                    <ArrowBackIcon onClick={() => {
+                        navigate(`/players`)
+                    }} className={styles.extraBackArrowIcon}/>)}
+
+                {/*<ModalPortal modalComponent={(onClose) => (<SaveBeforeLeaveModal onLeaveButtonCLick={() => {*/}
+                {/*        onClose();*/}
+                {/*        navigate(`/players`)*/}
+                {/*    }}/>)} openModalButtonComponent={(onOpen) => (*/}
+                {/*        <ArrowBackIcon onClick={onOpen} className={styles.extraBackArrowIcon}/>)}*/}
+                {/*    />*/}
+                {/*)}*/}
+
+                <div className={styles.orbRoot}>
+                    BR
+                    <div className={styles.orb}>
+                        <div className={styles.glass}></div>
+                        <div className={styles.amount} style={getBrStylesForOrb(freeBr)}></div>
+                        <div className={styles.orbText}>{freeBr}</div>
+                    </div>
+                </div>
+
             </div>
             <div className={styles.content}>
                 <Outlet/>

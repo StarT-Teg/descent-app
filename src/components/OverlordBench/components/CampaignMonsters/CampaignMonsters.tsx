@@ -57,7 +57,7 @@ export const CampaignMonsters = () => {
 
         if (!!selectedCampaign && !!selectedMission && !!selectedEncounter) {
 
-            campaignsData[selectedCampaign][selectedMission].encounters?.[selectedEncounter].openGroupsTraits
+            campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].openGroupsTraits
                 .forEach((groupTrait) => {
                     const act: 'act1' | 'act2' = 'act' + selectedAct as 'act1' | 'act2';
 

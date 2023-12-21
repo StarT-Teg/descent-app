@@ -1,22 +1,27 @@
 import styles from './hero-button.module.css'
-import React from "react";
+import React, {ReactNode} from "react";
+import cn from "classnames";
 
 export interface HeroButtonInterface {
-    buttonText: string;
     onClick?(): void;
+
+    theme?: 'hero' | 'blue' | 'red';
     buttonProps?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+    children: ReactNode;
 }
 
 export const HeroButton = (props: HeroButtonInterface) => {
 
     const {
         onClick,
-        buttonText,
+        children,
+        theme = 'blue',
+        buttonProps,
     } = props;
 
     return (
-        <button className={styles.root} onClick={onClick}>
-            {buttonText}
+        <button className={cn(styles.button, styles.buttonText, styles[theme])} onClick={onClick} {...buttonProps}>
+            {children}
         </button>
     )
 }

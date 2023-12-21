@@ -1,9 +1,10 @@
-.loading-spinner {
+.loadingSpinner {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    width: 100%;
+    align-self: center;
+    height: 100vh;
+    width: 100vw;
 }
 
 .spinner {
