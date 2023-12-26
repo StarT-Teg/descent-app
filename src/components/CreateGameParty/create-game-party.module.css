@@ -1,0 +1,11 @@
+.root {
+    padding: 89px 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    min-height: 100vh;
+}

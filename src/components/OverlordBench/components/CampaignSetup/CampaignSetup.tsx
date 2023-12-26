@@ -1,14 +1,13 @@
-import {CampaignPicksInterface, GameSavePicks, SelectionOptionInterface} from "../../../../types/shared";
+import {CampaignPicksInterface, SelectionOptionInterface} from "../../../../types/shared";
 import {toSelectOption} from "../../../../helpers";
 import React, {useEffect, useState} from "react";
 import Select from "react-select";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
-import {useSetGameSave} from "../../../../dataHooks/useSetGameSave";
 
 
-export const CampaignSetup = ({}: { setGameSave?: (gameData: Partial<GameSavePicks>, onSuccess?: () => void) => void }) => {
+export const CampaignSetup = () => {
 
     const {campaignsData} = useOverlordDataContext();
 
@@ -27,9 +26,6 @@ export const CampaignSetup = ({}: { setGameSave?: (gameData: Partial<GameSavePic
     const selectedAct: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedAct, `Act ${campaignPicks.selectedAct}`);
     const selectedMission: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedMission);
     const selectedEncounter: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedEncounter, `Encounter ${campaignPicks?.selectedEncounter}`);
-
-    const uuid = localStorage.getItem('descent-save-game-uuid')!;
-    const {mutate} = useSetGameSave();
 
     const dispatchCampaignPicks = (dispatchCampaignPicks: CampaignPicksInterface) => {
         const newCampaignPicks: CampaignPicksInterface = {

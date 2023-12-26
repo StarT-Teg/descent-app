@@ -9,23 +9,8 @@ import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-red
 export const ChoosePlayerButtons = () => {
     const navigate = useNavigate();
 
-    const {heroesPicks, overlordPicks} = useGameSaveContext();
+    const {heroesPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
-
-    // const localStorageSaveKey = 'descent-save-game-uuid';
-    // const uuid = localStorage.getItem(localStorageSaveKey)!
-    //
-    // const {mutate} = useSetGameSaveTest();
-
-    // const handleTest = () => {
-    //
-    //     mutate({data: {campaignPicks}, uuid}, {
-    //         onSuccess: (res) => {
-    //             console.log(res)
-    //         }
-    //     });
-    // }
-
 
     return (
         <div className={styles.content}>
