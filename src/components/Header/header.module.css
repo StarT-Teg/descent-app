@@ -1,20 +1,46 @@
 
 .root {
+    display: grid;
+    grid-template-rows: 1fr auto;
 
+    min-height: 100vh;
 }
 
 .content {
-    padding: 24px 20px;
+    padding: 89px 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    min-height: 100vh;
 }
 
 .header {
-    display: grid;
-    grid-auto-flow: column;
-    min-height: 50px;
-    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
 
-    background-color: hsl(0, 0%, 100%);
-    border-radius: 0 0 8px 8px;
+    display: grid;
+    align-items: center;
+    grid-auto-flow: column;
+
+    padding: 12px 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    color: hsl(0, 0%, 100%);
+
+    /*box-shadow: ;*/
+    filter: drop-shadow(0 5px 20px rgba(22, 52, 91, 1));
+    /*background: radial-gradient(circle, rgba(53, 61, 173, 1) 30%, rgba(22, 52, 91, 1) 100%) padding-box;*/
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
 }
 
 .extraBackArrowIcon {
@@ -23,6 +49,7 @@
 }
 
 .orbRoot {
+    margin-left: auto;
     /*display: grid;*/
     /*grid-template-columns: 1fr 1fr;*/
     /*grid-template-rows: auto auto;*/

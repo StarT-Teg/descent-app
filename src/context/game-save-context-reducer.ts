@@ -37,9 +37,11 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
         case GameSaveReducerActionTypeEnum.changeAllPicks:
             return {...payload};
         case GameSaveReducerActionTypeEnum.changeHeroesPicks:
+            return {...state, heroesPicks: {...state.heroesPicks, ...payload.heroesPicks}};
         case GameSaveReducerActionTypeEnum.changeOverlordPicks:
+            return {...state, overlordPicks: {...state.overlordPicks, ...payload.overlordPicks}};
         case GameSaveReducerActionTypeEnum.changeCampaignPicks:
-            return {...state, ...payload};
+            return {...state, campaignPicks: {...state.campaignPicks, ...payload.campaignPicks}};
         default:
             return state;
     }

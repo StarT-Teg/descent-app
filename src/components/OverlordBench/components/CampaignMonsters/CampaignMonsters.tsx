@@ -12,7 +12,7 @@ export const CampaignMonsters = () => {
 
     const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
-    const {purchasedCards, pickedCards, pickedMonsters} = overlordPicks;
+    const {pickedCards, pickedMonsters} = overlordPicks;
 
     const dispatch = useGameSaveDispatchContext();
 
@@ -57,18 +57,18 @@ export const CampaignMonsters = () => {
 
         if (!!selectedCampaign && !!selectedMission && !!selectedEncounter) {
 
-            campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].openGroupsTraits
-                .forEach((groupTrait) => {
-                    const act: 'act1' | 'act2' = 'act' + selectedAct as 'act1' | 'act2';
+            const act: 'act1' | 'act2' = 'act' + campaignsData[selectedCampaign][selectedMission].act as 'act1' | 'act2';
+            const availableTraits = campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].openGroupsTraits;
 
-                    Object.keys(monsters).forEach(monsterName => {
-                        const newMonster = monsters?.[monsterName]?.[act]?.master;
+            Object.values(monsters).forEach(monsterData => {
+                const newMonster = monsterData?.[act]?.master;
 
-                        if (newMonster?.traits?.includes(groupTrait) && !defaultMonsters.includes(newMonster?.name)) {
-                            newOpenGroups.push(monsterName);
-                        }
-                    })
-                })
+                if (newMonster?.traits?.some(r => availableTraits?.includes(r)) && !defaultMonsters.includes(newMonster.name)) {
+                    newOpenGroups.push(newMonster.name)
+                }
+            })
+        } else {
+            setPickedOpenGroups([]);
         }
 
         setOpenGroups(newOpenGroups);
@@ -86,12 +86,12 @@ export const CampaignMonsters = () => {
         if (pickedCards?.includes('Call of the Ravens')) {
             newFamiliars.push('Raven Flock')
         }
-        if (purchasedCards?.includes('Ties That Bind')) {
+        if (pickedCards?.includes('Ties That Bind')) {
             newFamiliars.push('Scourge')
         }
 
         setOverlordFamiliars(newFamiliars);
-    }, [pickedCards, purchasedCards])
+    }, [pickedCards])
 
     useEffect(() => {
         const newDefaultMonsters = (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.monsters || []).concat(overlordFamiliars);
@@ -109,7 +109,7 @@ export const CampaignMonsters = () => {
                             return (
                                 <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
                                     <div className="list">
-                                        <input type="text" readOnly value={monsterName}
+                                        <input type="text" readOnly value={monsterName} disabled
                                                className={'input'}
                                         />
                                     </div>
@@ -126,7 +126,8 @@ export const CampaignMonsters = () => {
 
             <fieldset>
                 <legend>Open Groups
-                    - {campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0}</legend>
+                    - {campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0}
+                </legend>
 
                 {openGroupMonsters?.sort((a, b) => (getMonsterGroupBr(monsters, b, numberOfHeroes, currentAct) - getMonsterGroupBr(monsters, a, numberOfHeroes, currentAct))).map((monsterName: string, index) => {
                         return (

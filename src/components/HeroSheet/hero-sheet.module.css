@@ -4,7 +4,6 @@
 }
 
 .hero-container {
-    /*background-image: url('/src/assets/img/buttons/hero/herobg.png');*/
     background-position: top;
     background-size: contain;
     background-repeat: no-repeat;
@@ -17,7 +16,6 @@
 }
 
 .hero-container-mobile {
-    /*background-image: url('/src/assets/img/buttons/hero/herobg.png');*/
     background-position: top;
     background-size: cover;
     background-repeat: no-repeat;

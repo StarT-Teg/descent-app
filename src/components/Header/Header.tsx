@@ -65,7 +65,7 @@ export const Header = () => {
 
         setFreeBr(heroesBR - overlordBR)
 
-    }, [heroes, heroClasses, items, heroesPicks, overlordCards, monsters, campaignPicks.selectedCampaign, overlordPicks])
+    }, [heroes, heroClasses, items, heroesPicks, overlordCards, monsters, campaignPicks, overlordPicks])
 
     useEffect(() => {
         setIsBackArrowVisible(location.pathname !== '/players')
@@ -88,7 +88,6 @@ export const Header = () => {
                 {/*)}*/}
 
                 <div className={styles.orbRoot}>
-                    BR
                     <div className={styles.orb}>
                         <div className={styles.glass}></div>
                         <div className={styles.amount} style={getBrStylesForOrb(freeBr)}></div>
@@ -100,6 +99,7 @@ export const Header = () => {
             <div className={styles.content}>
                 <Outlet/>
             </div>
+            <div className={styles.footer}></div>
         </div>
     )
 }

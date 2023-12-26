@@ -5,12 +5,12 @@ import cn from "classnames";
 export interface HeroButtonInterface {
     onClick?(): void;
 
-    theme?: 'hero' | 'blue' | 'red';
+    theme?: 'hero' | 'blue' | 'red' | 'outlineRed';
     buttonProps?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
     children: ReactNode;
 }
 
-export const HeroButton = (props: HeroButtonInterface) => {
+export const Button = (props: HeroButtonInterface) => {
 
     const {
         onClick,

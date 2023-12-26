@@ -11,6 +11,9 @@ import styles from './hero-sheet.module.css'
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 import {Accordion, AccordionItem} from "../shared/Accordion/Accordion";
+import {Button} from "../shared";
+import {useSetGameSave} from "../../dataHooks/useSetGameSave";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function HeroSheet() {
 
@@ -18,6 +21,9 @@ export default function HeroSheet() {
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
     const {heroes, heroClasses, items} = useHeroesDataContext()
+
+    const uuid = localStorage.getItem('descent-save-game-uuid')!;
+    const {mutate, isLoading} = useSetGameSave();
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -77,6 +83,10 @@ export default function HeroSheet() {
         })
     }
 
+    const handleSaveChanges = () => {
+        mutate({uuid, data: {heroesPicks: {[heroPlayerPosition]: {}}}})
+    }
+
     useEffect(() => {
         if (!!playerPicks?.heroName && !!heroes[playerPicks?.heroName]) {
             setHeroAvailableClasses(
@@ -134,6 +144,10 @@ export default function HeroSheet() {
         }
     }, [playerPicks, heroClasses, heroes])
 
+    if (isLoading) {
+        return <LoadingSpinner/>
+    }
+
     return (
         <div className={styles[isMobile ? 'hero-container-mobile' : 'hero-container']}>
             <div className={isMobile ? 'grid-container-mobile' : 'grid-container'}>
@@ -188,6 +202,11 @@ export default function HeroSheet() {
                         />
                     </AccordionItem>
                 </Accordion>
+
+                <Button theme='outlineRed' onClick={() => {
+                    handleSaveChanges()
+                }}>Сохранить
+                </Button>
             </div>
         </div>
 

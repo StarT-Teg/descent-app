@@ -26,7 +26,6 @@ export const App = () => {
 
     const {refetch: refetchData, isLoading: dataIsLoading} = useGetData()
     const {
-        data: saveGameData,
         refetch: saveGameDataRefetch,
         isLoading: saveIsLoading
     } = useGetGameSave(saveGameUuid || '');
@@ -35,31 +34,55 @@ export const App = () => {
     const dispatchHeroesData = useHeroesDataDispatchContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
+    const getSaveData = (uuid: string) => {
+        setSaveGameUuid(uuid);
+        saveGameDataRefetch().then(response => {
+            const saveGameData = response.data;
+
+            if (typeof saveGameData !== 'string') {
+                dispatchPlayersPick({
+                    actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
+                    payload: saveGameData,
+                })
+                navigate('/players');
+            } else {
+                alert(saveGameData)
+                navigate('/');
+            }
+        });
+    }
+
     useEffect(() => {
         setIsLoading(dataIsLoading || saveIsLoading)
     }, [dataIsLoading, saveIsLoading])
 
     useEffect(() => {
-        if (!!window && !!localStorage) {
-            const uuid = localStorage.getItem(localStorageSaveKey);
+        const inviteUuidQueryParam = query.get('inviteUuid');
 
-            if (!!uuid) {
-                setSaveGameUuid(uuid);
-                saveGameDataRefetch().then();
+        if (!!inviteUuidQueryParam) {
+            localStorage.setItem(localStorageSaveKey, inviteUuidQueryParam);
+            getSaveData(inviteUuidQueryParam);
+        } else {
+            if (!!window && !!localStorage) {
+                const uuid = localStorage.getItem(localStorageSaveKey);
+
+                if (!!uuid) {
+                    getSaveData(uuid);
+                }
             }
         }
-    }, [window, localStorage])
 
-    useEffect(() => {
-        if (!!saveGameData) {
-            console.log('saveGameData:', saveGameData)
-            dispatchPlayersPick({
-                actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
-                payload: saveGameData,
-            })
-            navigate('/players');
-        }
-    }, [saveGameData])
+    }, [])
+
+    // useEffect(() => {
+    //     if (!!saveGameData) {
+    //         dispatchPlayersPick({
+    //             actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
+    //             payload: saveGameData,
+    //         })
+    //         navigate('/players');
+    //     }
+    // }, [saveGameData])
 
     useEffect(() => {
         refetchData().then((response => {
@@ -100,14 +123,6 @@ export const App = () => {
         }));
     }, [])
 
-    useEffect(() => {
-        const inviteUuidQueryParam = query.get('inviteUuid');
-        if (!!inviteUuidQueryParam) {
-            localStorage.setItem(localStorageSaveKey, inviteUuidQueryParam);
-        }
-    }, [])
-
-
     if (isLoading) {
         return <LoadingSpinner/>
     }
@@ -117,10 +132,6 @@ export const App = () => {
             <Route
                 path={'/:inviteUuid?'}
                 element={<CreateGameParty/>}/>
-
-            {/*<Route*/}
-            {/*    path={':inviteUuid?'}*/}
-            {/*    element={<ChoosePlayerButtons/>}/>*/}
 
             <Route path="/players" element={<Header/>}>
                 <Route

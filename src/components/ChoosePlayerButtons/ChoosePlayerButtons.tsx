@@ -2,7 +2,7 @@ import styles from './choose-player-buttons.module.css'
 import {HeroPlayersEnum} from "../../types/shared";
 import {useNavigate} from "react-router-dom";
 import React from "react";
-import {HeroButton} from "../shared/HeroButton/HeroButton";
+import {Button} from "../shared/Button/Button";
 import {Initial_Player_Picks, useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
@@ -12,12 +12,10 @@ export const ChoosePlayerButtons = () => {
     const {heroesPicks, overlordPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
-    console.log('overlordPicks:', overlordPicks)
-
     // const localStorageSaveKey = 'descent-save-game-uuid';
     // const uuid = localStorage.getItem(localStorageSaveKey)!
     //
-    // const {mutate} = useSetGameSave();
+    // const {mutate} = useSetGameSaveTest();
 
     // const handleTest = () => {
     //
@@ -32,14 +30,14 @@ export const ChoosePlayerButtons = () => {
     return (
         <div className={styles.content}>
             {Object.keys(heroesPicks).map((heroPosition: string) => (
-                    <HeroButton onClick={() => {
-                        navigate(`${heroPosition}`)
-                    }}>{heroesPicks[heroPosition as HeroPlayersEnum]?.heroName || heroPosition}</HeroButton>
+                <Button onClick={() => {
+                    navigate(`${heroPosition}`)
+                }}>{heroesPicks[heroPosition as HeroPlayersEnum]?.heroName || heroPosition}</Button>
 
                 )
             )}
 
-            {(Object.keys(heroesPicks).length < 4) && <HeroButton onClick={() => {
+            {(Object.keys(heroesPicks).length < 4) && <Button onClick={() => {
                 dispatchPlayersPick({
                     actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
                     payload: {
@@ -49,13 +47,13 @@ export const ChoosePlayerButtons = () => {
                         }
                     }
                 })
-            }}>+</HeroButton>}
+            }}>+</Button>}
 
-            <HeroButton theme='red' onClick={() => {
+            <Button theme='red' onClick={() => {
                 navigate('overlord')
             }}>
                 Overlord
-            </HeroButton>
+            </Button>
 
             {/*<button className={styles.button} onClick={handleTest}>test</button>*/}
         </div>

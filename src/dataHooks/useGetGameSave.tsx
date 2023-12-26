@@ -1,19 +1,24 @@
 import axios from "axios";
 import {useQuery} from "react-query";
+import {AxiosRequestConfig} from "axios/index";
 
 export const useGetGameSave = (uuid: string) => {
 
-    const params = {
-        uuid,
+    const config: AxiosRequestConfig<string> = {
+        params: {uuid},
+        headers: {"Content-Type": "text/plain"},
+        validateStatus: (status) => status !== 302,
     }
 
     const query = () => axios
-        .get(`https://script.google.com/macros/s/AKfycbwrM4AbrDT_-rA55bg0TIXxAg_aI85kcJTXgqItL0twcBIT0K94I01Vicllcj2wnQBf9Q/exec`, {
-            params,
-            headers: {"Content-Type": "text/plain"}
-        })
+        .get(`https://script.google.com/macros/s/AKfycbwrM4AbrDT_-rA55bg0TIXxAg_aI85kcJTXgqItL0twcBIT0K94I01Vicllcj2wnQBf9Q/exec`, config)
         .then(response => {
-            return JSON.parse(response.data)
+            try {
+                JSON.parse(response.data);
+            } catch (e) {
+                return response.data;
+            }
+            return JSON.parse(response.data);
         });
 
     return useQuery('get-save-data', query, {

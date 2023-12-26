@@ -1,43 +1,40 @@
 import uuid from "react-uuid";
-import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import {useGameSaveContext} from "../../context/game-save-context";
 import {useNavigate} from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import React, {useLayoutEffect} from "react";
-
+import React from "react";
+import {useSetGameSave} from "../../dataHooks/useSetGameSave";
+import {Button} from "../shared";
+import styles from './create-game-party.module.css'
 
 export const CreateGameParty = () => {
 
-    const navigate = useNavigate();
-    const {mutate, isLoading} = useSetGameSave();
+    const localStorageSaveKey = 'descent-save-game-uuid';
+
     const gamePicks = useGameSaveContext()
 
+    const {mutate, isLoading} = useSetGameSave()
+
+    const navigate = useNavigate();
+
     const handleCreateUuid = () => {
-        const newSaveUuid = uuid();
+        const newUuid = uuid();
+        localStorage.setItem(localStorageSaveKey, newUuid);
 
-        mutate({uuid: newSaveUuid, data: {...gamePicks}}, {
+        mutate({uuid: newUuid, data: {...gamePicks}}, {
             onSuccess: () => {
-                localStorage.setItem('descent-save-game-uuid', newSaveUuid);
-                navigate(`/players`)
+                navigate('/players')
             }
-        });
-    }
-
-    useLayoutEffect(() => {
-        const isUuidAvailable = !!localStorage.getItem(String(process.env.Local_Storage_Save_Key));
-        if (isUuidAvailable) {
-            navigate(`/players`)
-        }
-
-    }, [localStorage])
-
-    if (isLoading) {
-        return <LoadingSpinner/>
+        })
     }
 
     return (
-        <div>
-            <button onClick={handleCreateUuid}>Create Game Party</button>
+        <div className={styles.root}>
+            {isLoading ? <LoadingSpinner/> : (
+                <Button theme='outlineRed' onClick={handleCreateUuid}>
+                    Create Game Party
+                </Button>
+            )}
         </div>
     )
 }

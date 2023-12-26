@@ -11,13 +11,12 @@ export interface GameSaveParametersInterface {
 
 export interface GameSaveDataInterface {
     uuid: string;
-    data: GameSavePicks;
+    data: Partial<GameSavePicks>;
 }
 
 export const useSetGameSave = () => {
 
     const headers = {
-        // 'Access-Control-Allow-Origin': '*',
         "Content-Type": "text/plain",
     }
 
