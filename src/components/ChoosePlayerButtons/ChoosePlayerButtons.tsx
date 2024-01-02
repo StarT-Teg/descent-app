@@ -40,6 +40,12 @@ export const ChoosePlayerButtons = () => {
                 Overlord
             </Button>
 
+            <Button onClick={() => {
+                navigate('/settings')
+            }}>
+                Test
+            </Button>
+
             {/*<button className={styles.button} onClick={handleTest}>test</button>*/}
         </div>
     )

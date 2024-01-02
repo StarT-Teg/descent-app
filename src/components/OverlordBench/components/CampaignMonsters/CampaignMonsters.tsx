@@ -4,11 +4,14 @@ import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-conte
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import styles from './campaign-monsters.module.css'
-import {getMonsterGroupBr} from "../../../../helpers";
+import {getFreeBr, getMonsterGroupBr} from "../../../../helpers";
+import classNames from 'classnames';
+import {useHeroesDataContext} from "../../../../context";
 
 export const CampaignMonsters = () => {
 
-    const {campaignsData, monsters} = useOverlordDataContext();
+    const {campaignsData, overlordCards, monsters} = useOverlordDataContext();
+    const heroesDataContext = useHeroesDataContext()
 
     const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
@@ -23,6 +26,11 @@ export const CampaignMonsters = () => {
     const [defaultMonsters, setDefaultMonsters] = useState<string[]>([])
     const [openGroupMonsters, setOpenGroups] = useState<string[]>([]);
     const [pickedOpenGroups, setPickedOpenGroups] = useState<string[]>([]);
+
+    const freeBr = getFreeBr({overlordPicks, campaignPicks, heroesPicks}, {
+        overlordCards,
+        monsters
+    }, {...heroesDataContext});
 
     const dispatchOverlordPicks = (dispatchOverlordPicks: CurrentOverlordPicks) => {
 
@@ -131,7 +139,9 @@ export const CampaignMonsters = () => {
 
                 {openGroupMonsters?.sort((a, b) => (getMonsterGroupBr(monsters, b, numberOfHeroes, currentAct) - getMonsterGroupBr(monsters, a, numberOfHeroes, currentAct))).map((monsterName: string, index) => {
                         return (
-                            <div className={styles.openGroupMonsterLine} key={`open-group-monster-${index}`}>
+                            <div
+                                className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: getMonsterGroupBr(monsters, monsterName, numberOfHeroes, currentAct) > freeBr})}
+                                key={`open-group-monster-${index}`}>
                                 <input type="checkbox"
                                        onChange={() => {
                                            onOpenGroupPicked(monsterName)

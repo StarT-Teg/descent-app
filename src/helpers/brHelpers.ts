@@ -1,6 +1,7 @@
 import {
     CampaignPicksInterface,
     CurrentOverlordPicks,
+    CurrentPlayersPicks,
     HeroClassesDataAdapted,
     HeroesDataAdapted,
     HeroPlayerPicks,
@@ -14,6 +15,19 @@ export const getMonsterGroupBr = (monstersData: MonstersDataAdapted, monsterName
         const monsterAmount = monsterValue.groupSize[String(amountOfHeroes)];
         return brAcc + (parseFloat(monsterValue.br) * monsterAmount);
     }, 0);
+}
+
+export const getFreeBr = (playersPicks: { heroesPicks: CurrentPlayersPicks, overlordPicks: CurrentOverlordPicks, campaignPicks: CampaignPicksInterface }, overlordData: { overlordCards: OverlordCardsDataAdapted, monsters: MonstersDataAdapted }, heroesData: { heroes: HeroesDataAdapted, heroClasses: HeroClassesDataAdapted, items: ItemsDataAdapted }) => {
+    const {heroes, heroClasses, items} = heroesData;
+    const {overlordCards, monsters} = overlordData
+    const {heroesPicks, overlordPicks, campaignPicks} = playersPicks;
+
+    const heroesAmount = Object.keys(heroesPicks).length;
+
+    const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroes, heroClasses, items, heroData), 0)
+    const overlordBR = getOverlordBr(overlordCards, monsters, campaignPicks, overlordPicks, heroesAmount);
+
+    return heroesBR - overlordBR;
 }
 
 export const getHeroBr = (heroes: HeroesDataAdapted, heroClasses: HeroClassesDataAdapted, items: ItemsDataAdapted, heroPicks: HeroPlayerPicks): number => {
@@ -47,6 +61,7 @@ export const getHeroBr = (heroes: HeroesDataAdapted, heroClasses: HeroClassesDat
 }
 
 export const getOverlordBr = (overlordCards: OverlordCardsDataAdapted, monsters: MonstersDataAdapted, campaignPicks: CampaignPicksInterface, overlordPicks: CurrentOverlordPicks, heroesAmount: number) => {
+
     let overlordBr = 0;
 
     if (!Object.keys(overlordPicks).length) {

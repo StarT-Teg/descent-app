@@ -4,16 +4,9 @@ import {OverlordDeck} from "./components/OverlordDeck/OverlordDeck";
 import styles from "../HeroSheet/сomponents/HeroSheetName/hero-sheet-name.module.css";
 import {CampaignMonsters} from "./components/CampaignMonsters/CampaignMonsters";
 import {Accordion, AccordionItem, Button} from "../shared";
-import {GameSavePicks} from "../../types/shared";
 import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import {useGameSaveContext} from "../../context/game-save-context";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-
-export interface SetGameSaveInterface {
-    uuid: string | null,
-    gameData: Partial<GameSavePicks>,
-    onSuccess?: () => void
-}
 
 export const OverlordBench = () => {
 

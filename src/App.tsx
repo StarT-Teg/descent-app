@@ -12,7 +12,7 @@ import {useGetGameSave} from "./dataHooks";
 import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
 import {useQuery} from "./helpers/useQuery";
-import {CreateGameParty} from "./components/CreateGameParty/CreateGameParty";
+import {Settings} from "./components/Settings/Settings";
 
 export const App = () => {
 
@@ -131,7 +131,11 @@ export const App = () => {
         <Routes>
             <Route
                 path={'/:inviteUuid?'}
-                element={<CreateGameParty/>}/>
+                element={<Settings/>}/>
+
+            <Route
+                path={'/settings'}
+                element={<Settings/>}/>
 
             <Route path="/players" element={<Header/>}>
                 <Route

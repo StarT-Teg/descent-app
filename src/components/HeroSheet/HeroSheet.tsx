@@ -84,7 +84,10 @@ export default function HeroSheet() {
     }
 
     const handleSaveChanges = () => {
-        mutate({uuid, data: {heroesPicks: {[heroPlayerPosition]: {}}}})
+        mutate({
+            uuid,
+            data: {heroesPicks: {[heroPlayerPosition]: {...gameSaveContext.heroesPicks[heroPlayerPosition]}}}
+        })
     }
 
     useEffect(() => {

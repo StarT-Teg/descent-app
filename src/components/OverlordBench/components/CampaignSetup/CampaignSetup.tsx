@@ -36,12 +36,13 @@ export const CampaignSetup = () => {
         if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
             const campaignName = newCampaignPicks.selectedCampaign;
 
-            if (!!newCampaignPicks.selectedMission) {
+            if (!!newCampaignPicks.selectedMission && !!campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission]) {
                 const missionName = newCampaignPicks.selectedMission;
 
                 newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length < 2 ? 1 : newCampaignPicks?.selectedEncounter;
                 newCampaignPicks.selectedAct = campaignsData?.[campaignName]?.[missionName]?.act;
             } else {
+                newCampaignPicks.selectedMission = undefined;
                 newCampaignPicks.selectedEncounter = undefined;
             }
 
