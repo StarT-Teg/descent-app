@@ -12,18 +12,16 @@ import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 import {Accordion, AccordionItem} from "../shared/Accordion/Accordion";
 import {Button} from "../shared";
-import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
 
 export default function HeroSheet() {
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
+    const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
 
     const {heroes, heroClasses, items} = useHeroesDataContext()
-
-    const uuid = localStorage.getItem('descent-save-game-uuid')!;
-    const {mutate, isLoading} = useSetGameSave();
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -84,10 +82,7 @@ export default function HeroSheet() {
     }
 
     const handleSaveChanges = () => {
-        mutate({
-            uuid,
-            data: {heroesPicks: {[heroPlayerPosition]: {...gameSaveContext.heroesPicks[heroPlayerPosition]}}}
-        })
+        setSaveAndUpdate({heroesPicks: {[heroPlayerPosition]: {...gameSaveContext.heroesPicks[heroPlayerPosition]}}})
     }
 
     useEffect(() => {

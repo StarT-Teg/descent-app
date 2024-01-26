@@ -9,7 +9,7 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
 
             const monsterName = row[0];
             const monsterType = row[1].toLowerCase();
-            const monsterAct = row[3];
+            const monsterAct = 'act' + row[3];
 
             const item = {
                 [MonstersDataParametersEnum.name]: monsterName,
@@ -45,8 +45,8 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
                 ...acc,
                 [monsterName]: {
                     ...acc[monsterName],
-                    ['act' + monsterAct]: {
-                        ...acc[monsterName]?.['act' + monsterAct],
+                    [monsterAct]: {
+                        ...acc[monsterName]?.[monsterAct],
                         [monsterType]: {
                             ...item
                         }

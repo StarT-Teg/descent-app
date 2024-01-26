@@ -1,11 +1,8 @@
 import styles from './header.module.css'
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-import {useHeroesDataContext} from "../../context";
-import {useOverlordDataContext} from "../../context/overlord-data-context";
 import React, {SVGProps, useEffect, useState} from 'react';
 import {JSX} from 'react/jsx-runtime';
-import {useGameSaveContext} from "../../context/game-save-context";
-import {getHeroBr, getOverlordBr} from "../../helpers";
+import {useBrFunctions} from "../../helpers/hooks/useBrFunctions";
 
 const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg
@@ -23,19 +20,10 @@ const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>)
 
 export const Header = () => {
 
-    const {heroes, heroClasses, items} = useHeroesDataContext()
-    const {heroesPicks, overlordPicks, campaignPicks} = useGameSaveContext();
-    const {
-        overlordCards,
-        plotCards,
-        lieutenants,
-        relics,
-        agents,
-        monsters,
-    } = useOverlordDataContext();
+    const {getOverlordAvailableBr} = useBrFunctions();
 
     const [isBackArrowVisible, setIsBackArrowVisible] = useState<boolean>(false);
-    const [freeBr, setFreeBr] = useState<number>(0);
+    const [freeBr, setFreeBr] = useState<number>(getOverlordAvailableBr());
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,14 +46,8 @@ export const Header = () => {
     }
 
     useEffect(() => {
-        const heroesAmount = Object.keys(heroesPicks).length;
-
-        const heroesBR = Object.values(heroesPicks!).reduce((acc: number, heroData) => acc + getHeroBr(heroes, heroClasses, items, heroData), 0)
-        const overlordBR = getOverlordBr(overlordCards, monsters, campaignPicks, overlordPicks, heroesAmount);
-
-        setFreeBr(heroesBR - overlordBR)
-
-    }, [heroes, heroClasses, items, heroesPicks, overlordCards, monsters, campaignPicks, overlordPicks])
+        setFreeBr(getOverlordAvailableBr())
+    }, [getOverlordAvailableBr])
 
     useEffect(() => {
         setIsBackArrowVisible(location.pathname !== '/players')

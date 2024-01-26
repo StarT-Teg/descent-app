@@ -72,9 +72,7 @@ export interface LieutenantData {
 
 export interface LieutenantActData {
     stats: {
-        '2h': LieutenantStats;
-        '3h': LieutenantStats;
-        '4h': LieutenantStats;
+        [numberOfHeroes in number]: LieutenantStats;
     };
 
     [LieutenantDataParametersEnum.size]: number;
@@ -90,14 +88,14 @@ export interface LieutenantActData {
     [LieutenantDataParametersEnum.actions]: string,
     [LieutenantDataParametersEnum.surgeAbilities]: string,
 
-    [LieutenantDataParametersEnum.br]: Number,
+    [LieutenantDataParametersEnum.br]: number,
 }
 
 export interface LieutenantStats {
     [LieutenantDataParametersEnum.movement]: number;
     [LieutenantDataParametersEnum.wounds]: number;
     [LieutenantDataParametersEnum.defenseDice]: string;
-    [LieutenantDataParametersEnum.br]: Number;
+    [LieutenantDataParametersEnum.br]: number;
 }
 
 export interface MonstersDataAdapted {

@@ -4,43 +4,34 @@ import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-conte
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import styles from './campaign-monsters.module.css'
-import {getFreeBr, getMonsterGroupBr} from "../../../../helpers";
 import classNames from 'classnames';
-import {useHeroesDataContext} from "../../../../context";
+import {useBrFunctions} from "../../../../helpers/hooks/useBrFunctions";
 
 export const CampaignMonsters = () => {
 
-    const {campaignsData, overlordCards, monsters} = useOverlordDataContext();
-    const heroesDataContext = useHeroesDataContext()
+    const {getMonsterGroupBr, getLieutenantBr, getOverlordAvailableBr} = useBrFunctions();
+    const {campaignsData, monsters} = useOverlordDataContext();
 
-    const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
+    const {overlordPicks, campaignPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
     const {pickedCards, pickedMonsters} = overlordPicks;
 
     const dispatch = useGameSaveDispatchContext();
 
-    const numberOfHeroes = Object.keys(heroesPicks).length;
-    const currentAct = !!selectedAct ? `act${selectedAct}` : '';
-
     const [overlordFamiliars, setOverlordFamiliars] = useState<string[]>([]);
     const [defaultMonsters, setDefaultMonsters] = useState<string[]>([])
+    const [defaultLieutenants, setDefaultLieutenants] = useState<string[]>([])
     const [openGroupMonsters, setOpenGroups] = useState<string[]>([]);
-    const [pickedOpenGroups, setPickedOpenGroups] = useState<string[]>([]);
+    const [pickedOpenGroups, setPickedOpenGroups] = useState<string[]>([...pickedMonsters?.filter(monsterName => !defaultMonsters.includes(monsterName)) || []]);
 
-    const freeBr = getFreeBr({overlordPicks, campaignPicks, heroesPicks}, {
-        overlordCards,
-        monsters
-    }, {...heroesDataContext});
+    const [freeBr, setFreeBr] = useState<number>(getOverlordAvailableBr());
+    const [maxBrLimit, setMaxBrLimit] = useState<number>(freeBr);
+
+    const openGroupsLimit = campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0;
 
     const dispatchOverlordPicks = (dispatchOverlordPicks: CurrentOverlordPicks) => {
-
-        const newOverlordPicks = {
-            ...overlordPicks,
-            ...dispatchOverlordPicks
-        }
-
         dispatch({
-            payload: {overlordPicks: {...newOverlordPicks}},
+            payload: {overlordPicks: {...dispatchOverlordPicks}},
             actionType: GameSaveReducerActionTypeEnum.changeOverlordPicks
         })
     }
@@ -58,7 +49,25 @@ export const CampaignMonsters = () => {
 
             return newMonsters;
         })
+
+        const newPickedMonstersList: string[] = [...pickedOpenGroups, ...defaultMonsters]
+
+        dispatchOverlordPicks({pickedMonsters: newPickedMonstersList})
     }
+
+    useEffect(() => {
+        const newFreeBr = getOverlordAvailableBr()
+        let newMaxBrLimit = newFreeBr;
+
+        for (let i = 1; i < (openGroupsLimit - pickedOpenGroups.length); i++) {
+            if (!!openGroupMonsters[openGroupMonsters.length - (i)]) {
+                newMaxBrLimit -= getMonsterGroupBr(openGroupMonsters[openGroupMonsters.length - (i)])
+            }
+        }
+
+        setFreeBr(newFreeBr);
+        setMaxBrLimit(newMaxBrLimit);
+    }, [getOverlordAvailableBr, getMonsterGroupBr, openGroupMonsters, openGroupsLimit])
 
     useEffect(() => {
         const newOpenGroups: string[] = [];
@@ -75,11 +84,14 @@ export const CampaignMonsters = () => {
                     newOpenGroups.push(newMonster.name)
                 }
             })
-        } else {
-            setPickedOpenGroups([]);
+
+
+            const newLieutenants: string[] = campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants || [];
+            setDefaultLieutenants(newLieutenants)
         }
 
-        setOpenGroups(newOpenGroups);
+        setPickedOpenGroups([])
+        setOpenGroups(newOpenGroups.sort((a, b) => (getMonsterGroupBr(b) - getMonsterGroupBr(a))));
     }, [campaignsData, monsters, selectedCampaign, selectedMission, selectedEncounter, selectedAct, defaultMonsters])
 
     useEffect(() => {
@@ -109,20 +121,22 @@ export const CampaignMonsters = () => {
 
     return (
         <>
-            {!!defaultMonsters.length && (
+            {!!defaultLieutenants.length && (
                 <fieldset>
-                    <legend>Default Monsters</legend>
+                    <legend>Lieutenants</legend>
 
-                    {defaultMonsters.map((monsterName: string, index) => {
+                    {defaultLieutenants.map((lieutenantName: string, index) => {
                             return (
                                 <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
                                     <div className="list">
-                                        <input type="text" readOnly value={monsterName} disabled
+                                        <input type="text" readOnly value={lieutenantName} disabled
                                                className={'input'}
                                         />
                                     </div>
                                     <div className={styles.br}>
-                                        BR: {getMonsterGroupBr(monsters, monsterName, numberOfHeroes, currentAct)}
+                                        <>
+                                            BR: {getLieutenantBr(lieutenantName)}
+                                        </>
                                     </div>
                                 </div>
                             )
@@ -132,21 +146,45 @@ export const CampaignMonsters = () => {
                 </fieldset>
             )}
 
-            <fieldset>
-                <legend>Open Groups
-                    - {campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0}
-                </legend>
+            {!!defaultMonsters.length && (
+                <fieldset>
+                    <legend>Default Monsters</legend>
 
-                {openGroupMonsters?.sort((a, b) => (getMonsterGroupBr(monsters, b, numberOfHeroes, currentAct) - getMonsterGroupBr(monsters, a, numberOfHeroes, currentAct))).map((monsterName: string, index) => {
+                    {defaultMonsters.map((monsterName: string, index) => {
                         return (
-                            <div
-                                className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: getMonsterGroupBr(monsters, monsterName, numberOfHeroes, currentAct) > freeBr})}
-                                key={`open-group-monster-${index}`}>
-                                <input type="checkbox"
-                                       onChange={() => {
-                                           onOpenGroupPicked(monsterName)
-                                       }}
-                                       checked={pickedMonsters?.includes(monsterName)}
+                            <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
+                                <div className="list">
+                                    <input type="text" readOnly value={monsterName} disabled
+                                           className={'input'}
+                                    />
+                                </div>
+                                <div className={styles.br}>
+                                    BR: {getMonsterGroupBr(monsterName)}
+                                </div>
+                                </div>
+                            )
+                        }
+                    )
+                    }
+                </fieldset>
+            )}
+
+            <fieldset>
+                <legend>Open Groups ( {openGroupsLimit} )</legend>
+
+                {openGroupMonsters.map((monsterName: string, index) => {
+                    const monsterGroupBr = getMonsterGroupBr(monsterName);
+                    const isDisabled = ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedOpenGroups.length >= openGroupsLimit) && !pickedOpenGroups?.includes(monsterName);
+
+                    return (
+                        <div
+                            className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: isDisabled})}
+                            key={`open-group-monster-${index}`}>
+                            <input type="checkbox"
+                                   onChange={() => {
+                                       onOpenGroupPicked(monsterName)
+                                   }}
+                                   checked={pickedMonsters?.includes(monsterName)}
                                 />
 
                                 <input type="text" readOnly value={monsterName}
@@ -156,9 +194,9 @@ export const CampaignMonsters = () => {
                                        className={'input'}
                                 />
 
-                                <div className={styles.br}>
-                                    BR: {getMonsterGroupBr(monsters, monsterName, numberOfHeroes, currentAct)}
-                                </div>
+                            <div className={styles.br}>
+                                BR: {monsterGroupBr}
+                            </div>
                             </div>
                         )
                     }

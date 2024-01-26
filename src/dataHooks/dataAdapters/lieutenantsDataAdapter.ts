@@ -4,6 +4,7 @@ import {
     LieutenantDataParametersEnum,
     LieutenantsDataAdapted
 } from "../../types/shared";
+import {floatClearing} from "../../helpers";
 
 export const lieutenantsDataAdapter = (data: ExcelDataRaw): LieutenantsDataAdapted => {
 
@@ -13,28 +14,27 @@ export const lieutenantsDataAdapter = (data: ExcelDataRaw): LieutenantsDataAdapt
             const lieutenantName = row[0];
             const lieutenantAct = row[1];
 
-
             const lieutenant: LieutenantActData = {
                 stats: {
-                    '2h': {
+                    2: {
                         [LieutenantDataParametersEnum.movement]: Number(row[5]),
                         [LieutenantDataParametersEnum.wounds]: Number(row[6]),
                         [LieutenantDataParametersEnum.defenseDice]: row[7],
-                        [LieutenantDataParametersEnum.br]: parseFloat(row[8]),
+                        [LieutenantDataParametersEnum.br]: floatClearing(row[8]),
                     },
 
-                    '3h': {
+                    3: {
                         [LieutenantDataParametersEnum.movement]: Number(row[9]),
                         [LieutenantDataParametersEnum.wounds]: Number(row[10]),
                         [LieutenantDataParametersEnum.defenseDice]: row[11],
-                        [LieutenantDataParametersEnum.br]: parseFloat(row[12]),
+                        [LieutenantDataParametersEnum.br]: floatClearing(row[12]),
                     },
 
-                    '4h': {
+                    4: {
                         [LieutenantDataParametersEnum.movement]: Number(row[13]),
                         [LieutenantDataParametersEnum.wounds]: Number(row[14]),
                         [LieutenantDataParametersEnum.defenseDice]: row[15],
-                        [LieutenantDataParametersEnum.br]: parseFloat(row[16]),
+                        [LieutenantDataParametersEnum.br]: floatClearing(row[16]),
                     },
                 },
 
@@ -51,7 +51,7 @@ export const lieutenantsDataAdapter = (data: ExcelDataRaw): LieutenantsDataAdapt
                 [LieutenantDataParametersEnum.actions]: row[26],
                 [LieutenantDataParametersEnum.surgeAbilities]: [row[28], row[30], row[32]].filter(str => !!str).join('\n'),
 
-                [LieutenantDataParametersEnum.br]: parseFloat(row[37]),
+                [LieutenantDataParametersEnum.br]: floatClearing(row[37]),
             }
 
 

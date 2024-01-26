@@ -9,11 +9,12 @@
 
     transition: all 100ms;
 
+    max-height: 78px;
     width: 100%;
 }
 
 .buttonText {
-    font-size: 21px;
+    font-size: 18px;
     text-align: center;
     color: hsl(0, 0%, 20%);
     font-family: DescentFont, sans-serif;

@@ -11,7 +11,7 @@ import {useGetData} from "./dataHooks/useGetData";
 import {useGetGameSave} from "./dataHooks";
 import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
-import {useQuery} from "./helpers/useQuery";
+import {useQuery} from "./helpers/hooks/useQuery";
 import {Settings} from "./components/Settings/Settings";
 
 export const App = () => {
@@ -36,6 +36,8 @@ export const App = () => {
 
     const getSaveData = (uuid: string) => {
         setSaveGameUuid(uuid);
+        localStorage.setItem(localStorageSaveKey, uuid);
+
         saveGameDataRefetch().then(response => {
             const saveGameData = response.data;
 
@@ -47,7 +49,7 @@ export const App = () => {
                 navigate('/players');
             } else {
                 alert(saveGameData)
-                navigate('/');
+                navigate('/settings');
             }
         });
     }
@@ -60,7 +62,6 @@ export const App = () => {
         const inviteUuidQueryParam = query.get('inviteUuid');
 
         if (!!inviteUuidQueryParam) {
-            localStorage.setItem(localStorageSaveKey, inviteUuidQueryParam);
             getSaveData(inviteUuidQueryParam);
         } else {
             if (!!window && !!localStorage) {
@@ -68,21 +69,13 @@ export const App = () => {
 
                 if (!!uuid) {
                     getSaveData(uuid);
+                } else {
+                    navigate('/settings');
                 }
             }
         }
 
     }, [])
-
-    // useEffect(() => {
-    //     if (!!saveGameData) {
-    //         dispatchPlayersPick({
-    //             actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
-    //             payload: saveGameData,
-    //         })
-    //         navigate('/players');
-    //     }
-    // }, [saveGameData])
 
     useEffect(() => {
         refetchData().then((response => {

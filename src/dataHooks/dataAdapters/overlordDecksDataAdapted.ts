@@ -1,4 +1,5 @@
 import {ExcelDataRaw, OverlordCardsDataAdapted} from "../../types/shared";
+import {floatClearing} from "../../helpers";
 
 export const overlordDecksDataAdapted = (data: ExcelDataRaw): OverlordCardsDataAdapted => {
     const decksDataAdapted: OverlordCardsDataAdapted = {};
@@ -12,7 +13,7 @@ export const overlordDecksDataAdapted = (data: ExcelDataRaw): OverlordCardsDataA
             const quantity = Number(row[3]);
             const type = row[4];
             const text = row[5];
-            const br = parseFloat(row[6]);
+            const br = floatClearing(row[6]);
 
             decksDataAdapted[cardName] = {
                 br, className, quantity, text, type, xpCost, cardName

@@ -4,4 +4,6 @@
     display: grid;
     grid-auto-flow: row;
     grid-row-gap: 15px;
+
+    width: 100%;
 }

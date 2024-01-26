@@ -5,18 +5,27 @@ import styles from "../HeroSheet/сomponents/HeroSheetName/hero-sheet-name.modul
 import {CampaignMonsters} from "./components/CampaignMonsters/CampaignMonsters";
 import {Accordion, AccordionItem, Button} from "../shared";
 import {useSetGameSave} from "../../dataHooks/useSetGameSave";
-import {useGameSaveContext} from "../../context/game-save-context";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
 export const OverlordBench = () => {
 
     const {campaignPicks, overlordPicks} = useGameSaveContext();
+    const dispatch = useGameSaveDispatchContext();
 
     const uuid = localStorage.getItem('descent-save-game-uuid')!;
     const {mutate, isLoading} = useSetGameSave();
 
     const handleSaveChanges = () => {
-        mutate({uuid, data: {campaignPicks, overlordPicks}})
+        mutate({uuid, data: {campaignPicks, overlordPicks}}, {
+            onSuccess: (dataResponse => {
+                dispatch({
+                    payload: {...dataResponse.data},
+                    actionType: GameSaveReducerActionTypeEnum.changeAllPicks
+                })
+            })
+        })
     }
 
     if (isLoading) {
@@ -34,7 +43,7 @@ export const OverlordBench = () => {
                     <OverlordDeck/>
                 </AccordionItem>
 
-                <AccordionItem header={'Monsters'}>
+                <AccordionItem header={'Army'}>
                     <CampaignMonsters/>
                 </AccordionItem>
             </Accordion>
