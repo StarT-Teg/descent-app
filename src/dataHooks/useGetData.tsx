@@ -9,11 +9,12 @@ import {lieutenantsDataAdapter} from "./dataAdapters/lieutenantsDataAdapter";
 import {monstersDataAdapter} from "./dataAdapters/monstersDataAdapter";
 import {overlordDecksDataAdapted} from "./dataAdapters/overlordDecksDataAdapted";
 import {overlordRelicsDataAdapter} from "./dataAdapters/overlordRelicsDataAdapter";
+import {familiarsDataAdapted} from "./dataAdapters/familiarsDataAdapted";
 
 
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
 
-    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics'].join('&ranges=');
+    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars'].join('&ranges=');
 
     const params = {
         valueRenderOption: 'FORMATTED_VALUE',
@@ -33,6 +34,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
                 monstersData: monstersDataAdapter(response.data?.valueRanges?.[5]),
                 overlordDecksData: overlordDecksDataAdapted(response.data?.valueRanges?.[6]),
                 relicsData: overlordRelicsDataAdapter(response.data?.valueRanges?.[7]),
+                familiars: familiarsDataAdapted(response.data?.valueRanges?.[8]),
             }
         ));
 

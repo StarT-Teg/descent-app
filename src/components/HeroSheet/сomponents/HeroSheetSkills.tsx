@@ -2,6 +2,7 @@ import React from "react";
 import {HeroPlayersEnum} from "../../../types/shared";
 
 export interface SkillsBundleViewProps {
+    familiars?: string[]
     pickedSkills?: string[]
     availableSkillsList?: string[],
     heroPosition: HeroPlayersEnum,
@@ -14,12 +15,29 @@ export const HeroSheetSkills = (props: SkillsBundleViewProps) => {
     const {
         pickedSkills = [],
         availableSkillsList = [],
+        familiars = [],
         heroPosition,
         onCheckboxChange
     } = props;
 
     return (
         <div className="sub-grid">
+            <fieldset>
+                <legend>Familiars</legend>
+
+                {familiars?.map((familiarName: string, index) => {
+                        return (
+                            <div className="list" key={`${heroPosition}-familiar-${index}`}>
+                                <input type="text" readOnly value={familiarName}
+                                       className={'input'}
+                                />
+                            </div>
+                        )
+                    }
+                )
+                }
+
+            </fieldset>
             <fieldset>
                 <legend>Skills</legend>
 

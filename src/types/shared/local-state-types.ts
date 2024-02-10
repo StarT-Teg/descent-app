@@ -1,5 +1,6 @@
 import {
     CampaignsDataAdapted,
+    FamiliarsDataAdapted,
     HeroClassesDataAdapted,
     HeroesDataAdapted,
     ItemsDataAdapted,
@@ -14,6 +15,7 @@ export interface HeroesDataInterface {
     heroes: HeroesDataAdapted;
     heroClasses: HeroClassesDataAdapted;
     items: ItemsDataAdapted;
+    familiars: FamiliarsDataAdapted;
 }
 
 export interface OverlordDataInterface {
@@ -38,6 +40,8 @@ export type CurrentOverlordPicks = {
     purchasedCards?: string[];
     pickedCards?: string[];
     pickedMonsters?: string[];
+    pickedRelics?: { [lieutenantName: string]: string | undefined };
+    customActPicks?: string[];
 }
 
 export type CurrentPlayersPicks = {

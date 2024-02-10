@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {HeroSheetName} from "./сomponents/HeroSheetName/HeroSheetName";
 import {HeroSheetItems} from "./сomponents/HeroSheetItems";
 import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
-import {HeroSheetSkills} from "./сomponents/HeroSheetSkills";
 import {HeroPlayerPicks, HeroPlayersEnum} from "../../types/shared";
 import {useHeroesDataContext,} from "../../context";
 import {useParams} from "react-router-dom";
@@ -19,9 +18,10 @@ export default function HeroSheet() {
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
+
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
 
-    const {heroes, heroClasses, items} = useHeroesDataContext()
+    const {heroes, heroClasses, items, familiars} = useHeroesDataContext()
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -41,7 +41,8 @@ export default function HeroSheet() {
 
     const [heroAvailableClasses, setHeroAvailableClasses] = useState<string[] | undefined>(undefined);
     const [heroAvailableSubclasses, setHeroAvailableSubclasses] = useState<string[] | undefined>(undefined);
-    const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(undefined);
+    const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(heroSkills);
+    const [heroAvailableFamiliars, setHeroAvailableFamiliars] = useState<string[] | undefined>(undefined);
 
     const getClassListOfArchetype = (archetype: 'Warrior' | 'Mage' | 'Scout' | 'Healer') => (
         Object.values(heroClasses).filter(classData => classData.archetype === archetype).map(classData => classData.className)
@@ -86,7 +87,23 @@ export default function HeroSheet() {
     }
 
     useEffect(() => {
+
+        const newFamiliars: string[] = [];
+
         if (!!playerPicks?.heroName && !!heroes[playerPicks?.heroName]) {
+
+            if (playerPicks.heroName === 'Vyrah the Falconer') {
+                newFamiliars.push('Skye');
+            }
+
+            if (playerPicks.heroName === 'Ronan of the Wild') {
+                newFamiliars.push('Pico');
+            }
+
+            if (playerPicks.heroName === 'Challara') {
+                newFamiliars.push('Brightblaze');
+            }
+
             setHeroAvailableClasses(
                 Object.values(heroClasses)
                     .filter(classData => classData.archetype === heroes?.[playerPicks.heroName!]?.type)
@@ -107,6 +124,18 @@ export default function HeroSheet() {
             setHeroAvailableSkills(Object.keys(heroClasses[playerPicks.heroClassName].skills))
 
             switch (playerPicks.heroClassName) {
+                case "Necromancer":
+                    newFamiliars.push('Reanimate')
+                    break;
+                case "Geomancer":
+                    newFamiliars.push('The Summoned Stone')
+                    break;
+                case "Beastmaster":
+                    newFamiliars.push('Wolf')
+                    break;
+                case "Shadow Walker":
+                    newFamiliars.push('Shadow Soul')
+                    break;
                 case "Battlemage":
                 case "Ravager":
                 case "Crusader":
@@ -127,6 +156,9 @@ export default function HeroSheet() {
                 case "Monk":
                     setHeroAvailableSubclasses(getClassListOfArchetype('Healer'))
                     break;
+                default:
+                    setHeroAvailableSubclasses(undefined);
+                    break;
             }
         } else {
             setHeroAvailableSubclasses(undefined)
@@ -140,6 +172,8 @@ export default function HeroSheet() {
                 )
             )
         }
+
+        setHeroAvailableFamiliars(newFamiliars);
     }, [playerPicks, heroClasses, heroes])
 
     if (isLoading) {
@@ -175,19 +209,94 @@ export default function HeroSheet() {
                             }}
                             heroPosition={heroPlayerPosition}
                         />
+
+                        {!!heroAvailableFamiliars?.length && (
+                            <fieldset>
+                                <legend>Familiars</legend>
+
+                                {heroAvailableFamiliars?.map((familiarName: string, index) => {
+                                        return (
+                                            <div className={styles.checkboxLine}
+                                                 key={`${heroPlayerPosition}-familiar-${index}`}>
+                                                <input type="checkbox"
+                                                       onChange={() => {
+                                                       }}
+                                                       checked={heroAvailableFamiliars?.includes(familiarName)}
+                                                />
+
+                                                <input type="text" readOnly value={familiarName}
+                                                       onClick={() => {
+                                                       }}
+                                                       className={'input'}
+                                                />
+
+                                                <div className={styles.br}>
+                                                    BR: {familiars?.[familiarName]?.br || 0}
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                )
+                                }
+                            </fieldset>
+                        )}
                     </AccordionItem>
 
                     <AccordionItem header='Skills' disabled={!heroAvailableSkills?.length}>
                         {!!heroAvailableSkills?.length && (
-                            <HeroSheetSkills
-                                pickedSkills={heroSkills}
-                                availableSkillsList={heroAvailableSkills}
-                                heroPosition={heroPlayerPosition}
-                                onCheckboxChange={(checkedSkillName) => {
-                                    const newSkills = heroSkills.includes(checkedSkillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== checkedSkillName))] : [...heroSkills, checkedSkillName]
-                                    handleChangePlayerPicks({heroSkills: newSkills})
-                                }}
-                            />
+
+                            <div className="sub-grid">
+                                <fieldset>
+                                    <legend>Skills</legend>
+
+                                    {heroAvailableSkills?.map((skillName: string, index) => {
+                                            const skillData = heroClasses?.[heroClassName]?.skills?.[skillName];
+
+                                            return (
+                                                <div className={styles.checkboxLine}
+                                                     key={`${heroPlayerPosition}-skillBlock-${index}`}>
+                                                    <input type="checkbox" id={`${heroPlayerPosition}-skill-${skillName}`}
+                                                           key={`${heroPlayerPosition}-skill-${skillName}-${index}`}
+                                                           onChange={() => {
+                                                               const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                                               handleChangePlayerPicks({heroSkills: newSkills})
+                                                           }}
+
+                                                           checked={heroSkills.includes(skillName)}
+                                                    />
+
+                                                    <input type="text" readOnly value={skillName}
+                                                           key={`${heroPlayerPosition}-skill-${skillName}-br-${index}`}
+                                                           onClick={() => {
+                                                               const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                                               handleChangePlayerPicks({heroSkills: newSkills})
+                                                           }}
+                                                           className={'input'}
+                                                    />
+
+
+                                                    <div className={styles.br}>
+                                                        BR: {heroClasses?.[heroClassName]?.skills[skillName]?.br || 0}
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    )
+                                    }
+
+                                </fieldset>
+                            </div>
+
+                            // <HeroSheetSkills
+                            //     familiars={familiars}
+                            //     pickedSkills={heroSkills}
+                            //     availableSkillsList={heroAvailableSkills}
+                            //     heroPosition={heroPlayerPosition}
+                            //     onCheckboxChange={(checkedSkillName) => {
+                            //         const newSkills = heroSkills.includes(checkedSkillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== checkedSkillName))] : [...heroSkills, checkedSkillName]
+                            //         handleChangePlayerPicks({heroSkills: newSkills})
+                            //     }}
+                            // />
                         )}
                     </AccordionItem>
 

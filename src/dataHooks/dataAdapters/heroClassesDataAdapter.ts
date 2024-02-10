@@ -10,7 +10,7 @@ export const heroClassesDataAdapter = (data: ExcelDataRaw) => {
             const archetype = row[0];
             const className = row[1];
             const skillName = row[2];
-            const xpCost = row[3];
+            const xpCost = Number(row[3]);
             const fatigueCost = row[4];
             const skillDescription = row[5];
             const br = row[6];

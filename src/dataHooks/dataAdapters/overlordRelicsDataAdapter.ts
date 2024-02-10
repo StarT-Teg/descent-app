@@ -1,4 +1,5 @@
 import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../types/shared";
+import {floatClearing} from "../../helpers";
 
 export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {
     return data.values.reduce((acc: OverlordRelicsDataAdapted, row, rowIndex) => {
@@ -6,13 +7,13 @@ export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {
 
             const relicName = row[1];
 
-            const item: { [key in OverlordRelicDataParametersEnum]: string } = {
+            const item = {
                 [OverlordRelicDataParametersEnum.name]: relicName,
                 [OverlordRelicDataParametersEnum.dice]: row[2],
                 [OverlordRelicDataParametersEnum.properties]: row[4],
                 [OverlordRelicDataParametersEnum.traits]: row[6],
                 [OverlordRelicDataParametersEnum.surgeAbilities]: [row[8], row[10]].filter(str => !!str).join('\n'),
-                [OverlordRelicDataParametersEnum.br]: row[11]
+                [OverlordRelicDataParametersEnum.br]: floatClearing(row[12])
             };
 
             return {...acc, [relicName]: item}

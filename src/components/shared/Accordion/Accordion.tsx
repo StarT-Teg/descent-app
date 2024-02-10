@@ -1,7 +1,7 @@
 import {
     Accordion as LocalAccordion,
     AccordionItem as Item,
-    AccordionItemProps,
+    AccordionItemProps as LocalAccordionItemProps,
     AccordionProps as LocalAccordionProps
 } from "@szhsin/react-accordion";
 import {ReactNode, SVGProps} from "react";
@@ -11,6 +11,11 @@ import styles from './accordion.module.css'
 export interface AccordionProps {
     children: ReactNode;
     accordionProps?: LocalAccordionProps;
+}
+
+export interface AccordionItemProps extends LocalAccordionItemProps {
+    theme?: 'default' | 'buttonWithOptions'
+    chevronDisabled?: boolean;
 }
 
 const ChevronDownIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
@@ -31,22 +36,23 @@ const ChevronDownIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement
     </svg>
 )
 
-export const AccordionItem = ({header, ...rest}: AccordionItemProps) => (
+
+export const AccordionItem = ({header, chevronDisabled, theme = 'default', ...rest}: AccordionItemProps) => (
     <Item
-        {...rest}
         header={
             <>
                 {header}
-                <ChevronDownIcon className={styles.chevron}/>
+                {!chevronDisabled && (<ChevronDownIcon className={styles[`chevron-${theme}`]}/>)}
             </>
         }
-        className={styles.item}
+        className={styles[`item-${theme}`]}
         buttonProps={{
             className: ({isEnter}) =>
-                `${styles.itemBtn} ${isEnter && styles.itemBtnExpanded}`
+                `${styles[`itemBtn-${theme}`]} ${isEnter && styles[`itemBtnExpanded-${theme}`]}`
         }}
-        contentProps={{className: styles.itemContent}}
-        panelProps={{className: styles.itemPanel}}
+        contentProps={{className: styles[`itemContent-${theme}`]}}
+        panelProps={{className: styles[`itemPanel-${theme}`]}}
+        {...rest}
     />
 );
 

@@ -23,3 +23,38 @@
     opacity: 0.3;
     pointer-events: none;
 }
+
+.chevron-down {
+    display: none;
+}
+
+.extraAccordionButton {
+    background-color: black;
+}
+
+.switchIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 18px;
+    text-align: center;
+    color: hsl(0, 0%, 20%);
+    font-family: DescentFont, sans-serif !important;
+    height: 100%;
+
+    margin-left: 6px;
+}
+
+.unitOptions {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 5px;
+    margin: 0 10px;
+    align-items: center;
+}
+
+.extraSwitch {
+    width: min-content;
+    height: min-content;
+}

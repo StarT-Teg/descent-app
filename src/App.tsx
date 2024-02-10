@@ -90,7 +90,8 @@ export const App = () => {
                     lieutenantsData,
                     relicsData,
                     monstersData,
-                    campaignData
+                    campaignData,
+                    familiars
                 } = data;
 
                 dispatchHeroesData({
@@ -98,6 +99,7 @@ export const App = () => {
                         heroes: heroesData || {},
                         heroClasses: heroClassesData || {},
                         items: itemsData || {},
+                        familiars: familiars || {},
                     }, actionType: DataReducerActionsEnum.update
                 })
 
@@ -109,7 +111,7 @@ export const App = () => {
                         relics: relicsData || {},
                         agents: undefined,
                         monsters: monstersData || {},
-                        campaignsData: campaignData || {}
+                        campaignsData: campaignData || {},
                     }, actionType: DataReducerActionsEnum.update
                 })
             }

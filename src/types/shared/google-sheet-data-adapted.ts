@@ -18,6 +18,7 @@ export interface GameDataInterface {
     relicsData: OverlordRelicsDataAdapted,
     monstersData: MonstersDataAdapted,
     campaignData: CampaignsDataAdapted,
+    familiars: FamiliarsDataAdapted,
 }
 
 export interface CampaignsDataAdapted {
@@ -106,6 +107,23 @@ export interface MonstersDataAdapted {
     }
 }
 
+export interface FamiliarsDataAdapted {
+    [familiarName: string]: FamiliarData,
+}
+
+export interface FamiliarData {
+    source: string,
+    name: string,
+    size: number,
+    movement: number,
+    wounds: number,
+    attackType: string,
+    defenseDice: string,
+    attackDice: string,
+    surgeAbilities: string,
+    br: number,
+}
+
 export enum MonsterTypesEnum {
     master = 'master',
     minion = 'minion',
@@ -152,7 +170,7 @@ export interface OverlordRelicsDataAdapted {
         [OverlordRelicDataParametersEnum.properties]?: string;
         [OverlordRelicDataParametersEnum.traits]?: string;
         [OverlordRelicDataParametersEnum.surgeAbilities]?: string;
-        [OverlordRelicDataParametersEnum.br]: string;
+        [OverlordRelicDataParametersEnum.br]: number;
     }
 }
 
@@ -195,7 +213,7 @@ export interface ClassSkill {
 
 export interface SkillClassDataAdapted {
     [HeroClassParametersEnum.skillName]: string,
-    [HeroClassParametersEnum.xpCost]?: string,
+    [HeroClassParametersEnum.xpCost]?: number,
     [HeroClassParametersEnum.fatigueCost]?: string,
     [HeroClassParametersEnum.skillDescription]: string,
     [HeroClassParametersEnum.br]: string,

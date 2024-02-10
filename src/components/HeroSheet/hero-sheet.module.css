@@ -29,3 +29,17 @@
 .szh-accordion__item-content {
     transition: all 200ms;
 }
+
+.checkboxLine {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    grid-column-gap: 8px;
+}
+
+.br {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

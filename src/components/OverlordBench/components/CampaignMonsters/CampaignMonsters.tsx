@@ -1,33 +1,43 @@
 import React, {useEffect, useState} from "react";
-import {CurrentOverlordPicks} from "../../../../types/shared";
+import {CurrentOverlordPicks, SelectionOptionInterface} from "../../../../types/shared";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
-import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import styles from './campaign-monsters.module.css'
 import classNames from 'classnames';
 import {useBrFunctions} from "../../../../helpers/hooks/useBrFunctions";
+import {toSelectOption, useGetOverlordPicks} from "../../../../helpers";
+import {Accordion, AccordionItem} from "../../../shared";
+import Select from "react-select";
+import {useOverlordDataContext} from "../../../../context/overlord-data-context";
+import ReactSwitch from "react-switch";
 
 export const CampaignMonsters = () => {
 
     const {getMonsterGroupBr, getLieutenantBr, getOverlordAvailableBr} = useBrFunctions();
-    const {campaignsData, monsters} = useOverlordDataContext();
 
-    const {overlordPicks, campaignPicks} = useGameSaveContext();
-    const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
-    const {pickedCards, pickedMonsters} = overlordPicks;
+    const {
+        getOverlordDefaultMonsters,
+        getOverlordDefaultLieutenants,
+        getOverlordOpenGroups,
+        getOpenGroupLimit
+    } = useGetOverlordPicks();
+
+    const {relics} = useOverlordDataContext()
+    const {overlordPicks} = useGameSaveContext();
+    const {pickedMonsters = [], customActPicks = []} = overlordPicks;
 
     const dispatch = useGameSaveDispatchContext();
 
-    const [overlordFamiliars, setOverlordFamiliars] = useState<string[]>([]);
-    const [defaultMonsters, setDefaultMonsters] = useState<string[]>([])
-    const [defaultLieutenants, setDefaultLieutenants] = useState<string[]>([])
-    const [openGroupMonsters, setOpenGroups] = useState<string[]>([]);
-    const [pickedOpenGroups, setPickedOpenGroups] = useState<string[]>([...pickedMonsters?.filter(monsterName => !defaultMonsters.includes(monsterName)) || []]);
+    const availableRelics: SelectionOptionInterface[] = Object.values(relics).map(relicData => toSelectOption(relicData.name)!)
 
-    const [freeBr, setFreeBr] = useState<number>(getOverlordAvailableBr());
+    const defaultMonsters = getOverlordDefaultMonsters();
+    const defaultLieutenants = getOverlordDefaultLieutenants()
+    const openGroupMonsters = getOverlordOpenGroups()
+
+    const freeBr = getOverlordAvailableBr()
     const [maxBrLimit, setMaxBrLimit] = useState<number>(freeBr);
 
-    const openGroupsLimit = campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0;
+    const openGroupsLimit = getOpenGroupLimit();
 
     const dispatchOverlordPicks = (dispatchOverlordPicks: CurrentOverlordPicks) => {
         dispatch({
@@ -36,88 +46,41 @@ export const CampaignMonsters = () => {
         })
     }
 
+    const onCustomActPick = (unitName: string) => {
+        let newPicks: string[] = [...customActPicks || []]
+
+        if (newPicks?.includes(unitName)) {
+            newPicks = newPicks.filter((name) => name !== unitName);
+        } else {
+            newPicks.push(unitName);
+        }
+
+        dispatchOverlordPicks({customActPicks: newPicks})
+    }
+
     const onOpenGroupPicked = (monsterName: string) => {
+        let newMonsters: string[] = [...pickedMonsters || []]
 
-        setPickedOpenGroups(prevState => {
-            let newMonsters: string[] = [...prevState || []]
+        if (newMonsters?.includes(monsterName)) {
+            newMonsters = newMonsters.filter((name) => name !== monsterName);
+        } else {
+            newMonsters.push(monsterName);
+        }
 
-            if (newMonsters?.includes(monsterName)) {
-                newMonsters = newMonsters.filter((name) => name !== monsterName);
-            } else {
-                newMonsters.push(monsterName);
-            }
-
-            return newMonsters;
-        })
-
-        const newPickedMonstersList: string[] = [...pickedOpenGroups, ...defaultMonsters]
-
-        dispatchOverlordPicks({pickedMonsters: newPickedMonstersList})
+        dispatchOverlordPicks({pickedMonsters: newMonsters})
     }
 
     useEffect(() => {
-        const newFreeBr = getOverlordAvailableBr()
-        let newMaxBrLimit = newFreeBr;
+        let newMaxBrLimit = freeBr;
 
-        for (let i = 1; i < (openGroupsLimit - pickedOpenGroups.length); i++) {
+        for (let i = 1; i < (openGroupsLimit - pickedMonsters.length); i++) {
             if (!!openGroupMonsters[openGroupMonsters.length - (i)]) {
                 newMaxBrLimit -= getMonsterGroupBr(openGroupMonsters[openGroupMonsters.length - (i)])
             }
         }
 
-        setFreeBr(newFreeBr);
         setMaxBrLimit(newMaxBrLimit);
     }, [getOverlordAvailableBr, getMonsterGroupBr, openGroupMonsters, openGroupsLimit])
-
-    useEffect(() => {
-        const newOpenGroups: string[] = [];
-
-        if (!!selectedCampaign && !!selectedMission && !!selectedEncounter) {
-
-            const act: 'act1' | 'act2' = 'act' + campaignsData[selectedCampaign][selectedMission].act as 'act1' | 'act2';
-            const availableTraits = campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].openGroupsTraits;
-
-            Object.values(monsters).forEach(monsterData => {
-                const newMonster = monsterData?.[act]?.master;
-
-                if (newMonster?.traits?.some(r => availableTraits?.includes(r)) && !defaultMonsters.includes(newMonster.name)) {
-                    newOpenGroups.push(newMonster.name)
-                }
-            })
-
-
-            const newLieutenants: string[] = campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants || [];
-            setDefaultLieutenants(newLieutenants)
-        }
-
-        setPickedOpenGroups([])
-        setOpenGroups(newOpenGroups.sort((a, b) => (getMonsterGroupBr(b) - getMonsterGroupBr(a))));
-    }, [campaignsData, monsters, selectedCampaign, selectedMission, selectedEncounter, selectedAct, defaultMonsters])
-
-    useEffect(() => {
-        const newPickedMonstersList: string[] = [...pickedOpenGroups, ...defaultMonsters]
-
-        dispatchOverlordPicks({pickedMonsters: newPickedMonstersList})
-    }, [pickedOpenGroups, defaultMonsters])
-
-    useEffect(() => {
-        const newFamiliars: string[] = []
-
-        if (pickedCards?.includes('Call of the Ravens')) {
-            newFamiliars.push('Raven Flock')
-        }
-        if (pickedCards?.includes('Ties That Bind')) {
-            newFamiliars.push('Scourge')
-        }
-
-        setOverlordFamiliars(newFamiliars);
-    }, [pickedCards])
-
-    useEffect(() => {
-        const newDefaultMonsters = (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.monsters || []).concat(overlordFamiliars);
-
-        setDefaultMonsters(newDefaultMonsters);
-    }, [campaignsData, selectedCampaign, selectedMission, selectedEncounter, overlordFamiliars])
 
     return (
         <>
@@ -127,18 +90,54 @@ export const CampaignMonsters = () => {
 
                     {defaultLieutenants.map((lieutenantName: string, index) => {
                             return (
-                                <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
-                                    <div className="list">
-                                        <input type="text" readOnly value={lieutenantName} disabled
-                                               className={'input'}
-                                        />
-                                    </div>
-                                    <div className={styles.br}>
-                                        <>
-                                            BR: {getLieutenantBr(lieutenantName)}
-                                        </>
-                                    </div>
-                                </div>
+                                <Accordion key={`${lieutenantName}-${index}`}>
+                                    <AccordionItem
+                                        chevronDisabled
+                                        initialEntered
+                                        theme='buttonWithOptions'
+                                        header={<div key={`default-monster-${index}`}
+                                                     className={styles.defaultMonsterLine}>
+                                            <div className="input">
+                                                {lieutenantName}
+                                            </div>
+                                            <div className={styles.br}>
+                                                BR: {getLieutenantBr(lieutenantName)}
+                                            </div>
+                                        </div>}>
+
+                                        <div className={styles.unitOptions}>
+                                            <ReactSwitch
+                                                uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
+                                                checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
+                                                checked={!customActPicks.includes(lieutenantName)}
+                                                onChange={() => {
+                                                    onCustomActPick(lieutenantName)
+                                                }}
+                                                className={styles.extraSwitch}
+                                                offColor={'#fc8245'}
+                                                onColor={'#627a83'}
+                                            />
+
+                                            <Select
+                                                className={'smallInput'}
+                                                value={toSelectOption(overlordPicks?.pickedRelics?.[lieutenantName])}
+                                                options={availableRelics}
+                                                onChange={(value, actionMeta) => {
+                                                    dispatchOverlordPicks({
+                                                        pickedRelics: {
+                                                            ...overlordPicks?.pickedRelics,
+                                                            [lieutenantName]: value?.value || undefined
+                                                        }
+                                                    })
+                                                }}
+                                                isClearable
+                                                name={`${lieutenantName}-relic-select`}
+                                                placeholder={'Relic'}
+                                            />
+                                        </div>
+
+                                    </AccordionItem>
+                                </Accordion>
                             )
                         }
                     )
@@ -151,16 +150,16 @@ export const CampaignMonsters = () => {
                     <legend>Default Monsters</legend>
 
                     {defaultMonsters.map((monsterName: string, index) => {
-                        return (
-                            <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
-                                <div className="list">
-                                    <input type="text" readOnly value={monsterName} disabled
-                                           className={'input'}
-                                    />
-                                </div>
-                                <div className={styles.br}>
-                                    BR: {getMonsterGroupBr(monsterName)}
-                                </div>
+                            return (
+                                <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
+                                    <div className="list">
+                                        <input type="text" readOnly value={monsterName} disabled
+                                               className={'input'}
+                                        />
+                                    </div>
+                                    <div className={styles.br}>
+                                        BR: {getMonsterGroupBr(monsterName)}
+                                    </div>
                                 </div>
                             )
                         }
@@ -173,18 +172,19 @@ export const CampaignMonsters = () => {
                 <legend>Open Groups ( {openGroupsLimit} )</legend>
 
                 {openGroupMonsters.map((monsterName: string, index) => {
+                    const isMonsterPicked = pickedMonsters?.includes(monsterName);
                     const monsterGroupBr = getMonsterGroupBr(monsterName);
-                    const isDisabled = ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedOpenGroups.length >= openGroupsLimit) && !pickedOpenGroups?.includes(monsterName);
+                    const isDisabled = ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedMonsters.length >= openGroupsLimit) && !pickedMonsters?.includes(monsterName);
 
                     return (
                         <div
-                            className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: isDisabled})}
                             key={`open-group-monster-${index}`}>
-                            <input type="checkbox"
-                                   onChange={() => {
-                                       onOpenGroupPicked(monsterName)
-                                   }}
-                                   checked={pickedMonsters?.includes(monsterName)}
+                            <div className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: false})}>
+                                <input type="checkbox"
+                                       onChange={() => {
+                                           onOpenGroupPicked(monsterName)
+                                       }}
+                                       checked={isMonsterPicked}
                                 />
 
                                 <input type="text" readOnly value={monsterName}
@@ -194,10 +194,26 @@ export const CampaignMonsters = () => {
                                        className={'input'}
                                 />
 
-                            <div className={styles.br}>
-                                BR: {monsterGroupBr}
+                                <div className={styles.br}>
+                                    BR: {monsterGroupBr}
+                                </div>
                             </div>
-                            </div>
+
+                            {isMonsterPicked && (
+                                <div className={styles.unitOptions}>
+                                    <ReactSwitch uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
+                                                 checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
+                                                 checked={!customActPicks.includes(monsterName)}
+                                                 onChange={() => {
+                                                     onCustomActPick(monsterName)
+                                                 }}
+                                                 className={styles.extraSwitch}
+                                                 offColor={'#fc8245'}
+                                                 onColor={'#627a83'}
+                                    />
+                                </div>
+                            )}
+                        </div>
                         )
                     }
                 )

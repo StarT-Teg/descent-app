@@ -17,27 +17,50 @@ export const ChoosePlayerButtons = () => {
 
     return (
         <div className={styles.content}>
-            {Object.keys(heroesPicks).map((heroPositionString: string) => {
 
-                    const heroPosition = heroPositionString as HeroPlayersEnum;
+            <Button onClick={() => {
+                navigate(`${HeroPlayersEnum.hero1}`)
+            }}>{heroesPicks[HeroPlayersEnum.hero1]?.heroName || 'Hero 1'} - {getHeroBr(HeroPlayersEnum.hero1)}</Button>
 
-                    return <Button onClick={() => {
-                        navigate(`${heroPosition}`)
-                    }}>{heroesPicks[heroPosition as HeroPlayersEnum]?.heroName || heroPosition} - {getHeroBr(heroPosition)}</Button>
-                }
+            <Button onClick={() => {
+                navigate(`${HeroPlayersEnum.hero2}`)
+            }}>{heroesPicks[HeroPlayersEnum.hero2]?.heroName || 'Hero 2'} - {getHeroBr(HeroPlayersEnum.hero2)}</Button>
+
+            {!!heroesPicks?.hero3 ? (
+                <Button onClick={() => {
+                    navigate(`${HeroPlayersEnum.hero3}`)
+                }}>{heroesPicks[HeroPlayersEnum.hero3]?.heroName || 'Hero 3'} - {getHeroBr(HeroPlayersEnum.hero3)}</Button>
+            ) : (
+                <Button onClick={() => {
+                    dispatchPlayersPick({
+                        actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
+                        payload: {
+                            heroesPicks: {
+                                ...heroesPicks,
+                                [HeroPlayersEnum.hero3]: Initial_Player_Picks,
+                            }
+                        }
+                    })
+                }}>+</Button>
             )}
 
-            {(Object.keys(heroesPicks).length < 4) && <Button onClick={() => {
-                dispatchPlayersPick({
-                    actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
-                    payload: {
-                        heroesPicks: {
-                            ...heroesPicks,
-                            ['hero' + (Object.keys(heroesPicks).length + 1)]: Initial_Player_Picks,
+            {(!!heroesPicks?.hero4) ? (
+                <Button onClick={() => {
+                    navigate(`${HeroPlayersEnum.hero4}`)
+                }}>{heroesPicks[HeroPlayersEnum.hero4]?.heroName || 'Hero 4'} - {getHeroBr(HeroPlayersEnum.hero4)}</Button>
+            ) : (
+                <Button onClick={() => {
+                    dispatchPlayersPick({
+                        actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
+                        payload: {
+                            heroesPicks: {
+                                ...heroesPicks,
+                                [HeroPlayersEnum.hero4]: Initial_Player_Picks,
+                            }
                         }
-                    }
-                })
-            }}>+</Button>}
+                    })
+                }}>+</Button>
+            )}
 
             <Button theme='red' onClick={() => {
                 navigate('overlord')
