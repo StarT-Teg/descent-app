@@ -9,7 +9,7 @@ import {isMobile} from 'react-device-detect';
 import styles from './hero-sheet.module.css'
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
-import {Accordion, AccordionItem} from "../shared/Accordion/Accordion";
+import {Accordion, AccordionItem} from "../shared";
 import {Button} from "../shared";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
@@ -50,12 +50,9 @@ export default function HeroSheet() {
 
     const handleChangePlayerPicks = (newPick: Partial<HeroPlayerPicks>) => {
 
-        const heroItems: string[] = newPick?.heroItems || [];
-
         const newHeroPicks: HeroPlayerPicks = {
             ...playerPicks,
             ...newPick,
-            heroItems,
         };
 
         if (!newHeroPicks?.heroName) {
@@ -83,7 +80,7 @@ export default function HeroSheet() {
     }
 
     const handleSaveChanges = () => {
-        setSaveAndUpdate({heroesPicks: {[heroPlayerPosition]: {...gameSaveContext.heroesPicks[heroPlayerPosition]}}})
+        setSaveAndUpdate({heroesPicks: {[heroPlayerPosition]: {...playerPicks}}})
     }
 
     useEffect(() => {
@@ -250,8 +247,6 @@ export default function HeroSheet() {
                                     <legend>Skills</legend>
 
                                     {heroAvailableSkills?.map((skillName: string, index) => {
-                                            const skillData = heroClasses?.[heroClassName]?.skills?.[skillName];
-
                                             return (
                                                 <div className={styles.checkboxLine}
                                                      key={`${heroPlayerPosition}-skillBlock-${index}`}>

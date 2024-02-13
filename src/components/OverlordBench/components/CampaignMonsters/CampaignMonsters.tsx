@@ -122,7 +122,7 @@ export const CampaignMonsters = () => {
                                                 className={'smallInput'}
                                                 value={toSelectOption(overlordPicks?.pickedRelics?.[lieutenantName])}
                                                 options={availableRelics}
-                                                onChange={(value, actionMeta) => {
+                                                onChange={(value) => {
                                                     dispatchOverlordPicks({
                                                         pickedRelics: {
                                                             ...overlordPicks?.pickedRelics,
@@ -151,14 +151,29 @@ export const CampaignMonsters = () => {
 
                     {defaultMonsters.map((monsterName: string, index) => {
                             return (
-                                <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
-                                    <div className="list">
-                                        <input type="text" readOnly value={monsterName} disabled
-                                               className={'input'}
-                                        />
+                                <div>
+                                    <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
+                                        <div className="list">
+                                            <input type="text" readOnly value={monsterName} disabled
+                                                   className={'input'}
+                                            />
+                                        </div>
+                                        <div className={styles.br}>
+                                            BR: {getMonsterGroupBr(monsterName)}
+                                        </div>
                                     </div>
-                                    <div className={styles.br}>
-                                        BR: {getMonsterGroupBr(monsterName)}
+
+                                    <div className={styles.unitOptions}>
+                                        <ReactSwitch uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
+                                                     checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
+                                                     checked={!customActPicks.includes(monsterName)}
+                                                     onChange={() => {
+                                                         onCustomActPick(monsterName)
+                                                     }}
+                                                     className={styles.extraSwitch}
+                                                     offColor={'#fc8245'}
+                                                     onColor={'#627a83'}
+                                        />
                                     </div>
                                 </div>
                             )
@@ -179,7 +194,7 @@ export const CampaignMonsters = () => {
                     return (
                         <div
                             key={`open-group-monster-${index}`}>
-                            <div className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: false})}>
+                            <div className={classNames(styles.openGroupMonsterLine, {[styles.disabled]: isDisabled})}>
                                 <input type="checkbox"
                                        onChange={() => {
                                            onOpenGroupPicked(monsterName)
