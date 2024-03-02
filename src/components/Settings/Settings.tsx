@@ -33,7 +33,8 @@ export const Settings = () => {
         const url = `${process.env.REACT_APP_BASE_PATH}?inviteUuid=${saveGameUuid}`
 
         try {
-            navigator.share({url}).then()
+            // navigator.share({url}).then()
+            navigator.clipboard.writeText(url).then()
         } catch (e) {
             console.log('Share error:', e)
         }
@@ -53,7 +54,7 @@ export const Settings = () => {
 
                     {!!saveGameUuid && (
                         <Button theme='outlineRed' onClick={handleSendInviteLink}>
-                            Send Invite Link
+                            Copy Invite Link
                         </Button>
                     )}
 
@@ -61,6 +62,12 @@ export const Settings = () => {
                     }}>
                         Select expansions
                     </Button>
+
+                    {!!saveGameUuid && (
+                        <Button theme={'red'} onClick={() => {
+                            navigate('/players')
+                        }}>Back To Game</Button>
+                    )}
                 </>
             )}
         </div>

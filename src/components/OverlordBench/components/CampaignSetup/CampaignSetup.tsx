@@ -11,7 +11,7 @@ export const CampaignSetup = () => {
 
     const {campaignsData} = useOverlordDataContext();
 
-    const {campaignPicks} = useGameSaveContext();
+    const {campaignPicks, overlordPicks} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
 
     const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => ({
@@ -31,6 +31,10 @@ export const CampaignSetup = () => {
         const newCampaignPicks: CampaignPicksInterface = {
             ...campaignPicks,
             ...dispatchCampaignPicks,
+        }
+
+        const newOverlordPicks = {
+            ...overlordPicks
         }
 
         if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
@@ -56,6 +60,11 @@ export const CampaignSetup = () => {
         dispatch({
             payload: {campaignPicks: {...newCampaignPicks}},
             actionType: GameSaveReducerActionTypeEnum.changeCampaignPicks
+        },)
+
+        dispatch({
+            payload: {overlordPicks: {...newOverlordPicks, pickedMonsters: undefined}},
+            actionType: GameSaveReducerActionTypeEnum.changeOverlordPicks
         },)
     }
 

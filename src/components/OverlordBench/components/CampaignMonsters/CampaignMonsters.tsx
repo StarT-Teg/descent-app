@@ -189,7 +189,8 @@ export const CampaignMonsters = () => {
                 {openGroupMonsters.map((monsterName: string, index) => {
                     const isMonsterPicked = pickedMonsters?.includes(monsterName);
                     const monsterGroupBr = getMonsterGroupBr(monsterName);
-                    const isDisabled = ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedMonsters.length >= openGroupsLimit) && !pickedMonsters?.includes(monsterName);
+                    const isDisabled = false;
+                    // ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedMonsters.length >= openGroupsLimit) && !pickedMonsters?.includes(monsterName);
 
                     return (
                         <div

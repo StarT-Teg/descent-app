@@ -101,16 +101,19 @@ export function useBrFunctions() {
             })
         }
 
-        if (!!Object.keys(pickedRelics || {}).length) {
-            Object.keys(pickedRelics || {}).forEach((lieutenantName) => {
-                const relicName = pickedRelics?.[lieutenantName];
-                if (!!relicName) {
-                    overlordBr += relics[relicName].br
-                }
-            })
-        }
-
         if (!!selectedCampaign && !!selectedMission && !!selectedEncounter) {
+
+            if (!!Object.keys(pickedRelics || {}).length) {
+                Object.keys(pickedRelics || {}).forEach((lieutenantName) => {
+                    const isLieutenantAvailable = !!campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants.includes(lieutenantName)
+                    const relicName = pickedRelics?.[lieutenantName];
+
+                    if (isLieutenantAvailable && !!relicName) {
+                        overlordBr += relics[relicName].br
+                    }
+                })
+            }
+
             campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants.forEach(lieutenantName => {
                 overlordBr += getLieutenantBr(lieutenantName);
             })
@@ -130,11 +133,16 @@ export function useBrFunctions() {
         return Math.round(heroesBR - overlordBR);
     }
 
+    function getItemBr(itemName: string) {
+        return Math.round(floatClearing(items[itemName]?.br));
+    }
+
     return {
         getMonsterGroupBr,
         getLieutenantBr,
         getHeroBr,
         getOverlordBr,
         getOverlordAvailableBr,
+        getItemBr
     }
 }

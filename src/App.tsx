@@ -37,22 +37,26 @@ export const App = () => {
     const getSaveData = (uuid: string) => {
         setSaveGameUuid(uuid);
         localStorage.setItem(localStorageSaveKey, uuid);
-
-        saveGameDataRefetch().then(response => {
-            const saveGameData = response.data;
-
-            if (typeof saveGameData !== 'string') {
-                dispatchPlayersPick({
-                    actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
-                    payload: saveGameData,
-                })
-                navigate('/players');
-            } else {
-                alert(saveGameData)
-                navigate('/settings');
-            }
-        });
     }
+
+    useEffect(() => {
+        if (!!saveGameUuid) {
+            saveGameDataRefetch().then(response => {
+                const saveGameData = response.data;
+
+                if (typeof saveGameData !== 'string') {
+                    dispatchPlayersPick({
+                        actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
+                        payload: saveGameData,
+                    })
+                    navigate('/players');
+                } else {
+                    alert(saveGameData)
+                    navigate('/settings');
+                }
+            });
+        }
+    }, [saveGameUuid])
 
     useEffect(() => {
         setIsLoading(dataIsLoading || saveIsLoading)

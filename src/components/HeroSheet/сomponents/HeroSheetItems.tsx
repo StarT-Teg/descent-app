@@ -2,6 +2,8 @@ import React from "react";
 import {HeroPlayerPicks, SelectionOptionInterface} from "../../../types/shared";
 import {MultiSelect} from "../../OverlordBench/components/shared/MultiSelect/MultiSelect";
 import {toSelectOption} from "../../../helpers";
+import styles from "../../OverlordBench/components/CampaignMonsters/campaign-monsters.module.css";
+import {useBrFunctions} from "../../../helpers/hooks/useBrFunctions";
 
 
 export interface ItemsBundleViewProps {
@@ -25,6 +27,8 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
     const itemOptions: SelectionOptionInterface[] = itemList.map(itemName => (toSelectOption(itemName)!));
     const selectedItems = heroItems?.map(itemName => (toSelectOption(itemName)!));
 
+    const {getItemBr} = useBrFunctions();
+
     const onItemSelect = (items: SelectionOptionInterface[]) => {
         const newItemsList = items.map(itemData => (itemData.value));
 
@@ -39,9 +43,17 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
                 <MultiSelect options={itemOptions} selectedOptions={selectedItems} onItemsChange={onItemSelect}/>
 
                 {heroItems?.map((itemName: string, index) => {
+                        const itemBr = getItemBr(itemName);
+
                         return (
-                            <input type="text" readOnly value={itemName} className={'input'}
-                                   key={`${heroPosition}-item-${itemName}-${index}`}/>
+                            <div className={styles.openGroupMonsterLine}>
+                                <input type="text" readOnly value={itemName} className={'input'}
+                                       key={`${heroPosition}-item-${itemName}-${index}`}
+                                />
+                                <div className={styles.br}>
+                                    BR: {itemBr}
+                                </div>
+                            </div>
                         )
                     }
                 )}

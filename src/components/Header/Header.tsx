@@ -3,6 +3,7 @@ import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import React, {SVGProps, useEffect, useState} from 'react';
 import {JSX} from 'react/jsx-runtime';
 import {useBrFunctions} from "../../helpers/hooks/useBrFunctions";
+import {ScrollIcon} from "../shared/icons/ScrollIcon/ScrollIcon";
 
 const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg
@@ -56,10 +57,14 @@ export const Header = () => {
     return (
         <div className={styles.root}>
             <div className={styles.header}>
-                {isBackArrowVisible && (
+                {isBackArrowVisible ? (
                     <ArrowBackIcon onClick={() => {
                         navigate(`/players`)
-                    }} className={styles.extraBackArrowIcon}/>)}
+                    }} className={styles.extraBackArrowIcon}/>) : (
+                    <ScrollIcon onClick={() => {
+                        navigate(`/settings`)
+                    }}/>
+                )}
 
                 {/*<ModalPortal modalComponent={(onClose) => (<SaveBeforeLeaveModal onLeaveButtonCLick={() => {*/}
                 {/*        onClose();*/}
