@@ -11,6 +11,7 @@ export enum CampaignsDataParametersEnum {
     monsters = 'monsters',
     openGroupsAmount = 'openGroupsAmount',
     openGroupsTraits = 'openGroupsTraits',
+    isOnlySmallMonsters = 'isOnlySmallMonsters',
 }
 
 export enum OverlordDeckDataParametersEnum {

@@ -31,6 +31,7 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                     }
                     return acc
                 }, []);
+            const isOnlySmallMonsters = !!row[24]?.trim()
 
             campaignsDataAdapted[campaignName] = {
                 ...campaignsDataAdapted[campaignName],
@@ -47,6 +48,7 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                                 monsters,
                                 openGroupsAmount,
                                 openGroupsTraits,
+                                isOnlySmallMonsters,
                             }
                         }
                     }

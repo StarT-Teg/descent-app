@@ -26,7 +26,10 @@ export function useGetOverlordPicks() {
     }
 
     function getOverlordDefaultMonsters(): string[] {
-        return (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.monsters || []).concat(getOverlordFamiliars());
+        const defaultMonsters = (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.monsters || []);
+        const familiars = getOverlordFamiliars();
+
+        return defaultMonsters.concat(familiars);
     }
 
     function getOverlordDefaultLieutenants(): string[] {
@@ -48,8 +51,9 @@ export function useGetOverlordPicks() {
 
             Object.values(monsters).forEach(monsterData => {
                 const newMonster = monsterData?.[act]?.master;
+                const isMonsterSizeValid = campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.isOnlySmallMonsters ? Number(newMonster?.size) === 1 : true;
 
-                if (newMonster?.traits?.some(r => availableTraits?.includes(r)) && !defaultMonsters.includes(newMonster.name)) {
+                if (newMonster?.traits?.some(r => isMonsterSizeValid && availableTraits?.includes(r)) && !defaultMonsters.includes(newMonster.name)) {
                     newOpenGroups.push(newMonster.name)
                 }
             })

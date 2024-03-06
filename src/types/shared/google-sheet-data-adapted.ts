@@ -42,6 +42,7 @@ export interface EncounterData {
     [CampaignsDataParametersEnum.monsters]: string[],
     [CampaignsDataParametersEnum.openGroupsAmount]: number,
     [CampaignsDataParametersEnum.openGroupsTraits]: MonsterTraitNamesEnum[],
+    [CampaignsDataParametersEnum.isOnlySmallMonsters]: boolean,
 }
 
 export interface OverlordCardsDataAdapted {

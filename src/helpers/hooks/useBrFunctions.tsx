@@ -24,7 +24,7 @@ export function useBrFunctions() {
 
         const act = customActPicks?.includes(monsterName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
 
-        return Object.values(monsters?.[monsterName][act]).reduce((brAcc: number, monsterValue) => {
+        return Object.values(monsters?.[monsterName]?.[act]).reduce((brAcc: number, monsterValue) => {
             const monsterAmount = monsterValue.groupSize[String(numberOfHeroes)];
             return Math.round(brAcc + (floatClearing(monsterValue.br) * monsterAmount));
         }, 0);
@@ -42,13 +42,14 @@ export function useBrFunctions() {
         const additionalBr = lieutenants[lieutenantName][act]?.stats?.[numberOfHeroes].br || 0;
 
         return Math.round(baseBr + additionalBr);
-    };
+    }
 
     function getHeroBr(heroPosition: HeroPlayersEnum): number {
 
         const heroPicks = heroesPicks[heroPosition];
         let heroBr: number = 0;
-
+        console.log('heroPicks:', heroPicks)
+        console.log('condition:', heroes[heroPicks?.heroName || '']?.br)
         if (!!heroPicks?.heroName) {
             heroBr += floatClearing(heroes[heroPicks?.heroName].br);
         }
