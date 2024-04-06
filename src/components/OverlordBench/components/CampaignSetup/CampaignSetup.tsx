@@ -131,7 +131,7 @@ export const CampaignSetup = () => {
                 className={'input'}
                 value={selectedMission}
                 options={availableMissions}
-                onChange={(value, actionMeta) => {
+                onChange={(value) => {
                     dispatchCampaignPicks({selectedMission: value?.value})
                 }}
                 isClearable

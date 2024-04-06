@@ -1,7 +1,7 @@
 import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum} from "../../types/shared";
 
-const getCleanArrayFromString = (dirtyString: string, separator: string | RegExp = ',') => {
-    if (dirtyString.length <= 0) {
+const getCleanArrayFromString = (dirtyString?: string, separator: string | RegExp = ',') => {
+    if (!dirtyString) {
         return []
     }
 
@@ -32,6 +32,7 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                     return acc
                 }, []);
             const isOnlySmallMonsters = !!row[24]?.trim()
+            const cantChangeActMonsterList: string[] = getCleanArrayFromString(row?.[25]);
 
             campaignsDataAdapted[campaignName] = {
                 ...campaignsDataAdapted[campaignName],
@@ -49,6 +50,7 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                                 openGroupsAmount,
                                 openGroupsTraits,
                                 isOnlySmallMonsters,
+                                cantChangeActMonsterList,
                             }
                         }
                     }

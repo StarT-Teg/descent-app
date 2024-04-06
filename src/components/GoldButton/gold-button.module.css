@@ -1,0 +1,26 @@
+
+.root {
+    background-image: url('/src/assets/img/buttons/gold/gold.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+
+    border: none;
+
+    height: 50px;
+    width: 179px;
+    justify-self: center;
+
+    transition: all 100ms;
+    box-sizing: border-box;
+
+    font-size: 18px;
+    text-align: center;
+    color: hsl(0, 0%, 20%);
+
+    font-family: DescentFont, sans-serif !important;
+}
+
+.root:focus {
+    outline: none;
+}

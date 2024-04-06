@@ -19,11 +19,12 @@ export const CampaignMonsters = () => {
         getOverlordDefaultMonsters,
         getOverlordDefaultLieutenants,
         getOverlordOpenGroups,
-        getOpenGroupLimit
+        getOpenGroupLimit,
+        isMonsterChangeActAvailable
     } = useGetOverlordPicks();
 
     const {relics} = useOverlordDataContext()
-    const {overlordPicks} = useGameSaveContext();
+    const {overlordPicks, campaignPicks} = useGameSaveContext();
     const {pickedMonsters = [], customActPicks = []} = overlordPicks;
 
     const dispatch = useGameSaveDispatchContext();
@@ -109,7 +110,7 @@ export const CampaignMonsters = () => {
                                             <ReactSwitch
                                                 uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
                                                 checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
-                                                checked={!customActPicks.includes(lieutenantName)}
+                                                checked={customActPicks.includes(lieutenantName) && Number(campaignPicks.selectedAct) === 2}
                                                 onChange={() => {
                                                     onCustomActPick(lieutenantName)
                                                 }}
@@ -150,23 +151,26 @@ export const CampaignMonsters = () => {
                     <legend>Default Monsters</legend>
 
                     {defaultMonsters.map((monsterName: string, index) => {
-                            return (
-                                <div>
-                                    <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
-                                        <div className="list">
-                                            <input type="text" readOnly value={monsterName} disabled
-                                                   className={'input'}
-                                            />
-                                        </div>
-                                        <div className={styles.br}>
+                        const isCanChangeAct = isMonsterChangeActAvailable(monsterName);
+
+                        return (
+                            <div>
+                                <div key={`default-monster-${index}`} className={styles.defaultMonsterLine}>
+                                    <div className="list">
+                                        <input type="text" readOnly value={monsterName} disabled
+                                               className={'input'}
+                                        />
+                                    </div>
+                                    <div className={styles.br}>
                                             BR: {getMonsterGroupBr(monsterName)}
                                         </div>
                                     </div>
 
-                                    <div className={styles.unitOptions}>
+                                <div className={styles.unitOptions}>
+                                    {isCanChangeAct && (
                                         <ReactSwitch uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
                                                      checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
-                                                     checked={!customActPicks.includes(monsterName)}
+                                                     checked={customActPicks.includes(monsterName) && Number(campaignPicks.selectedAct) === 2}
                                                      onChange={() => {
                                                          onCustomActPick(monsterName)
                                                      }}
@@ -174,7 +178,9 @@ export const CampaignMonsters = () => {
                                                      offColor={'#fc8245'}
                                                      onColor={'#627a83'}
                                         />
-                                    </div>
+                                    )}
+
+                                </div>
                                 </div>
                             )
                         }
@@ -188,6 +194,7 @@ export const CampaignMonsters = () => {
 
                 {openGroupMonsters.map((monsterName: string, index) => {
                     const isMonsterPicked = pickedMonsters?.includes(monsterName);
+                    const isCanChangeAct = isMonsterChangeActAvailable(monsterName);
                     const monsterGroupBr = getMonsterGroupBr(monsterName);
                     const isDisabled = false;
                     // ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedMonsters.length >= openGroupsLimit) && !pickedMonsters?.includes(monsterName);
@@ -215,11 +222,11 @@ export const CampaignMonsters = () => {
                                 </div>
                             </div>
 
-                            {isMonsterPicked && (
+                            {isMonsterPicked && isCanChangeAct && (
                                 <div className={styles.unitOptions}>
                                     <ReactSwitch uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
                                                  checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
-                                                 checked={!customActPicks.includes(monsterName)}
+                                                 checked={customActPicks.includes(monsterName) && Number(campaignPicks.selectedAct) === 2}
                                                  onChange={() => {
                                                      onCustomActPick(monsterName)
                                                  }}

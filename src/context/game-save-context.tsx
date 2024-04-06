@@ -31,7 +31,7 @@ const INITIAL_GAME_PICKS: GameSavePicks = {
     campaignPicks: Initial_Campaign_Picks,
     overlordPicks: Initial_Overlord_Picks,
     heroesPicks: Heroes_Current_Picks_Initial_State,
-
+    gold: 0,
 }
 
 export const GameSaveContext = createContext<GameSavePicks>(INITIAL_GAME_PICKS);

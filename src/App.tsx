@@ -13,6 +13,7 @@ import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
 import {useQuery} from "./helpers/hooks/useQuery";
 import {Settings} from "./components/Settings/Settings";
+import {ExpansionsSettings} from "./components/ExpansionsSettings/ExpansionsSettings";
 
 export const App = () => {
 
@@ -135,6 +136,10 @@ export const App = () => {
             <Route
                 path={'/settings'}
                 element={<Settings/>}/>
+
+            <Route
+                path={'/expansions'}
+                element={<ExpansionsSettings/>}/>
 
             <Route path="/players" element={<Header/>}>
                 <Route

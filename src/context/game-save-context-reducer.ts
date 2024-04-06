@@ -5,6 +5,7 @@ export enum GameSaveReducerActionTypeEnum {
     changeHeroesPicks = 'changeHeroesPicks',
     changeOverlordPicks = 'changeOverlordPicks',
     changeCampaignPicks = 'changeCampaignPicks',
+    changeGold = 'changeGold',
 }
 
 interface setAllPicks {
@@ -27,7 +28,12 @@ interface setCampaignPicks {
     payload: Pick<GameSavePicks, 'campaignPicks'>;
 }
 
-export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks;
+interface setGold {
+    actionType: GameSaveReducerActionTypeEnum.changeGold;
+    payload: number;
+}
+
+export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks | setGold;
 
 export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveReducerActions): GameSavePicks => {
 
@@ -42,6 +48,8 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
             return {...state, overlordPicks: {...state.overlordPicks, ...payload.overlordPicks}};
         case GameSaveReducerActionTypeEnum.changeCampaignPicks:
             return {...state, campaignPicks: {...state.campaignPicks, ...payload.campaignPicks}};
+        case GameSaveReducerActionTypeEnum.changeGold:
+            return {...state, gold: payload};
         default:
             return state;
     }

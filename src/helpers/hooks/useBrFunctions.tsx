@@ -24,7 +24,7 @@ export function useBrFunctions() {
 
         const act = customActPicks?.includes(monsterName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
 
-        return Object.values(monsters?.[monsterName]?.[act]).reduce((brAcc: number, monsterValue) => {
+        return Object.values(monsters?.[monsterName]?.[act] || {}).reduce((brAcc: number, monsterValue) => {
             const monsterAmount = monsterValue.groupSize[String(numberOfHeroes)];
             return Math.round(brAcc + (floatClearing(monsterValue.br) * monsterAmount));
         }, 0);
@@ -44,12 +44,11 @@ export function useBrFunctions() {
         return Math.round(baseBr + additionalBr);
     }
 
+//TODO убрать округление до последнего высчитывания
     function getHeroBr(heroPosition: HeroPlayersEnum): number {
 
         const heroPicks = heroesPicks[heroPosition];
         let heroBr: number = 0;
-        console.log('heroPicks:', heroPicks)
-        console.log('condition:', heroes[heroPicks?.heroName || '']?.br)
         if (!!heroPicks?.heroName) {
             heroBr += floatClearing(heroes[heroPicks?.heroName].br);
         }
@@ -67,7 +66,11 @@ export function useBrFunctions() {
         if (!!heroPicks?.heroItems?.length) {
             Object.keys(items).forEach((itemName) => {
                 if (heroPicks.heroItems?.includes(itemName)) {
-                    heroBr += floatClearing(items[itemName].br);
+                    if (items[itemName].equip === 'One Hand' && heroPicks.heroItems?.some(item => (itemName !== item && items[itemName].equip === 'One Hand' && !!items[itemName].dice))) {
+                        heroBr += floatClearing(items[itemName].br) * 0.75;
+                    } else {
+                        heroBr += floatClearing(items[itemName].br);
+                    }
                 }
             })
         }

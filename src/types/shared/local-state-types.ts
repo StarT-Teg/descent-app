@@ -68,4 +68,5 @@ export interface GameSavePicks {
     heroesPicks: CurrentPlayersPicks;
     overlordPicks: CurrentOverlordPicks;
     campaignPicks: CampaignPicksInterface;
+    gold: number
 }

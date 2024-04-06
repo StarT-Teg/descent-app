@@ -66,11 +66,16 @@ export function useGetOverlordPicks() {
         return campaignsData[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.openGroupsAmount || 0;
     }
 
+    const isMonsterChangeActAvailable = (monsterName: string) => {
+        return !campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.cantChangeActMonsterList?.includes(monsterName)
+    }
+
     return {
         getOverlordFamiliars,
         getOverlordDefaultMonsters,
         getOverlordDefaultLieutenants,
         getOverlordOpenGroups,
-        getOpenGroupLimit
+        getOpenGroupLimit,
+        isMonsterChangeActAvailable
     }
 }

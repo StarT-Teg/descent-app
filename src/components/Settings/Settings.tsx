@@ -36,8 +36,12 @@ export const Settings = () => {
             // navigator.share({url}).then()
             navigator.clipboard.writeText(url).then()
         } catch (e) {
-            console.log('Share error:', e)
+            console.log('error:', e)
         }
+    }
+
+    const handleExpansionsSettings = () => {
+        navigate('/expansions')
     }
 
     useEffect(() => {
@@ -58,8 +62,7 @@ export const Settings = () => {
                         </Button>
                     )}
 
-                    <Button theme='outlineRed' onClick={() => {
-                    }}>
+                    <Button theme='outlineRed' onClick={handleExpansionsSettings}>
                         Select expansions
                     </Button>
 
