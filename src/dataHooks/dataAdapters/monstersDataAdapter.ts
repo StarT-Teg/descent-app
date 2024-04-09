@@ -14,6 +14,7 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
             const item = {
                 [MonstersDataParametersEnum.name]: monsterName,
                 [MonstersDataParametersEnum.type]: monsterType,
+                serialNumber: row[2],
                 [MonstersDataParametersEnum.act]: monsterAct,
                 [MonstersDataParametersEnum.size]: row[4],
                 [MonstersDataParametersEnum.movement]: row[5],

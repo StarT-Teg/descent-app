@@ -59,7 +59,7 @@ export function useGetOverlordPicks() {
             })
         }
 
-        return newOpenGroups.sort((a, b) => (getMonsterGroupBr(b) - getMonsterGroupBr(a)))
+        return newOpenGroups.sort((a, b) => (getMonsterGroupBr(b, (selectedAct as 1 | 2) || 1) - getMonsterGroupBr(a, (selectedAct as 1 | 2) || 1)))
     }
 
     function getOpenGroupLimit(): number {

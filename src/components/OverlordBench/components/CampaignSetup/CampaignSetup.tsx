@@ -44,7 +44,13 @@ export const CampaignSetup = () => {
                 const missionName = newCampaignPicks.selectedMission;
 
                 newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length < 2 ? 1 : newCampaignPicks?.selectedEncounter;
-                newCampaignPicks.selectedAct = campaignsData?.[campaignName]?.[missionName]?.act;
+                newCampaignPicks.selectedAct = newCampaignPicks?.selectedAct || campaignsData?.[campaignName]?.[missionName]?.act;
+
+                if (campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission].act !== newCampaignPicks.selectedAct) {
+                    newCampaignPicks.selectedMission = undefined;
+                    newCampaignPicks.selectedEncounter = undefined;
+                }
+
             } else {
                 newCampaignPicks.selectedMission = undefined;
                 newCampaignPicks.selectedEncounter = undefined;
@@ -119,7 +125,7 @@ export const CampaignSetup = () => {
                 className={'input'}
                 value={selectedAct}
                 options={availableActs}
-                onChange={(value, actionMeta) => {
+                onChange={(value) => {
                     dispatchCampaignPicks({selectedAct: value?.value})
                 }}
                 isClearable

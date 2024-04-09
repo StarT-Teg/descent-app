@@ -1,11 +1,13 @@
 
 .root {
+    display: flex;
+    align-items: center;
+
     background-image: url('/src/assets/img/buttons/gold/gold.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-color: transparent;
-
-    border: none;
+    filter: drop-shadow(0 5px 20px rgba(230, 152, 67, 1));
+    /*background: radial-gradient(circle, rgba(230,152,67,1) 50%, rgba(126,73,41,1) 100%);*/
 
     height: 50px;
     width: 179px;
@@ -13,14 +15,15 @@
 
     transition: all 100ms;
     box-sizing: border-box;
+    padding-left: 27px;
+}
 
+.goldNumber {
     font-size: 18px;
     text-align: center;
+    font-family: DescentFont, sans-serif !important;
     color: hsl(0, 0%, 20%);
 
-    font-family: DescentFont, sans-serif !important;
+    width: 100%;
 }
 
-.root:focus {
-    outline: none;
-}

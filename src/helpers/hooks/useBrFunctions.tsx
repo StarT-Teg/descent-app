@@ -17,12 +17,18 @@ export function useBrFunctions() {
     const numberOfHeroes = Object.keys(heroesPicks).length;
     const currentAct = ('act' + selectedAct) as 'act1' | 'act2';
 
-    function getMonsterGroupBr(monsterName: string) {
-        if (!selectedAct) {
+    function getMonsterGroupBr(monsterName: string, customSelectedAct?: 1 | 2) {
+        if (!selectedAct && !customSelectedAct) {
             return 0;
         }
 
-        const act = customActPicks?.includes(monsterName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
+        let act: 'act1' | 'act2';
+
+        if (!!customSelectedAct) {
+            act = ('act' + customSelectedAct) as 'act1' | 'act2';
+        } else {
+            act = customActPicks?.includes(monsterName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
+        }
 
         return Object.values(monsters?.[monsterName]?.[act] || {}).reduce((brAcc: number, monsterValue) => {
             const monsterAmount = monsterValue.groupSize[String(numberOfHeroes)];

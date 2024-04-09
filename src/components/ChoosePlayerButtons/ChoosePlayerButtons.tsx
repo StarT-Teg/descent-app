@@ -13,7 +13,7 @@ export const ChoosePlayerButtons = () => {
     const {heroesPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
-    const {getHeroBr} = useBrFunctions();
+    const {getHeroBr, getOverlordBr} = useBrFunctions();
 
     return (
         <div className={styles.content}>
@@ -65,7 +65,7 @@ export const ChoosePlayerButtons = () => {
             <Button theme='red' onClick={() => {
                 navigate('overlord')
             }}>
-                Overlord
+                Overlord - {getOverlordBr()}
             </Button>
 
             {/*<Button onClick={() => {*/}

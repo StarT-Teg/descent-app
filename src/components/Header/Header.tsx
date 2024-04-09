@@ -5,8 +5,6 @@ import {JSX} from 'react/jsx-runtime';
 import {useBrFunctions} from "../../helpers/hooks/useBrFunctions";
 import {ScrollIcon} from "../shared/icons/ScrollIcon/ScrollIcon";
 import {GoldButton} from "../GoldButton/GoldButton";
-import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
-import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
 const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
     <svg
@@ -25,21 +23,12 @@ const ArrowBackIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>)
 export const Header = () => {
 
     const {getOverlordAvailableBr} = useBrFunctions();
-    const {gold} = useGameSaveContext()
-    const dispatch = useGameSaveDispatchContext();
 
     const [isBackArrowVisible, setIsBackArrowVisible] = useState<boolean>(false);
     const [freeBr, setFreeBr] = useState<number>(getOverlordAvailableBr());
 
     const navigate = useNavigate();
     const location = useLocation();
-
-    const handleGoldChange = (value: number) => {
-        dispatch({
-            payload: value,
-            actionType: GameSaveReducerActionTypeEnum.changeGold
-        })
-    }
 
     const getBrStylesForOrb = (currentBr: number): React.CSSProperties => {
 
@@ -69,18 +58,18 @@ export const Header = () => {
     return (
         <div className={styles.root}>
             <div className={styles.header}>
-                {isBackArrowVisible ? (
-                    <ArrowBackIcon onClick={() => {
-                        navigate(`/players`)
-                    }} className={styles.extraBackArrowIcon}/>) : (
-                    <ScrollIcon onClick={() => {
-                        navigate(`/settings`)
-                    }}/>
-                )}
+                <div className={styles.navigationIcon}>
+                    {isBackArrowVisible ? (
+                        <ArrowBackIcon onClick={() => {
+                            navigate(`/players`)
+                        }} className={styles.extraBackArrowIcon}/>) : (
+                        <ScrollIcon onClick={() => {
+                            navigate(`/settings`)
+                        }}/>
+                    )}
+                </div>
 
-                <GoldButton value={gold} onChange={(e) => {
-                    handleGoldChange(Number(e.target.value))
-                }}/>
+                <GoldButton/>
 
                 {/*<ModalPortal modalComponent={(onClose) => (<SaveBeforeLeaveModal onLeaveButtonCLick={() => {*/}
                 {/*        onClose();*/}

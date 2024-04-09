@@ -30,7 +30,7 @@ interface setCampaignPicks {
 
 interface setGold {
     actionType: GameSaveReducerActionTypeEnum.changeGold;
-    payload: number;
+    payload?: number;
 }
 
 export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks | setGold;

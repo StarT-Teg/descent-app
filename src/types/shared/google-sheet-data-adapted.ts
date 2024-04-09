@@ -105,7 +105,7 @@ export interface MonstersDataAdapted {
     [monsterName: string]: {
         [act: string]: {
             [key in MonsterTypesEnum]: MonsterData;
-        }
+        },
     }
 }
 
@@ -162,6 +162,7 @@ export interface MonsterData {
         [numberOfHeroes: string]: number;
     };
     [MonstersDataParametersEnum.br]: string;
+    serialNumber: string;
 }
 
 

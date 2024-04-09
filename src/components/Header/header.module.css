@@ -23,11 +23,12 @@
 .header {
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 100;
 
     display: grid;
     align-items: center;
     grid-auto-flow: column;
+    justify-items: center;
 
     padding: 12px 10px 0;
     width: 100%;
@@ -36,7 +37,7 @@
     color: hsl(0, 0%, 100%);
 
     /*box-shadow: ;*/
-    filter: drop-shadow(0 5px 20px rgba(22, 52, 91, 1));
+    /*filter: drop-shadow(0 5px 20px rgba(22, 52, 91, 1));*/
     /*background: radial-gradient(circle, rgba(53, 61, 173, 1) 30%, rgba(22, 52, 91, 1) 100%) padding-box;*/
 }
 
@@ -52,6 +53,7 @@
 
 .orbRoot {
     margin-left: auto;
+    z-index: 2;
     /*display: grid;*/
     /*grid-template-columns: 1fr 1fr;*/
     /*grid-template-rows: auto auto;*/
@@ -136,4 +138,9 @@
     to {
         background-position: -1400px 0;
     }
+}
+
+.navigationIcon {
+    margin-right: auto;
+    z-index: 2;
 }
