@@ -1,4 +1,4 @@
-import {HeroesDataInterface} from "../types/shared";
+import {HeroesDataInterface} from "../shared";
 
 export interface HeroesDataReducerActions {
     payload: HeroesDataInterface,

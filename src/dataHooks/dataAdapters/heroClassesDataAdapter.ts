@@ -1,4 +1,4 @@
-import {ExcelDataRaw, HeroClassesDataAdapted,} from "../../types/shared";
+import {ExcelDataRaw, HeroClassesDataAdapted,} from "../../shared";
 
 export const heroClassesDataAdapter = (data: ExcelDataRaw) => {
 

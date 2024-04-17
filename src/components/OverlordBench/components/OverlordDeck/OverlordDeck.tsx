@@ -6,7 +6,7 @@ import {
     OverlordBasicDecksEnum,
     OverlordDeckDataParametersEnum,
     SelectionOptionInterface
-} from "../../../../types/shared";
+} from "../../../../shared";
 import {toSelectOption} from "../../../../helpers";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {MultiSelect} from "../shared/MultiSelect/MultiSelect";

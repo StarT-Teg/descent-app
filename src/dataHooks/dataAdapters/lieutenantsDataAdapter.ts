@@ -1,9 +1,4 @@
-import {
-    ExcelDataRaw,
-    LieutenantActData,
-    LieutenantDataParametersEnum,
-    LieutenantsDataAdapted
-} from "../../types/shared";
+import {ExcelDataRaw, LieutenantActData, LieutenantDataParametersEnum, LieutenantsDataAdapted} from "../../shared";
 import {floatClearing} from "../../helpers";
 
 export const lieutenantsDataAdapter = (data: ExcelDataRaw): LieutenantsDataAdapted => {

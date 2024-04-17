@@ -1,4 +1,4 @@
-import {ExcelDataRaw, OverlordCardsDataAdapted} from "../../types/shared";
+import {ExcelDataRaw, OverlordCardsDataAdapted} from "../../shared";
 import {floatClearing} from "../../helpers";
 
 export const overlordDecksDataAdapted = (data: ExcelDataRaw): OverlordCardsDataAdapted => {

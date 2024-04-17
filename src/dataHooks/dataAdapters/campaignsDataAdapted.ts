@@ -1,4 +1,4 @@
-import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum} from "../../types/shared";
+import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum} from "../../shared";
 
 const getCleanArrayFromString = (dirtyString?: string, separator: string | RegExp = ',') => {
     if (!dirtyString) {

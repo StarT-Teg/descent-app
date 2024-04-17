@@ -1,4 +1,4 @@
-import {CampaignPicksInterface, CampaignsDataAdapted, CurrentOverlordPicks, MonstersDataAdapted} from "../types/shared";
+import {CampaignPicksInterface, CampaignsDataAdapted, CurrentOverlordPicks, MonstersDataAdapted} from "../shared";
 
 
 export const calculateOverlordMonsters = (props: {

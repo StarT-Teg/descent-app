@@ -5,7 +5,7 @@ import cn from "classnames";
 export interface HeroButtonInterface {
     onClick?(): void;
 
-    theme?: 'hero' | 'blue' | 'red' | 'outlineRed';
+    theme?: 'hero' | 'blue' | 'red' | 'outlineRed' | 'simple';
     buttonProps?: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
     children: ReactNode;
 }

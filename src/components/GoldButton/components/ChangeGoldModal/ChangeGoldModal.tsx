@@ -1,5 +1,6 @@
 import React from "react";
 import styles from './change-gold-modal.module.css'
+import {Button} from "../../../shared";
 
 export interface ChangeGoldModalPropsInterface {
     onAddGold?(goldAmount: number): void;
@@ -14,9 +15,9 @@ const SimpleAddButton = (props: React.DetailedHTMLProps<React.ButtonHTMLAttribut
     const {children, ...otherProps} = props;
 
     return (
-        <button className={styles.button} {...otherProps}>
+        <Button theme={'simple'} buttonProps={otherProps}>
             {children}
-        </button>
+        </Button>
     )
 }
 

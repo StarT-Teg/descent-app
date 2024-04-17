@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {HeroSheetName} from "./сomponents/HeroSheetName/HeroSheetName";
-import {HeroSheetItems} from "./сomponents/HeroSheetItems";
+import {HeroSheetItems} from "./сomponents/HeroSheetItems/HeroSheetItems";
 import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
-import {HeroPlayerPicks, HeroPlayersEnum} from "../../types/shared";
+import {HeroPlayerPicks, HeroPlayersEnum} from "../../shared";
 import {useHeroesDataContext,} from "../../context";
 import {useParams} from "react-router-dom";
 import {isMobile} from 'react-device-detect';
 import styles from './hero-sheet.module.css'
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
-import {Accordion, AccordionItem} from "../shared";
-import {Button} from "../shared";
+import {Accordion, AccordionItem, Button} from "../shared";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
 

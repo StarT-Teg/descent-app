@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig} from "axios";
-import {GameSavePicks} from "../types/shared";
+import {GameSavePicks} from "../shared";
 import {useEffect, useState} from "react";
 import {GameSaveReducerActionTypeEnum} from "../context/game-save-context-reducer";
 import {useGameSaveDispatchContext} from "../context/game-save-context";

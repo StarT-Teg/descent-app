@@ -1,5 +1,5 @@
 import styles from './gold-button.module.css'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {useSetGameSave} from "../../dataHooks/useSetGameSave";
@@ -32,6 +32,12 @@ export const GoldButton = () => {
             }
         })
     }
+
+    useEffect(() => {
+        if (gold !== localGoldState) {
+            setLocalGoldState(gold);
+        }
+    }, [gold])
 
     // useDebounce({
     //     debounceData: localGoldState, callback: () => {

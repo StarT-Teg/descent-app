@@ -1,5 +1,5 @@
 import React from "react";
-import {CurrentOverlordPicks, SelectionOptionInterface} from "../../../../types/shared";
+import {CurrentOverlordPicks, SelectionOptionInterface} from "../../../../shared";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import styles from './campaign-monsters.module.css'
@@ -83,6 +83,9 @@ export const CampaignMonsters = () => {
 
                     {defaultLieutenants.map((lieutenantName: string, index) => {
                         const isCanChangeAct = isMonsterChangeActAvailable(lieutenantName);
+                        const minMonsterGroupBr = getLieutenantBr(lieutenantName, 1);
+                        const maxMonsterGroupBr = getLieutenantBr(lieutenantName, 2);
+                        const isSwitchDisabled = !customActPicks.includes(lieutenantName) && (maxMonsterGroupBr - minMonsterGroupBr) > freeBr
 
                         return (
                             <Accordion key={`${lieutenantName}-${index}`}>
@@ -113,6 +116,7 @@ export const CampaignMonsters = () => {
                                                 className={styles.extraSwitch}
                                                 offColor={'#fc8245'}
                                                 onColor={'#627a83'}
+                                                disabled={isSwitchDisabled}
                                             />
                                         )}
 
@@ -148,7 +152,11 @@ export const CampaignMonsters = () => {
                     <legend>Default Monsters</legend>
 
                     {defaultMonsters.map((monsterName: string, index) => {
+                        const isMonsterPicked = pickedMonsters?.includes(monsterName);
                         const isCanChangeAct = isMonsterChangeActAvailable(monsterName);
+                        const minMonsterGroupBr = getMonsterGroupBr(monsterName, 1);
+                        const maxMonsterGroupBr = getMonsterGroupBr(monsterName, 2);
+                        const isSwitchDisabled = !customActPicks.includes(monsterName) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
 
                         return (
                             <div key={`default-monster-${index}`}>
@@ -174,6 +182,7 @@ export const CampaignMonsters = () => {
                                                      className={styles.extraSwitch}
                                                      offColor={'#fc8245'}
                                                      onColor={'#627a83'}
+                                                     disabled={isSwitchDisabled}
                                         />
                                     )}
 
@@ -196,7 +205,6 @@ export const CampaignMonsters = () => {
                     const maxMonsterGroupBr = getMonsterGroupBr(monsterName, 2);
                     const isDisabled = !isMonsterPicked && (minMonsterGroupBr > freeBr || pickedMonsters.length >= openGroupsLimit);
                     const isSwitchDisabled = !customActPicks.includes(monsterName) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
-                    // ((monsterGroupBr > maxBrLimit) || (monsterGroupBr > freeBr) || pickedMonsters.length >= openGroupsLimit) && !pickedMonsters?.includes(monsterName);
 
                     return (
                         <div

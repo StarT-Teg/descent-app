@@ -1,4 +1,4 @@
-import {SelectionOptionInterface} from "../types/shared";
+import {SelectionOptionInterface} from "../shared";
 
 export const toSelectOption = <T,> (value?: T, label?: string, isFixed = false): SelectionOptionInterface | null => {
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import {SelectionOptionInterface} from "../../../types/shared";
+import {SelectionOptionInterface} from "../../../shared";
 
 export interface ClassesBundleViewProps {
     classList?: string[],

@@ -1,7 +1,7 @@
 import axios from "axios";
 import {campaignsDataAdapted} from "./dataAdapters/campaignsDataAdapted";
 import {useQuery, UseQueryResult} from "react-query";
-import {GameDataInterface} from "../types/shared";
+import {GameDataInterface} from "../shared";
 import {heroesRawDataAdapter} from "./dataAdapters/heroesRawDataAdapter";
 import {heroClassesDataAdapter} from "./dataAdapters/heroClassesDataAdapter";
 import {itemsDataAdapter} from "./dataAdapters/itemsDataAdapter";
@@ -14,7 +14,7 @@ import {familiarsDataAdapted} from "./dataAdapters/familiarsDataAdapted";
 
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
 
-    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars'].join('&ranges=');
+    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A1:B1000'].join('&ranges=');
 
     const params = {
         valueRenderOption: 'FORMATTED_VALUE',
@@ -35,6 +35,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
                 overlordDecksData: overlordDecksDataAdapted(response.data?.valueRanges?.[6]),
                 relicsData: overlordRelicsDataAdapter(response.data?.valueRanges?.[7]),
                 familiars: familiarsDataAdapted(response.data?.valueRanges?.[8]),
+                translation: response.data?.valueRanges?.[9],
             }
         ));
 

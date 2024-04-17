@@ -1,4 +1,4 @@
-import {ExcelDataRaw, HeroesDataAdapted, HeroParametersEnum} from "../../types/shared";
+import {ExcelDataRaw, HeroesDataAdapted, HeroParametersEnum} from "../../shared";
 
 export const heroesRawDataAdapter = (data: ExcelDataRaw, maxColumns?: number): HeroesDataAdapted => {
 

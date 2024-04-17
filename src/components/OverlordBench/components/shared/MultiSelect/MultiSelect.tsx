@@ -1,5 +1,5 @@
 import Select, {ActionMeta, OnChangeValue, StylesConfig} from "react-select";
-import {SelectionOptionInterface} from "../../../../../types/shared";
+import {SelectionOptionInterface} from "../../../../../shared";
 import React from "react";
 
 const orderOptions = (values: readonly SelectionOptionInterface[]) => {

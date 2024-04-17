@@ -1,0 +1,13 @@
+
+.itemLine {
+    display: grid;
+    grid-template-columns: auto 50px;
+    align-items: center;
+    grid-column-gap: 8px;
+}
+
+.br {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

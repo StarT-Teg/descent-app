@@ -1,5 +1,5 @@
 import styles from './choose-player-buttons.module.css'
-import {HeroPlayersEnum} from "../../types/shared";
+import {HeroPlayersEnum} from "../../shared";
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import {Button} from "../shared/Button/Button";

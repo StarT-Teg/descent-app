@@ -1,4 +1,4 @@
-import {HeroPlayersEnum} from "../../types/shared";
+import {HeroPlayersEnum} from "../../shared";
 import {floatClearing} from "../mathHelpers";
 import {useOverlordDataContext} from "../../context/overlord-data-context";
 import {useHeroesDataContext} from "../../context";
@@ -36,13 +36,19 @@ export function useBrFunctions() {
         }, 0);
     }
 
-    function getLieutenantBr(lieutenantName: string): number {
+    function getLieutenantBr(lieutenantName: string, customSelectedAct?: 1 | 2): number {
 
-        if (!selectedAct) {
+        if (!selectedAct && !customSelectedAct) {
             return 0;
         }
 
-        const act = customActPicks?.includes(lieutenantName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
+        let act: 'act1' | 'act2';
+
+        if (!!customSelectedAct) {
+            act = ('act' + customSelectedAct) as 'act1' | 'act2';
+        } else {
+            act = customActPicks?.includes(lieutenantName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
+        }
 
         const baseBr = lieutenants[lieutenantName]?.[act]?.br || 0;
         const additionalBr = lieutenants[lieutenantName][act]?.stats?.[numberOfHeroes].br || 0;

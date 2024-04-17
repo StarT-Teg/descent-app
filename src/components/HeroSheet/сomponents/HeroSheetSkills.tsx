@@ -1,5 +1,5 @@
 import React from "react";
-import {HeroPlayersEnum} from "../../../types/shared";
+import {HeroPlayersEnum} from "../../../shared";
 
 export interface SkillsBundleViewProps {
     familiars?: string[]

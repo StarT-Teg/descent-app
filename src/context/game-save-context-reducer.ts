@@ -1,4 +1,4 @@
-import {GameSavePicks} from "../types/shared";
+import {GameSavePicks} from "../shared";
 
 export enum GameSaveReducerActionTypeEnum {
     changeAllPicks = 'changeAllPicks',

@@ -1,4 +1,4 @@
-import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../types/shared";
+import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../shared";
 import {floatClearing} from "../../helpers";
 
 export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {

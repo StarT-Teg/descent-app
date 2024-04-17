@@ -96,7 +96,7 @@ export const App = () => {
                     relicsData,
                     monstersData,
                     campaignData,
-                    familiars
+                    familiars,
                 } = data;
 
                 dispatchHeroesData({

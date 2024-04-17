@@ -1,4 +1,4 @@
-import {ExcelDataRaw, FamiliarsDataAdapted,} from "../../types/shared";
+import {ExcelDataRaw, FamiliarsDataAdapted,} from "../../shared";
 import {floatClearing} from "../../helpers";
 
 export const familiarsDataAdapted = (data: ExcelDataRaw) => {

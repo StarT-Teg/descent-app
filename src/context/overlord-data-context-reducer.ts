@@ -1,4 +1,4 @@
-import {OverlordDataInterface} from "../types/shared";
+import {OverlordDataInterface} from "../shared";
 
 export interface OverlordDataReducerActions {
     payload: OverlordDataInterface,

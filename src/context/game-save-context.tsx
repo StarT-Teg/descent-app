@@ -6,7 +6,7 @@ import {
     GameSavePicks,
     HeroPlayerPicks,
     HeroPlayersEnum
-} from "../types/shared";
+} from "../shared";
 import {GameSaveContextReducer, GameSaveReducerActions} from "./game-save-context-reducer";
 
 export const Initial_Player_Picks: HeroPlayerPicks = {

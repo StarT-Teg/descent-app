@@ -1,4 +1,4 @@
-import {CampaignPicksInterface, SelectionOptionInterface} from "../../../../types/shared";
+import {CampaignPicksInterface, SelectionOptionInterface} from "../../../../shared";
 import {toSelectOption} from "../../../../helpers";
 import React, {useEffect, useState} from "react";
 import Select from "react-select";

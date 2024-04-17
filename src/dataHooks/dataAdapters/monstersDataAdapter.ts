@@ -1,4 +1,4 @@
-import {ExcelDataRaw, MonstersDataAdapted, MonstersDataParametersEnum, MonsterTraitNamesEnum} from "../../types/shared";
+import {ExcelDataRaw, MonstersDataAdapted, MonstersDataParametersEnum, MonsterTraitNamesEnum} from "../../shared";
 
 export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => {
 

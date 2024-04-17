@@ -1,5 +1,5 @@
 import React, {createContext, Dispatch, ReactNode, useReducer} from "react";
-import {OverlordDataInterface} from "../types/shared";
+import {OverlordDataInterface} from "../shared";
 import {OverlordDataContextReducer, OverlordDataReducerActions} from "./overlord-data-context-reducer";
 
 export const Overlord_Data_Initial_State: OverlordDataInterface = {

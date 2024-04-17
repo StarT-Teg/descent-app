@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useMutation} from "react-query";
-import {GameSavePicks} from "../types/shared";
+import {GameSavePicks} from "../shared";
 
 export interface GameSaveParametersInterface {
     valueInputOption: 'INPUT_VALUE_OPTION_UNSPECIFIED' | 'RAW' | 'USER_ENTERED'; // RAW
@@ -24,5 +24,5 @@ export const useSetGameSave = () => {
         .post(`https://script.google.com/macros/s/AKfycbwrM4AbrDT_-rA55bg0TIXxAg_aI85kcJTXgqItL0twcBIT0K94I01Vicllcj2wnQBf9Q/exec`, JSON.stringify(gameData), {headers})
         .then(response => response);
 
-    return useMutation('SaveGame', query)
+    return useMutation('SaveGame', query, {})
 }

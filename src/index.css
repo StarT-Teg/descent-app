@@ -5,6 +5,11 @@
                               'embedded-opentype', and 'svg' */
 }
 
+@font-face {
+    font-family: 'DescentSymbols';
+    src: local('DescentSymbols'), url(/src/assets/fonts/symbols.ttf) format('truetype');
+}
+
 body {
     /*background-image: url('https://wallpaperaccess.com/full/1302782.jpg');*/
     background: url('assets/img/bg.png') no-repeat center center fixed;
