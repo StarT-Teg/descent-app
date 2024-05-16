@@ -16,10 +16,11 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.19.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
     "react-switch": "^7.0.0",
     "react-uuid": "^2.0.0",
+    "swiper": "^11.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

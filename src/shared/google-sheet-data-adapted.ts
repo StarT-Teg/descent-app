@@ -154,15 +154,15 @@ export interface MonsterData {
     [MonstersDataParametersEnum.defenseDice]: string;
     [MonstersDataParametersEnum.attackType]: string;
     [MonstersDataParametersEnum.attackDice]: string;
-    [MonstersDataParametersEnum.abilities]?: string;
-    [MonstersDataParametersEnum.actions]?: string;
-    [MonstersDataParametersEnum.surgeAbilities]?: string;
+    [MonstersDataParametersEnum.abilities]?: string[];
+    [MonstersDataParametersEnum.actions]?: string[];
+    [MonstersDataParametersEnum.surgeAbilities]?: string[];
     [MonstersDataParametersEnum.traits]?: MonsterTraitNamesEnum[];
     [MonstersDataParametersEnum.groupSize]: {
         [numberOfHeroes: string]: number;
     };
     [MonstersDataParametersEnum.br]: string;
-    serialNumber: string;
+    serialNumber?: string;
 }
 
 

@@ -22,9 +22,9 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
                 [MonstersDataParametersEnum.defenseDice]: row[7],
                 [MonstersDataParametersEnum.attackType]: row[9],
                 [MonstersDataParametersEnum.attackDice]: row[10],
-                [MonstersDataParametersEnum.abilities]: row[12],
-                [MonstersDataParametersEnum.actions]: row[14],
-                [MonstersDataParametersEnum.surgeAbilities]: [row[16], row[18], row[20]].filter(str => !!str).join('\n'),
+                [MonstersDataParametersEnum.abilities]: row[12]?.split(', ')?.filter(str => !!str),
+                [MonstersDataParametersEnum.actions]: row[14]?.split(', ')?.filter(str => !!str),
+                [MonstersDataParametersEnum.surgeAbilities]: [row[16], row[18], row[20]]?.filter(str => !!str),
                 [MonstersDataParametersEnum.traits]: [row[25], row[26], row[27], row[28], row[29], row[30], row[31], row[32], row[33], row[34]]
                     .reduce((acc: string[], item, index) => {
                         if (!!item) {

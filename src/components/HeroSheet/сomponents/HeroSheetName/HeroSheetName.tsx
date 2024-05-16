@@ -45,7 +45,8 @@ export const HeroSheetName = (props: HeroBundleViewProps) => {
                         name="hero-name"
                         placeholder={'Choose hero'}
                     />
-                    {type &&<img src={require(`/src/assets/img/archetypes/${type.toLowerCase()}.png`)} style={{width:'50px', height:'50px'}} alt=""/>}
+                    {type && <img src={require(`/src/assets/img/archetypes/${type.toLowerCase()}.png`)}
+                                  style={{width: '50px', height: '50px'}} alt=""/>}
                 </div>
             </fieldset>
 

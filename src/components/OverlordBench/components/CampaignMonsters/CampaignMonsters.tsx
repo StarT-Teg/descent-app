@@ -10,6 +10,7 @@ import {Accordion, AccordionItem} from "../../../shared";
 import Select from "react-select";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import ReactSwitch from "react-switch";
+import {MonsterShowcase} from "../MonsterShowcase/MonsterShowcase";
 
 export const CampaignMonsters = () => {
 
@@ -74,7 +75,7 @@ export const CampaignMonsters = () => {
         <>
             <fieldset>
                 <legend>Monster serial numbers</legend>
-                <p className="input">{[...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master.serialNumber).sort((a, b) => (Number(a) - Number(b))).join(', ')}</p>
+                <p className="input">{[...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master?.serialNumber).filter(monsterBr => !!monsterBr).sort((a, b) => (Number(a) - Number(b))).join(', ')}</p>
             </fieldset>
 
             {!!defaultLieutenants.length && (
@@ -85,7 +86,7 @@ export const CampaignMonsters = () => {
                         const isCanChangeAct = isMonsterChangeActAvailable(lieutenantName);
                         const minMonsterGroupBr = getLieutenantBr(lieutenantName, 1);
                         const maxMonsterGroupBr = getLieutenantBr(lieutenantName, 2);
-                        const isSwitchDisabled = !customActPicks.includes(lieutenantName) && (maxMonsterGroupBr - minMonsterGroupBr) > freeBr
+                        const isSwitchDisabled = !(customActPicks.includes(lieutenantName) || campaignPicks.selectedAct === 2) && (maxMonsterGroupBr - minMonsterGroupBr) > freeBr
 
                         return (
                             <Accordion key={`${lieutenantName}-${index}`}>
@@ -96,12 +97,12 @@ export const CampaignMonsters = () => {
                                     header={<div key={`default-monster-${index}`}
                                                  className={styles.defaultMonsterLine}>
                                         <div className="input">
-                                                {lieutenantName}
-                                            </div>
-                                            <div className={styles.br}>
-                                                BR: {getLieutenantBr(lieutenantName)}
-                                            </div>
-                                        </div>}>
+                                            {lieutenantName}
+                                        </div>
+                                        <div className={styles.br}>
+                                            BR: {getLieutenantBr(lieutenantName)}
+                                        </div>
+                                    </div>}>
 
                                     <div className={styles.unitOptions}>
 
@@ -129,14 +130,14 @@ export const CampaignMonsters = () => {
                                                     pickedRelics: {
                                                         ...overlordPicks?.pickedRelics,
                                                         [lieutenantName]: value?.value || undefined
-                                                        }
-                                                    })
-                                                }}
-                                                isClearable
-                                                name={`${lieutenantName}-relic-select`}
-                                                placeholder={'Relic'}
-                                            />
-                                        </div>
+                                                    }
+                                                })
+                                            }}
+                                            isClearable
+                                            name={`${lieutenantName}-relic-select`}
+                                            placeholder={'Relic'}
+                                        />
+                                    </div>
 
                                     </AccordionItem>
                                 </Accordion>
@@ -156,7 +157,7 @@ export const CampaignMonsters = () => {
                         const isCanChangeAct = isMonsterChangeActAvailable(monsterName);
                         const minMonsterGroupBr = getMonsterGroupBr(monsterName, 1);
                         const maxMonsterGroupBr = getMonsterGroupBr(monsterName, 2);
-                        const isSwitchDisabled = !customActPicks.includes(monsterName) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
+                        const isSwitchDisabled = !(customActPicks.includes(monsterName) || campaignPicks.selectedAct === 2) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
 
                         return (
                             <div key={`default-monster-${index}`}>
@@ -198,14 +199,17 @@ export const CampaignMonsters = () => {
             <fieldset>
                 <legend>Open Groups ( {openGroupsLimit} )</legend>
 
+                <MonsterShowcase/>
+
                 {openGroupMonsters.map((monsterName: string, index) => {
                     const isMonsterPicked = pickedMonsters?.includes(monsterName);
                     const isCanChangeAct = isMonsterChangeActAvailable(monsterName);
                     const minMonsterGroupBr = getMonsterGroupBr(monsterName, 1);
                     const maxMonsterGroupBr = getMonsterGroupBr(monsterName, 2);
                     const isDisabled = !isMonsterPicked && (minMonsterGroupBr > freeBr || pickedMonsters.length >= openGroupsLimit);
-                    const isSwitchDisabled = !customActPicks.includes(monsterName) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
+                    const isSwitchDisabled = !(customActPicks.includes(monsterName) || campaignPicks.selectedAct === 2) && (isMonsterPicked ? (maxMonsterGroupBr - minMonsterGroupBr) : maxMonsterGroupBr) > freeBr
 
+                    console.log(monsterName, minMonsterGroupBr)
                     return (
                         <div
                             key={`open-group-monster-${index}`}>

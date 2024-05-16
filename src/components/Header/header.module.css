@@ -23,7 +23,7 @@
 .header {
     position: fixed;
     top: 0;
-    z-index: 3;
+    z-index: 2;
 
     display: grid;
     align-items: center;
@@ -53,7 +53,7 @@
 
 .orbRoot {
     margin-left: auto;
-    z-index: 2;
+    z-index: 1;
     /*display: grid;*/
     /*grid-template-columns: 1fr 1fr;*/
     /*grid-template-rows: auto auto;*/
@@ -142,5 +142,5 @@
 
 .navigationIcon {
     margin-right: auto;
-    z-index: 2;
+    z-index: 1;
 }

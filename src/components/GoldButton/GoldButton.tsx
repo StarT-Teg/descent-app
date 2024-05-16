@@ -39,19 +39,6 @@ export const GoldButton = () => {
         }
     }, [gold])
 
-    // useDebounce({
-    //     debounceData: localGoldState, callback: () => {
-    //         if (localGoldState.length > 0) {
-    //             mutate({uuid: uuid, data: {gold: goldSum}}, {
-    //                 onSuccess: (response) => {
-    //                     handleGoldChange(response.data?.gold)
-    //                     setLocalGoldState([])
-    //                 }
-    //             })
-    //         }
-    //     }
-    // })
-
     return (
         <ModalPortal
             openModalButtonComponent={(onOpen) => (

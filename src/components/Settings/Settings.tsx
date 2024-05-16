@@ -1,18 +1,19 @@
 import uuid from "react-uuid";
-import {useGameSaveContext} from "../../context/game-save-context";
+import {INITIAL_GAME_PICKS, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {useNavigate} from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import React, {useEffect, useState} from "react";
 import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import {Button} from "../shared";
 import styles from './create-game-party.module.css'
+import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
 export const Settings = () => {
 
     const localStorageSaveKey = 'descent-save-game-uuid';
     const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(localStorageSaveKey));
 
-    const gamePicks = useGameSaveContext()
+    const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const {mutate, isLoading} = useSetGameSave()
 
@@ -22,8 +23,21 @@ export const Settings = () => {
         const newUuid = uuid();
         localStorage.setItem(localStorageSaveKey, newUuid);
 
-        mutate({uuid: newUuid, data: {...gamePicks}}, {
-            onSuccess: () => {
+        mutate({uuid: newUuid, data: {...INITIAL_GAME_PICKS}}, {
+            onSuccess: (response) => {
+
+                const saveGameData = response.data;
+
+                if (typeof saveGameData !== 'string') {
+                    dispatchPlayersPick({
+                        actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
+                        payload: saveGameData,
+                    })
+                    navigate('/players');
+                } else {
+                    alert(saveGameData)
+                    navigate('/settings');
+                }
                 navigate('/players')
             }
         })

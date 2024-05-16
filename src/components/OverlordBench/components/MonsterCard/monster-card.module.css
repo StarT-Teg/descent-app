@@ -1,0 +1,125 @@
+
+.cardRoot {
+    width: 100%;
+
+    border-radius: 25px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardContent {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+}
+
+.cardDataTable {
+    position: absolute;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 1%;
+    height: 100%;
+    width: 100%;
+
+    z-index: 1;
+}
+
+.cardHeader {
+    height: 31%;
+}
+
+.cardHeaderStats {
+    display: grid;
+    grid-template-columns: 34% 32% 34%;
+    align-items: center;
+
+    width: 100%;
+    height: 12%;
+}
+
+.cardHeaderAbilities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 15%);
+    font-family: DescentFont, sans-serif !important;
+
+    height: 11%;
+}
+
+.middleBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    height: 36%;
+}
+
+.cardAttackTypeAndAct {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardMonsterName {
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 15%);
+    font-family: DescentFont, sans-serif !important;
+
+    margin-bottom: 3%;
+}
+
+.cardHeaderAttackDice {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 1px;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 15%);
+    font-family: DescentFont, sans-serif !important;
+
+    height: 6%;
+}
+
+.cardText {
+    display: flex;
+    justify-content: flex-end;
+
+    font-size: 26px;
+    text-align: center;
+    color: hsl(0, 0%, 100%);
+
+    font-family: DescentFont, sans-serif !important;
+
+    margin-right: 25%;
+}
+
+.cardDefenceDice {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-right: 15%;
+}
+
+.backgroundImg {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 25px;
+
+    z-index: 0;
+}

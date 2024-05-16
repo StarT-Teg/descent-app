@@ -47,7 +47,7 @@ export const ChangeGoldModal = (props: ChangeGoldModalPropsInterface) => {
             </SimpleAddButton>
 
             <SimpleAddButton onClick={onSaveAndClose}>
-                Сохранить и выйти
+                Сохранить
             </SimpleAddButton>
         </div>
     )

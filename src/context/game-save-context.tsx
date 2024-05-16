@@ -27,7 +27,7 @@ const Initial_Overlord_Picks: CurrentOverlordPicks = {}
 const Initial_Campaign_Picks: CampaignPicksInterface = {}
 
 
-const INITIAL_GAME_PICKS: GameSavePicks = {
+export const INITIAL_GAME_PICKS: GameSavePicks = {
     campaignPicks: Initial_Campaign_Picks,
     overlordPicks: Initial_Overlord_Picks,
     heroesPicks: Heroes_Current_Picks_Initial_State,

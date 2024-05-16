@@ -10,6 +10,7 @@ import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-conte
 import {useSetGameSave} from "../../../../dataHooks/useSetGameSave";
 import {useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {useHeroesDataContext} from "../../../../context";
+import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 
 
 export interface ItemsBundleViewProps {
@@ -46,14 +47,14 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
         handleChangeHeroItems({heroItems: newItemsList})
     }
 
-    const onBuyOrSellButtonClick = (gold: number) => {
-        console.log('gold:', gold)
+    const onBuyOrSellButtonClick = (gold: number, onSuccess?: () => void) => {
         mutate({uuid: uuid, data: {gold}}, {
             onSuccess: (response) => {
                 dispatch({
                     payload: response.data?.gold,
                     actionType: GameSaveReducerActionTypeEnum.changeGold
                 })
+                onSuccess?.();
             }
         })
     }
@@ -66,37 +67,40 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
                 <MultiSelect options={itemOptions} selectedOptions={selectedItems} onItemsChange={onItemSelect}/>
 
                 {heroItems?.map((itemName: string, index) => {
-                    const itemBr = getItemBr(itemName);
-                    const itemCost = Number(items[itemName].shoppingAct) * shoppingActMultiplier;
-                    const itemCostForSale = Math.ceil(itemCost / 2 / 5) * 5
+                        const itemBr = getItemBr(itemName);
+                        const itemCost = Number(items[itemName].shoppingAct) * shoppingActMultiplier;
+                        const itemCostForSale = Math.ceil(itemCost / 2 / 5) * 5
 
-                    return (
-                        <ModalPortal modalComponent={
-                            (onClose) => (
-                                <div>
-                                    <Button onClick={() => {
-                                        onBuyOrSellButtonClick(-itemCost)
-                                    }} theme={'simple'}>Buy</Button>
-                                    <Button onClick={() => {
-                                        onBuyOrSellButtonClick(itemCostForSale)
-                                    }} theme={'simple'}>Sell</Button>
-                                    <Button onClick={onClose} theme={'simple'}>Quit</Button>
-                                </div>
-                            )
-                        } openModalButtonComponent={
-                            (onOpen) => (
-                                <div className={styles.itemLine}>
-                                    <input type="text" readOnly value={itemName} className={'input'}
-                                           key={`${heroPosition}-item-${itemName}-${index}`}
-                                           onClick={onOpen}
-                                    />
-                                    <div className={styles.br}>
-                                        BR: {itemBr}
+                        return (
+                            <ModalPortal modalComponent={
+                                (onClose) => (
+                                    isLoading ? <LoadingSpinner/> : (<div className={styles.buttonColumn}>
+                                        <Button onClick={() => {
+                                            onBuyOrSellButtonClick(-itemCost);
+                                        }} theme={'simple'}>Buy</Button>
+                                        <Button onClick={() => {
+                                            onBuyOrSellButtonClick(itemCostForSale, () => {
+                                                onItemSelect(selectedItems?.filter(item => item.value !== itemName) || []);
+                                                onClose();
+                                            });
+                                        }} theme={'simple'}>Sell</Button>
+                                        <Button onClick={onClose} theme={'simple'}>Quit</Button>
+                                    </div>)
+                                )
+                            } openModalButtonComponent={
+                                (onOpen) => (
+                                    <div className={styles.itemLine}>
+                                        <input type="text" readOnly value={itemName} className={'input'}
+                                               key={`${heroPosition}-item-${itemName}-${index}`}
+                                               onClick={onOpen}
+                                        />
+                                        <div className={styles.br}>
+                                            BR: {itemBr}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        }/>
-                    )
+                                )
+                            }/>
+                        )
                     }
                 )}
             </fieldset>

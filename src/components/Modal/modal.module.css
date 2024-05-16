@@ -1,8 +1,6 @@
 
 .modalRoot {
     box-sizing: border-box;
-
-    display: flex;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -13,5 +11,21 @@
     height: 100vh;
     padding: 77px 15px 25px;
 
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
+
+    touch-action: none;
+}
+
+.modalContent {
+    height: 100%;
+    width: 100%;
+}
+
+.closeIcon {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+
+    background-color: white;
+    border-radius: 50px;
 }
