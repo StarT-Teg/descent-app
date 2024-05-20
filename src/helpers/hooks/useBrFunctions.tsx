@@ -56,7 +56,6 @@ export function useBrFunctions() {
         return Math.round(baseBr + additionalBr);
     }
 
-//TODO убрать округление до последнего высчитывания
     function getHeroBr(heroPosition: HeroPlayersEnum): number {
 
         const heroPicks = heroesPicks[heroPosition];
@@ -76,12 +75,13 @@ export function useBrFunctions() {
         }
 
         if (!!heroPicks?.heroItems?.length) {
-            Object.keys(items).forEach((itemName) => {
-                if (heroPicks.heroItems?.includes(itemName)) {
-                    if (items[itemName].equip === 'One Hand' && heroPicks.heroItems?.some(item => (itemName !== item && items[itemName].equip === 'One Hand' && !!items[itemName].dice))) {
-                        heroBr += floatClearing(items[itemName].br) * 0.75;
+            heroPicks.heroItems.forEach((itemName) => {
+                const itemData = items[itemName];
+                if (!!itemData) {
+                    if (itemData.equip === 'One Hand' && heroPicks.heroItems?.some(item => (itemName !== item && itemData.equip === 'One Hand' && !!itemData.dice))) {
+                        heroBr += floatClearing(itemData.br) * 0.75;
                     } else {
-                        heroBr += floatClearing(items[itemName].br);
+                        heroBr += floatClearing(itemData.br);
                     }
                 }
             })

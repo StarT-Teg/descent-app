@@ -31,7 +31,7 @@ export const ChangeGoldModal = (props: ChangeGoldModalPropsInterface) => {
     return (
         <div className={styles.root}>
             <div className={styles.column}>
-                {subtractGoldAmountArray.map(gold => <SimpleAddButton onClick={() => {
+                {subtractGoldAmountArray.map(gold => <SimpleAddButton key={`add-button-gold-${gold}`} onClick={() => {
                     onAddGold?.(gold)
                 }}>{gold}</SimpleAddButton>)}
             </div>

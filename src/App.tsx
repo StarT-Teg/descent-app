@@ -124,7 +124,11 @@ export const App = () => {
     }, [])
 
     if (isLoading) {
-        return <LoadingSpinner/>
+        return (
+            <div className='center'>
+                <LoadingSpinner/>
+            </div>
+        )
     }
 
     return (
