@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {HeroSheetName} from "./сomponents/HeroSheetName/HeroSheetName";
 import {HeroSheetItems} from "./сomponents/HeroSheetItems/HeroSheetItems";
-import {HeroSheetClasses} from "./сomponents/HeroSheetClasses";
+import {HeroSheetClasses} from "./сomponents/HeroSheetClasses/HeroSheetClasses";
 import {HeroPlayerPicks, HeroPlayersEnum} from "../../shared";
 import {useHeroesDataContext,} from "../../context";
 import {useParams} from "react-router-dom";
@@ -12,6 +12,8 @@ import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-red
 import {Accordion, AccordionItem, Button} from "../shared";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
+import {SuggestTranslationButton} from "../SuggestTranslationButton/SuggestTranslationButton";
+import {useGetControlTranslation} from "../../helpers/translationHelpers";
 
 export default function HeroSheet() {
 
@@ -24,6 +26,8 @@ export default function HeroSheet() {
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
+
+    const {getControlTranslation} = useGetControlTranslation()
 
     const playerPicks = gameSaveContext.heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
@@ -181,7 +185,7 @@ export default function HeroSheet() {
             <div className={isMobile ? 'grid-container-mobile' : 'grid-container'}>
 
                 <Accordion>
-                    <AccordionItem header="Hero Name/Class">
+                    <AccordionItem header={getControlTranslation('Name/Class')}>
                         <HeroSheetName
                             selectedHeroName={heroName}
                             heroNames={heroNames}
@@ -208,7 +212,7 @@ export default function HeroSheet() {
 
                         {!!heroAvailableFamiliars?.length && (
                             <fieldset>
-                                <legend>Familiars</legend>
+                                <legend>{getControlTranslation('Familiars')}</legend>
 
                                 {heroAvailableFamiliars?.map((familiarName: string, index) => {
                                         return (
@@ -238,12 +242,12 @@ export default function HeroSheet() {
                         )}
                     </AccordionItem>
 
-                    <AccordionItem header='Skills' disabled={!heroAvailableSkills?.length}>
+                    <AccordionItem header={getControlTranslation('Skills')} disabled={!heroAvailableSkills?.length}>
                         {!!heroAvailableSkills?.length && (
 
                             <div className="sub-grid">
                                 <fieldset>
-                                    <legend>Skills</legend>
+                                    <legend>{getControlTranslation('Skills')}</legend>
 
                                     {heroAvailableSkills?.map((skillName: string, index) => {
                                             return (
@@ -268,6 +272,7 @@ export default function HeroSheet() {
                                                            className={'input'}
                                                     />
 
+                                                    <SuggestTranslationButton stringToTranslate={skillName}/>
 
                                                     <div className={styles.br}>
                                                         BR: {heroClasses?.[heroClassName]?.skills[skillName]?.br || 0}
@@ -294,7 +299,7 @@ export default function HeroSheet() {
                         )}
                     </AccordionItem>
 
-                    <AccordionItem header='Items'>
+                    <AccordionItem header={getControlTranslation('Items')}>
                         <HeroSheetItems
                             itemList={itemList}
                             heroItems={heroItems}
@@ -306,7 +311,7 @@ export default function HeroSheet() {
 
                 <Button theme='outlineRed' onClick={() => {
                     handleSaveChanges()
-                }}>Сохранить
+                }}>{getControlTranslation('Save')}
                 </Button>
             </div>
         </div>

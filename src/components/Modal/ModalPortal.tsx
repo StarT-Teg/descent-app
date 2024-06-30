@@ -1,12 +1,14 @@
-import React, {SVGProps, useCallback, useEffect, useRef, useState} from "react";
+import React, {ReactNode, SVGProps, useCallback, useEffect, useRef, useState} from "react";
 import {createPortal} from "react-dom";
 import styles from './modal.module.css';
 import {JSX} from "react/jsx-runtime";
 
 export interface ModalPropsInterface {
-    openModalButtonComponent(onOpen: () => void): React.ReactElement;
+    openModalButtonComponent(onOpen: () => void): ReactNode;
 
-    modalComponent(onClose: () => void): React.ReactElement;
+    modalComponent(onClose: () => void): ReactNode;
+
+    isAutoCloseDisabled?: boolean;
 }
 
 const CloseIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
@@ -24,7 +26,7 @@ const CloseIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => 
     </svg>
 )
 
-export const ModalPortal = ({modalComponent, openModalButtonComponent}: ModalPropsInterface) => {
+export const ModalPortal = ({modalComponent, openModalButtonComponent, isAutoCloseDisabled = false}: ModalPropsInterface) => {
 
     const modalRef = useRef<any>(null)
     const [showModal, setShowModal] = useState(false);
@@ -46,11 +48,13 @@ export const ModalPortal = ({modalComponent, openModalButtonComponent}: ModalPro
     )
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
+        if (!isAutoCloseDisabled) {
+            document.addEventListener('mousedown', handleClickOutside)
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside)
+            }
         }
-    }, [modalRef])
+    }, [modalRef, isAutoCloseDisabled])
 
     return (
         <div>

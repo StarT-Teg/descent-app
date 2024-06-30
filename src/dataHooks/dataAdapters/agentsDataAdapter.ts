@@ -1,13 +1,13 @@
 import {ExcelDataRaw, LieutenantActData, LieutenantDataParametersEnum, LieutenantsDataAdapted} from "../../shared";
 import {floatClearing} from "../../helpers";
 
-export const lieutenantsDataAdapter = (data?: ExcelDataRaw): LieutenantsDataAdapted => {
-
+export const agentsDataAdapter = (data?: ExcelDataRaw): LieutenantsDataAdapted => {
     return data?.values?.reduce((acc: LieutenantsDataAdapted, row, rowIndex) => {
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
 
             const lieutenantName = row[0];
             const lieutenantAct = row[1];
+            const lieutenantSize = Number(row[2]);
 
             const lieutenant: LieutenantActData = {
                 stats: {
@@ -33,20 +33,20 @@ export const lieutenantsDataAdapter = (data?: ExcelDataRaw): LieutenantsDataAdap
                     },
                 },
 
-                [LieutenantDataParametersEnum.size]: Number(row[2]),
+                [LieutenantDataParametersEnum.size]: lieutenantSize,
                 [LieutenantDataParametersEnum.strength]: Number(row[17]),
                 [LieutenantDataParametersEnum.knowledge]: Number(row[18]),
                 [LieutenantDataParametersEnum.willpower]: Number(row[19]),
                 [LieutenantDataParametersEnum.awareness]: Number(row[20]),
 
-                [LieutenantDataParametersEnum.attackType]: row[21],
-                [LieutenantDataParametersEnum.attackDice]: row[22],
+                [LieutenantDataParametersEnum.attackType]: row[17],
+                [LieutenantDataParametersEnum.attackDice]: row[18],
 
-                [LieutenantDataParametersEnum.traits]: row[24],
-                [LieutenantDataParametersEnum.actions]: row[26],
-                [LieutenantDataParametersEnum.surgeAbilities]: [row[28], row[30], row[32]].filter(str => !!str).join('\n'),
+                [LieutenantDataParametersEnum.traits]: row[20],
+                [LieutenantDataParametersEnum.actions]: row[22],
+                [LieutenantDataParametersEnum.surgeAbilities]: [row[23], row[25], row[27]].filter(str => !!str).join('\n'),
 
-                [LieutenantDataParametersEnum.br]: floatClearing(row[37]),
+                [LieutenantDataParametersEnum.br]: floatClearing(row[33]),
             }
 
 

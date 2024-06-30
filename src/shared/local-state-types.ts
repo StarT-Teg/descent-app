@@ -1,4 +1,5 @@
 import {
+    AbilitiesDataAdaptedInterface,
     CampaignsDataAdapted,
     FamiliarsDataAdapted,
     HeroClassesDataAdapted,
@@ -7,7 +8,8 @@ import {
     LieutenantsDataAdapted,
     MonstersDataAdapted,
     OverlordCardsDataAdapted,
-    OverlordRelicsDataAdapted
+    OverlordRelicsDataAdapted,
+    TranslationDataAdaptedInterface
 } from "./google-sheet-data-adapted";
 import {OverlordBasicDecksEnum} from "./overlord-types";
 
@@ -26,6 +28,7 @@ export interface OverlordDataInterface {
     agents: unknown;
     monsters: MonstersDataAdapted;
     campaignsData: CampaignsDataAdapted;
+    abilitiesData: AbilitiesDataAdaptedInterface;
 }
 
 export enum HeroPlayersEnum {
@@ -68,5 +71,7 @@ export interface GameSavePicks {
     heroesPicks: CurrentPlayersPicks;
     overlordPicks: CurrentOverlordPicks;
     campaignPicks: CampaignPicksInterface;
-    gold?: number
+    gold?: number;
+    language?: string;
+    translation?: TranslationDataAdaptedInterface;
 }

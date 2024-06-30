@@ -1,7 +1,7 @@
 
 .itemLine {
     display: grid;
-    grid-template-columns: auto 50px;
+    grid-template-columns: 1fr auto auto;
     align-items: center;
     grid-column-gap: 8px;
 }

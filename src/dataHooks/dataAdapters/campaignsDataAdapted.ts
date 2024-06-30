@@ -1,4 +1,5 @@
-import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum} from "../../shared";
+import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum, TranslationDataAdaptedInterface} from "../../shared";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
 const getCleanArrayFromString = (dirtyString?: string, separator: string | RegExp = ',') => {
     if (!dirtyString) {
@@ -8,10 +9,14 @@ const getCleanArrayFromString = (dirtyString?: string, separator: string | RegEx
     return dirtyString.split(separator).map(value => value.trim());
 }
 
-export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted => {
+export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): CampaignsDataAdapted => {
 
     const monsterTraitsArray = Object.values(MonsterTraitNamesEnum);
     const campaignsDataAdapted: CampaignsDataAdapted = {};
+
+    if (!data) {
+        return {}
+    }
 
     data.values.forEach((row, rowIndex) => {
 
@@ -52,7 +57,8 @@ export const campaignsDataAdapted = (data: ExcelDataRaw): CampaignsDataAdapted =
                                 isOnlySmallMonsters,
                                 cantChangeActMonsterList,
                             }
-                        }
+                        },
+                        translation: {...getTranslationData({campaignName, missionName }, translation),}
                     }
             }
         }

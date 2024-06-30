@@ -1,0 +1,7 @@
+.rowLine {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 12px;
+
+    width: 100%;
+}

@@ -7,13 +7,26 @@ import {ChoosePlayerButtons} from "./components/ChoosePlayerButtons/ChoosePlayer
 import {OverlordBench} from "./components/OverlordBench/OverlordBench";
 import {useOverlordDataDispatchContext} from "./context/overlord-data-context";
 import {Header} from "./components/Header/Header";
-import {useGetData} from "./dataHooks/useGetData";
+import {useGetData} from "./dataHooks";
 import {useGetGameSave} from "./dataHooks";
 import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
 import {useQuery} from "./helpers/hooks/useQuery";
 import {Settings} from "./components/Settings/Settings";
 import {ExpansionsSettings} from "./components/ExpansionsSettings/ExpansionsSettings";
+import {campaignsDataAdapted} from "./dataHooks/dataAdapters/campaignsDataAdapted";
+import {heroClassesDataAdapter} from "./dataHooks/dataAdapters/heroClassesDataAdapter";
+import {heroesRawDataAdapter} from "./dataHooks/dataAdapters/heroesRawDataAdapter";
+import {itemsDataAdapter} from "./dataHooks/dataAdapters/itemsDataAdapter";
+import {lieutenantsDataAdapter} from "./dataHooks/dataAdapters/lieutenantsDataAdapter";
+import {monstersDataAdapter} from "./dataHooks/dataAdapters/monstersDataAdapter";
+import {overlordDecksDataAdapted} from "./dataHooks/dataAdapters/overlordDecksDataAdapted";
+import {overlordRelicsDataAdapter} from "./dataHooks/dataAdapters/overlordRelicsDataAdapter";
+import {familiarsDataAdapted} from "./dataHooks/dataAdapters/familiarsDataAdapted";
+import {abilitiesDataAdapted} from "./dataHooks/dataAdapters/abilitiesDataAdapted";
+import {translationDataAdapted} from "./dataHooks/dataAdapters/translationDataAdapted";
+import {useGetTranslation} from "./dataHooks/useGetTranslation";
+import {agentsDataAdapter} from "./dataHooks/dataAdapters/agentsDataAdapter";
 
 export const App = () => {
 
@@ -23,13 +36,14 @@ export const App = () => {
     const navigate = useNavigate();
     const query = useQuery();
 
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-
-    const {refetch: refetchData, isLoading: dataIsLoading} = useGetData()
+    const {data: translationData, isLoading: translationIsLoading} = useGetTranslation();
+    const {data: gameData, isLoading: dataIsLoading} = useGetData()
     const {
         refetch: saveGameDataRefetch,
         isLoading: saveIsLoading
     } = useGetGameSave(saveGameUuid || '');
+
+    const isLoading = dataIsLoading || saveIsLoading || translationIsLoading;
 
     const dispatchOverlordData = useOverlordDataDispatchContext()
     const dispatchHeroesData = useHeroesDataDispatchContext();
@@ -52,16 +66,11 @@ export const App = () => {
                     })
                     navigate('/players');
                 } else {
-                    alert(saveGameData)
                     navigate('/settings');
                 }
             });
         }
     }, [saveGameUuid])
-
-    useEffect(() => {
-        setIsLoading(dataIsLoading || saveIsLoading)
-    }, [dataIsLoading, saveIsLoading])
 
     useEffect(() => {
         const inviteUuidQueryParam = query.get('inviteUuid');
@@ -83,45 +92,46 @@ export const App = () => {
     }, [])
 
     useEffect(() => {
-        refetchData().then((response => {
-            const data = response?.data;
+        if (!!gameData) {
+            const {
+                heroesData,
+                heroClassesData,
+                itemsData,
+                overlordDecksData,
+                lieutenantsData,
+                relicsData,
+                monstersData,
+                campaignData,
+                familiars,
+                abilitiesData,
+                agentsData,
+            } = gameData;
 
-            if (!!data) {
-                const {
-                    heroesData,
-                    heroClassesData,
-                    itemsData,
-                    overlordDecksData,
-                    lieutenantsData,
-                    relicsData,
-                    monstersData,
-                    campaignData,
-                    familiars,
-                } = data;
+            const translation = translationDataAdapted(translationData);
 
-                dispatchHeroesData({
-                    payload: {
-                        heroes: heroesData || {},
-                        heroClasses: heroClassesData || {},
-                        items: itemsData || {},
-                        familiars: familiars || {},
-                    }, actionType: DataReducerActionsEnum.update
-                })
+            dispatchHeroesData({
+                payload: {
+                    heroes: heroesRawDataAdapter(heroesData),
+                    heroClasses: heroClassesDataAdapter(heroClassesData, translation),
+                    items: itemsDataAdapter(itemsData, translation),
+                    familiars: familiarsDataAdapted(familiars),
+                }, actionType: DataReducerActionsEnum.update
+            })
 
-                dispatchOverlordData({
-                    payload: {
-                        overlordCards: overlordDecksData || {},
-                        plotCards: undefined,
-                        lieutenants: lieutenantsData || {},
-                        relics: relicsData || {},
-                        agents: undefined,
-                        monsters: monstersData || {},
-                        campaignsData: campaignData || {},
-                    }, actionType: DataReducerActionsEnum.update
-                })
-            }
-        }));
-    }, [])
+            dispatchOverlordData({
+                payload: {
+                    overlordCards: overlordDecksDataAdapted(overlordDecksData, translation),
+                    plotCards: undefined,
+                    lieutenants: lieutenantsDataAdapter(lieutenantsData),
+                    relics: overlordRelicsDataAdapter(relicsData),
+                    agents: agentsDataAdapter(agentsData),
+                    monsters: monstersDataAdapter(monstersData),
+                    campaignsData: campaignsDataAdapted(campaignData, translation),
+                    abilitiesData: abilitiesDataAdapted(abilitiesData, translation),
+                }, actionType: DataReducerActionsEnum.update
+            })
+        }
+    }, [translationData, gameData])
 
     if (isLoading) {
         return (

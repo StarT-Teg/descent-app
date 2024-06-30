@@ -1,11 +1,11 @@
 import {ExcelDataRaw, FamiliarsDataAdapted,} from "../../shared";
 import {floatClearing} from "../../helpers";
 
-export const familiarsDataAdapted = (data: ExcelDataRaw) => {
+export const familiarsDataAdapted = (data?: ExcelDataRaw) => {
 
     const familiarsDataAdapted: FamiliarsDataAdapted = {};
 
-    data.values.forEach((row, rowIndex) => {
+    data?.values.forEach((row, rowIndex) => {
 
         if (!!row[0] && rowIndex !== 0) {
             const source = row[0];

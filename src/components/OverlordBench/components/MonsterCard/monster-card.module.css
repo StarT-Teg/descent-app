@@ -1,4 +1,38 @@
 
+.flipCard {
+    background-color: transparent;
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+.flipCardInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.cardRotated {
+    transform: rotateY(180deg);
+}
+
+.flipCardFront, .flipCardBack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+.flipCardFront {
+    transform: rotateY(0deg);
+}
+
+.flipCardBack {
+    transform: rotateY(180deg);
+}
+
 .cardRoot {
     width: 100%;
 
@@ -58,6 +92,11 @@
     height: 11%;
 }
 
+.abilityItem {
+    display: flex;
+    align-items: center;
+}
+
 .middleBlock {
     display: flex;
     flex-direction: column;
@@ -69,6 +108,18 @@
 .cardAttackTypeAndAct {
     display: flex;
     justify-content: space-between;
+    padding: 0 10%;
+    height: 25%;
+}
+
+.cardAct {
+    display: flex;
+    width: 35px;
+    height: 35px;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 26px;
 }
 
 .cardMonsterName {
@@ -122,4 +173,52 @@
     border-radius: 25px;
 
     z-index: 0;
+}
+
+.backCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 3% 11% 0;
+    height: 13%;
+}
+
+.backCardMonsterName {
+    font-size: 16px;
+    text-align: center;
+    color: hsl(0, 0%, 15%);
+    font-family: DescentFont, sans-serif !important;
+
+    height: 5%;
+}
+
+.backCardAbilities {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    padding: 10% 10%;
+
+    height: 58%;
+}
+
+.backCardCount {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 15%;
+    justify-content: space-between;
+    padding: 0 7%;
+
+    height: 10%;
+
+    font-size: 16px;
+    color: hsl(0, 0%, 15%);
+    font-family: DescentFont, sans-serif !important;
+}
+
+.backCardCountSize {
+    display: grid;
+    grid-auto-flow: column;
+    justify-items: center;
 }

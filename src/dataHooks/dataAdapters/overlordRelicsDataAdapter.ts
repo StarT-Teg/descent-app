@@ -1,8 +1,8 @@
 import {ExcelDataRaw, OverlordRelicDataParametersEnum, OverlordRelicsDataAdapted} from "../../shared";
 import {floatClearing} from "../../helpers";
 
-export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {
-    return data.values.reduce((acc: OverlordRelicsDataAdapted, row, rowIndex) => {
+export const overlordRelicsDataAdapter = (data?: ExcelDataRaw) => {
+    return data?.values?.reduce((acc: OverlordRelicsDataAdapted, row, rowIndex) => {
         if (!!row[0] && rowIndex !== 0) {
 
             const relicName = row[1];
@@ -19,5 +19,5 @@ export const overlordRelicsDataAdapter = (data: ExcelDataRaw) => {
             return {...acc, [relicName]: item}
         }
         return acc;
-    }, {})
+    }, {}) || {}
 }

@@ -1,0 +1,20 @@
+
+.translateIcon {
+    display: flex;
+    align-items: center;
+
+    background-color: hsl(0, 0%, 100%);
+    border-color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+
+    box-sizing: border-box;
+
+    padding: 0 8px;
+}
+
+.translateIconDisabled {
+    opacity: 0.3;
+    pointer-events: none;
+}

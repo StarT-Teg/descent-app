@@ -1,5 +1,6 @@
 import {
     CampaignsDataParametersEnum,
+    ExcelDataRaw,
     HeroClassParametersEnum,
     HeroParametersEnum,
     ItemDataParametersEnum,
@@ -9,16 +10,27 @@ import {
     OverlordRelicDataParametersEnum
 } from "./google-sheet-data-raw";
 
-export interface GameDataInterface {
-    heroesData: HeroesDataAdapted,
-    heroClassesData: HeroClassesDataAdapted,
-    itemsData: ItemsDataAdapted,
-    overlordDecksData: OverlordCardsDataAdapted,
-    lieutenantsData: LieutenantsDataAdapted,
-    relicsData: OverlordRelicsDataAdapted,
-    monstersData: MonstersDataAdapted,
-    campaignData: CampaignsDataAdapted,
-    familiars: FamiliarsDataAdapted,
+export enum GameDataEnum {
+    heroesData = 'heroesData',
+    heroClassesData = 'heroClassesData',
+    itemsData = 'itemsData',
+    overlordDecksData = 'overlordDecksData',
+    lieutenantsData = 'lieutenantsData',
+    relicsData = 'relicsData',
+    monstersData = 'monstersData',
+    campaignData = 'campaignData',
+    familiars = 'familiars',
+    abilitiesData = 'abilitiesData',
+    translation = 'translation',
+    agentsData = 'agentsData',
+}
+
+export type GameDataInterface = {
+    [key in GameDataEnum]?: ExcelDataRaw;
+}
+
+export interface TranslationDataAdaptedInterface {
+    [key: string]: { [key in string]?: string }
 }
 
 export interface CampaignsDataAdapted {
@@ -31,6 +43,10 @@ export interface MissionDataAdapted {
     [CampaignsDataParametersEnum.campaignName]: string,
     [CampaignsDataParametersEnum.act]: number,
     [CampaignsDataParametersEnum.missionName]: string,
+    [CampaignsDataParametersEnum.translation]?: {
+        campaignName?: { [key in string]?: string },
+        missionName?: { [key in string]?: string }
+    },
     'encounters'?: {
         [key in number]: EncounterData;
     }
@@ -58,6 +74,9 @@ export interface OverlordDeckSkill {
     [OverlordDeckDataParametersEnum.text]: string;
     [OverlordDeckDataParametersEnum.className]: string;
     [OverlordDeckDataParametersEnum.quantity]: number;
+    [OverlordDeckDataParametersEnum.translations]: {
+        name: { [key in string]: string }
+    };
 }
 
 export interface LieutenantsDataAdapted {
@@ -75,7 +94,7 @@ export interface LieutenantData {
 
 export interface LieutenantActData {
     stats: {
-        [numberOfHeroes in number]: LieutenantStats;
+        [numberOfHeroes: number]: LieutenantStats;
     };
 
     [LieutenantDataParametersEnum.size]: number;
@@ -144,6 +163,11 @@ export enum MonsterTraitNamesEnum {
     wilderness = 'wilderness',
 }
 
+export interface AbilitieDataInterface {
+    type: 'surge' | 'action' | 'abilitie';
+    cost?: number;
+}
+
 export interface MonsterData {
     [MonstersDataParametersEnum.name]: string;
     [MonstersDataParametersEnum.type]: string;
@@ -191,6 +215,9 @@ export interface ItemsDataAdapted {
         [ItemDataParametersEnum.traits]?: string;
         [ItemDataParametersEnum.surgeAbilities]?: string;
         [ItemDataParametersEnum.br]: string;
+        [ItemDataParametersEnum.translations]: {
+            name: { [key in string]: string }
+        };
     }
 }
 
@@ -198,6 +225,16 @@ export interface HeroesDataAdapted {
     [key: string]: {
         [key in HeroParametersEnum]: string;
     }
+}
+
+export interface AbilitiesDataAdaptedInterface {
+    [key: string]: {
+        description: string
+        translation?: {
+            name?: { [language in string]: string };
+            description?: { [language in string]: string };
+        }
+    };
 }
 
 export interface HeroClassesDataAdapted {
@@ -208,6 +245,7 @@ export interface HeroClass {
     [HeroClassParametersEnum.archetype]: string,
     [HeroClassParametersEnum.className]: string,
     skills: ClassSkill;
+    translation: { name?: { [key in string]: string } };
 }
 
 export interface ClassSkill {

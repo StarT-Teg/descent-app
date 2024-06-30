@@ -1,8 +1,12 @@
 import {ExcelDataRaw, HeroesDataAdapted, HeroParametersEnum} from "../../shared";
 
-export const heroesRawDataAdapter = (data: ExcelDataRaw, maxColumns?: number): HeroesDataAdapted => {
+export const heroesRawDataAdapter = (data?: ExcelDataRaw, maxColumns?: number): HeroesDataAdapted => {
 
     const heroTemplateHeaders = Object.values(HeroParametersEnum);
+
+    if (!data) {
+        return {}
+    }
 
     return data.values.reduce((acc: HeroesDataAdapted, row, rowIndex) => {
         if (!!row[0] && rowIndex !== 0) {

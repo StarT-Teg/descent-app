@@ -36,7 +36,6 @@ p {
     height: 100vh;
 }
 
-
 .grid-container {
     display: grid;
 
@@ -108,6 +107,7 @@ legend {
     font-size: 18px;
     text-align: center;
     color: hsl(0, 0%, 20%);
+    text-overflow: ellipsis;
 
     font-family: DescentFont, sans-serif !important;
 }
@@ -140,7 +140,8 @@ legend {
     font-family: DescentFont, sans-serif !important;
 }
 
-.szh-accordion__item-content {
-
+.desktopContainer {
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 480px;
 }
-

@@ -1,22 +1,53 @@
 
 .defaultMonsterLine {
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    grid-column-gap: 8px;
+    grid-auto-flow: column;
+    grid-column-gap: 4px;
+
+    height: 30px;
 }
 
 .openGroupMonsterLine {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-auto-flow: column;
+    grid-column-gap: 4px;
+}
+
+.monsterPreviewIcon {
+    display: flex;
     align-items: center;
-    grid-column-gap: 8px;
+
+    background-color: hsl(0, 0%, 100%);
+    border-color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+
+    box-sizing: border-box;
+
+    height: 30px;
+    padding: 0 8px;
 }
 
 .br {
     display: flex;
     align-items: center;
+
+    height: 100%;
+    width: 40px;
+
+    background-color: hsl(0, 0%, 100%);
+    border-color: black;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+
+    font-family: DescentFont, sans-serif !important;
     justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 0 8px;
 }
 
 .disabled {

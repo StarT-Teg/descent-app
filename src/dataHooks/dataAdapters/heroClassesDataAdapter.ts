@@ -1,8 +1,13 @@
-import {ExcelDataRaw, HeroClassesDataAdapted,} from "../../shared";
+import {ExcelDataRaw, HeroClassesDataAdapted, TranslationDataAdaptedInterface,} from "../../shared";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const heroClassesDataAdapter = (data: ExcelDataRaw) => {
+export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface) => {
 
     const heroClassesAdapted: HeroClassesDataAdapted = {};
+
+    if (!data) {
+        return {}
+    }
 
     data.values.forEach((row, rowIndex) => {
 
@@ -19,6 +24,9 @@ export const heroClassesDataAdapter = (data: ExcelDataRaw) => {
                 {
                     archetype,
                     className,
+                    translation: {
+                        ...getTranslationData({name: className}, translation),
+                    },
                     skills: {
                         ...heroClassesAdapted[className]?.skills,
                         [skillName]: {

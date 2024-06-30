@@ -5,27 +5,44 @@ import Select from "react-select";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
+import styles from "./campaign-setup.module.css";
+import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
+import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 
 export const CampaignSetup = () => {
 
     const {campaignsData} = useOverlordDataContext();
+    const {getControlTranslation} = useGetControlTranslation()
 
-    const {campaignPicks, overlordPicks} = useGameSaveContext();
+    const {campaignPicks, overlordPicks, language} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
 
-    const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => ({
-        value: campaignName,
-        label: campaignName
-    }))
-    const availableActs = [{value: 1, label: 'Act 1'}, {value: 2, label: 'Act 2'}]
-    const [availableMissions, setAvailableMissions] = useState<SelectionOptionInterface[] | undefined>(undefined);
-    const availableEncounters = [{value: 1, label: 'Encounter 1'}, {value: 2, label: 'Encounter 2'}]
+    const getCampaignTranslation = (campaignName: string | undefined) => {
+        if (!!language && !!campaignName) {
+            return Object.values(campaignsData[campaignName])[0]?.translation?.campaignName?.[language] || campaignName;
+        }
 
-    const selectedCampaign: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedCampaign);
-    const selectedAct: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedAct, `Act ${campaignPicks.selectedAct}`);
-    const selectedMission: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedMission);
-    const selectedEncounter: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedEncounter, `Encounter ${campaignPicks?.selectedEncounter}`);
+        return campaignName;
+    }
+
+    const getMissionTranslation = (missionName?: string) => {
+        if (!!language && !!campaignPicks?.selectedCampaign && !!missionName) {
+            return campaignsData[campaignPicks.selectedCampaign][missionName]?.translation?.missionName?.[language] || missionName;
+        }
+
+        return missionName;
+    }
+
+    const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => (toSelectOption(campaignName, getCampaignTranslation(campaignName))!))
+    const availableActs = [{value: 1, label: `${getControlTranslation('Act')} 1`}, {value: 2, label: `${getControlTranslation('Act')} 2`}]
+    const [availableMissions, setAvailableMissions] = useState<SelectionOptionInterface[] | undefined>(undefined);
+    const availableEncounters = [{value: 1, label: `${getControlTranslation('Encounter')} 1`}, {value: 2, label: `${getControlTranslation('Encounter')} 2`}]
+
+    const selectedCampaign: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedCampaign, getCampaignTranslation(campaignPicks?.selectedCampaign));
+    const selectedAct: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedAct, `${getControlTranslation('Act')} ${campaignPicks.selectedAct}`);
+    const selectedMission: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedMission, getMissionTranslation(campaignPicks?.selectedMission));
+    const selectedEncounter: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedEncounter, `${getControlTranslation('Encounter')} ${campaignPicks?.selectedEncounter}`);
 
     const dispatchCampaignPicks = (dispatchCampaignPicks: CampaignPicksInterface) => {
         const newCampaignPicks: CampaignPicksInterface = {
@@ -69,7 +86,7 @@ export const CampaignSetup = () => {
         },)
 
         dispatch({
-            payload: {overlordPicks: {...newOverlordPicks, pickedMonsters: undefined}},
+            payload: {overlordPicks: {...newOverlordPicks, pickedMonsters: undefined, customActPicks: undefined}},
             actionType: GameSaveReducerActionTypeEnum.changeOverlordPicks
         },)
     }
@@ -84,10 +101,7 @@ export const CampaignSetup = () => {
                 const availableMissions = Object.keys(campaignsData[campaignName]).reduce((acc: SelectionOptionInterface[], missionName) => {
                     if (campaignsData[campaignName][missionName].act === newCampaignPicks.selectedAct) {
                         return (
-                            [...acc, {
-                                value: missionName,
-                                label: missionName
-                            }]
+                            [...acc, toSelectOption(missionName, getMissionTranslation(missionName))!]
                         )
                     }
                     return acc;
@@ -95,10 +109,7 @@ export const CampaignSetup = () => {
                 setAvailableMissions(availableMissions)
 
             } else {
-                const availableMissions = Object.keys(campaignsData[campaignName]).map((missionName) => ({
-                    value: missionName,
-                    label: missionName
-                }))
+                const availableMissions = Object.keys(campaignsData[campaignName]).map((missionName) => (toSelectOption(missionName, getMissionTranslation(missionName))!))
                 setAvailableMissions(availableMissions)
             }
 
@@ -109,17 +120,22 @@ export const CampaignSetup = () => {
 
     return (
         <>
-            <Select
-                className={'input'}
-                value={toSelectOption(campaignPicks.selectedCampaign)}
-                options={availableCampaigns}
-                onChange={(value, actionMeta) => {
-                    dispatchCampaignPicks({selectedCampaign: value?.value})
-                }}
-                isClearable
-                name="select-campaign"
-                placeholder={'Campaign'}
-            />
+            <div className={styles.listRow}>
+                <Select
+                    className={'input'}
+                    value={selectedCampaign}
+                    options={availableCampaigns}
+                    onChange={(value) => {
+                        dispatchCampaignPicks({selectedCampaign: value?.value})
+                    }}
+                    isClearable
+                    name="select-campaign"
+                    placeholder={getControlTranslation('Campaign')}
+                />
+
+                <SuggestTranslationButton stringToTranslate={campaignPicks?.selectedCampaign}
+                                          disabled={!campaignPicks?.selectedCampaign}/>
+            </div>
 
             <Select
                 className={'input'}
@@ -130,32 +146,36 @@ export const CampaignSetup = () => {
                 }}
                 isClearable
                 name="select-act"
-                placeholder={'Act'}
+                placeholder={getControlTranslation('Act')}
             />
 
-            <Select
-                className={'input'}
-                value={selectedMission}
-                options={availableMissions}
-                onChange={(value) => {
-                    dispatchCampaignPicks({selectedMission: value?.value})
-                }}
-                isClearable
-                name="select-mission"
-                placeholder={'Mission'}
-            />
+            <div className={styles.listRow}>
+                <Select
+                    className={'input'}
+                    value={selectedMission}
+                    options={availableMissions}
+                    onChange={(value) => {
+                        dispatchCampaignPicks({selectedMission: value?.value})
+                    }}
+                    isClearable
+                    name="select-mission"
+                    placeholder={getControlTranslation('Mission')}
+                />
+                <SuggestTranslationButton stringToTranslate={campaignPicks?.selectedMission}
+                                          disabled={!campaignPicks?.selectedMission}/>
+            </div>
 
             {Object.keys(campaignsData?.[selectedCampaign?.value]?.[selectedMission?.value]?.encounters || {}).length > 1 && (
                 <Select
                     className={'input'}
                     value={selectedEncounter}
                     options={availableEncounters}
-                    onChange={(value, actionMeta) => {
+                    onChange={(value) => {
                         dispatchCampaignPicks({selectedEncounter: value?.value})
                     }}
                     isClearable
                     name="select-mission"
-                    placeholder={'Encounter'}
+                    placeholder={getControlTranslation('Encounter')}
                 />
             )}
 

@@ -8,9 +8,11 @@ import styles from './hero-sheet-items.module.css'
 import {Button} from "../../../shared";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import {useSetGameSave} from "../../../../dataHooks/useSetGameSave";
-import {useGameSaveDispatchContext} from "../../../../context/game-save-context";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {useHeroesDataContext} from "../../../../context";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
+import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
+import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 
 export interface ItemsBundleViewProps {
@@ -31,14 +33,22 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
         heroPosition
     } = props;
 
-    const itemOptions: SelectionOptionInterface[] = itemList.map(itemName => (toSelectOption(itemName)!));
-    const selectedItems = heroItems?.map(itemName => (toSelectOption(itemName)!));
+    const {items} = useHeroesDataContext();
+    const {language} = useGameSaveContext()
+
+    const {getControlTranslation} = useGetControlTranslation()
+
+    const getTranslation = (cardName: string, translationName: 'name') => {
+        return !!language ? items[cardName]?.translations?.[translationName]?.[language] || cardName : cardName;
+    }
+
+    const itemOptions: SelectionOptionInterface[] = itemList.map(itemName => (toSelectOption(itemName, getTranslation(itemName, 'name'))!));
+    const selectedItems = heroItems?.map(itemName => (toSelectOption(itemName, getTranslation(itemName, 'name'))!));
 
     const uuid = localStorage.getItem('descent-save-game-uuid')!;
     const {mutate, isLoading} = useSetGameSave()
     const dispatch = useGameSaveDispatchContext();
 
-    const {items} = useHeroesDataContext()
     const {getItemBr} = useBrFunctions();
 
     const onItemSelect = (items: SelectionOptionInterface[]) => {
@@ -62,38 +72,42 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
     return (
         <div className="sub-grid">
             <fieldset>
-                <legend>Items</legend>
+                <legend>{getControlTranslation('Items')}</legend>
 
                 <MultiSelect options={itemOptions} selectedOptions={selectedItems} onItemsChange={onItemSelect}/>
 
                 {heroItems?.map((itemName: string, index) => {
                         const itemBr = getItemBr(itemName);
-                        const itemCost = Number(items[itemName].shoppingAct) * shoppingActMultiplier;
+                        const itemCost = Number(items[itemName]?.shoppingAct) * shoppingActMultiplier;
                         const itemCostForSale = Math.ceil(itemCost / 2 / 5) * 5
 
                         return (
-                            <ModalPortal modalComponent={
-                                (onClose) => (
-                                    isLoading ? <LoadingSpinner/> : (<div className={styles.buttonColumn}>
-                                        <Button onClick={() => {
-                                            onBuyOrSellButtonClick(-itemCost);
-                                        }} theme={'simple'}>Buy</Button>
-                                        <Button onClick={() => {
-                                            onBuyOrSellButtonClick(itemCostForSale, () => {
-                                                onItemSelect(selectedItems?.filter(item => item.value !== itemName) || []);
-                                                onClose();
-                                            });
-                                        }} theme={'simple'}>Sell</Button>
-                                        <Button onClick={onClose} theme={'simple'}>Quit</Button>
-                                    </div>)
-                                )
-                            } openModalButtonComponent={
+                            <ModalPortal isAutoCloseDisabled key={`${heroPosition}-items-${itemName}-${index}`}
+                                         modalComponent={
+                                             (onClose) => (
+                                                 isLoading ? <LoadingSpinner/> : (<div className={styles.buttonColumn}>
+                                                     <Button onClick={() => {
+                                                         onBuyOrSellButtonClick(-itemCost);
+                                                     }} theme={'simple'}>Buy</Button>
+                                                     <Button onClick={() => {
+                                                         onBuyOrSellButtonClick(itemCostForSale, () => {
+                                                             onItemSelect(selectedItems?.filter(item => item.value !== itemName) || []);
+                                                             onClose();
+                                                         });
+                                                     }} theme={'simple'}>Sell</Button>
+                                                     <Button onClick={onClose} theme={'simple'}>Quit</Button>
+                                                 </div>)
+                                             )
+                                         } openModalButtonComponent={
                                 (onOpen) => (
                                     <div className={styles.itemLine}>
-                                        <input type="text" readOnly value={itemName} className={'input'}
+                                        <input type="text" readOnly
+                                               value={getTranslation(itemName, 'name')}
+                                               className={'input'}
                                                key={`${heroPosition}-item-${itemName}-${index}`}
                                                onClick={onOpen}
                                         />
+                                        <SuggestTranslationButton stringToTranslate={itemName} />
                                         <div className={styles.br}>
                                             BR: {itemBr}
                                         </div>

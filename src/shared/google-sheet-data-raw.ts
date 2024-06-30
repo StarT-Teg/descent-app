@@ -13,6 +13,7 @@ export enum CampaignsDataParametersEnum {
     openGroupsTraits = 'openGroupsTraits',
     isOnlySmallMonsters = 'isOnlySmallMonsters',
     cantChangeActMonsterList = 'cantChangeActMonsterList',
+    translation = 'translation'
 }
 
 export enum OverlordDeckDataParametersEnum {
@@ -23,6 +24,7 @@ export enum OverlordDeckDataParametersEnum {
     type = 'type',
     text = 'text',
     br = 'br',
+    translations = 'translations',
 }
 
 export enum LieutenantDataParametersEnum {
@@ -87,6 +89,7 @@ export enum ItemDataParametersEnum {
     traits = 'traits',
     surgeAbilities = 'surgeAbilities',
     br = 'br',
+    translations = 'translations',
 }
 
 export enum HeroParametersEnum {

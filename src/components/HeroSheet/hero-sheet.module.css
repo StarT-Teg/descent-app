@@ -32,9 +32,8 @@
 
 .checkboxLine {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    grid-column-gap: 8px;
+    grid-template-columns: auto 1fr 42px 50px;
+    grid-column-gap: 4px;
 }
 
 .br {

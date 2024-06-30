@@ -1,4 +1,4 @@
-export const floatClearing = (number: string) => {
+export const floatClearing = (number?: string) => {
     if (!number) {
         return 0
     }

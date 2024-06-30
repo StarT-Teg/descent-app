@@ -7,11 +7,13 @@ import {Accordion, AccordionItem, Button} from "../shared";
 import {useGameSaveContext} from "../../context/game-save-context";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
+import {useGetControlTranslation} from "../../helpers/translationHelpers";
 
 export const OverlordBench = () => {
 
     const {campaignPicks, overlordPicks} = useGameSaveContext();
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
+    const {getControlTranslation} = useGetControlTranslation();
 
     const handleSaveChanges = () => {
         setSaveAndUpdate({campaignPicks, overlordPicks})
@@ -24,22 +26,21 @@ export const OverlordBench = () => {
     return (
         <div className={styles.formColumn}>
             <Accordion>
-                <AccordionItem header={'Campaign Setup'}>
+                <AccordionItem header={getControlTranslation('Campaign Setup')}>
                     <CampaignSetup/>
                 </AccordionItem>
 
-                <AccordionItem header={'Overlord Deck'}>
+                <AccordionItem header={getControlTranslation('Overlord Deck')}>
                     <OverlordDeck/>
                 </AccordionItem>
 
-                <AccordionItem header={'Army'}>
+                <AccordionItem header={getControlTranslation('Army')}>
                     <CampaignMonsters/>
                 </AccordionItem>
             </Accordion>
 
-            <Button theme='outlineRed' onClick={() => {
-                handleSaveChanges()
-            }}>Сохранить
+            <Button theme='outlineRed' onClick={handleSaveChanges}>
+                {getControlTranslation('Save')}
             </Button>
         </div>
     )

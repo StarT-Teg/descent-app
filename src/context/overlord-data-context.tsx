@@ -10,6 +10,7 @@ export const Overlord_Data_Initial_State: OverlordDataInterface = {
     plotCards: undefined,
     relics: {},
     campaignsData: {},
+    abilitiesData: {}
 }
 
 export const OverlordDataContext = createContext<OverlordDataInterface>(Overlord_Data_Initial_State)

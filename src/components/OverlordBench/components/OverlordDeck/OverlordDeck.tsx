@@ -12,35 +12,47 @@ import {useOverlordDataContext} from "../../../../context/overlord-data-context"
 import {MultiSelect} from "../shared/MultiSelect/MultiSelect";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
+import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
+import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 export const OverlordDeck = () => {
 
     const {overlordCards} = useOverlordDataContext();
-    const {overlordPicks} = useGameSaveContext();
+    const {overlordPicks, language} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
+
+    const {getControlTranslation} = useGetControlTranslation()
+
+    const getTranslation = (cardName: string, translationName: 'name') => {
+        return !!language ? overlordCards[cardName]?.translations?.[translationName]?.[language] || cardName : cardName;
+    }
 
     const overlordCardsOptions =
         Object.keys(overlordCards).reduce((acc: SelectionOptionInterface[], cardName) => {
 
             const className = overlordCards[cardName][OverlordDeckDataParametersEnum.className];
+            const cardNameTranslated = getTranslation(cardName, 'name');
 
             if (!Object.keys(OverlordBasicDecksEnum).includes(className)) {
-                acc.push(toSelectOption(cardName)!)
+                acc.push(toSelectOption(cardName, cardNameTranslated)!)
             }
 
             if (overlordPicks?.basicDeck === className as unknown as OverlordBasicDecksEnum) {
-                acc.push(toSelectOption(cardName, cardName, true)!)
+                acc.push(toSelectOption(cardName, cardNameTranslated, true)!)
             }
 
             return acc;
         }, [])
 
-    const basicDecksOptions: SelectionOptionInterface[] = [{value: 'Basic I', label: 'Basic I'}, {
+    const basicDecksOptions: SelectionOptionInterface[] = [{
+        value: 'Basic I',
+        label: `${getControlTranslation('Basic')} I`
+    }, {
         value: 'Basic II',
-        label: 'Basic II'
+        label: `${getControlTranslation('Basic')} II`,
     }]
 
-    const selectedCards = overlordPicks?.purchasedCards?.map(cardName => toSelectOption(cardName, cardName, ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!);
+    const selectedCards = overlordPicks?.purchasedCards?.map(cardName => toSelectOption(cardName, getTranslation(cardName, 'name'), ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!);
 
     const dispatchOverlordPicks = (newOverlordPicks: CurrentOverlordPicks) => {
         dispatch({
@@ -50,8 +62,8 @@ export const OverlordDeck = () => {
     }
 
     const onBasicDeckPick = (basicDeckNameData: SingleValue<SelectionOptionInterface>) => {
-        let newCards = !!overlordPicks?.purchasedCards?.length ? [...overlordPicks.purchasedCards] : [];
-        const newPickedCards: string[] = !!overlordPicks?.pickedCards?.length ? [...overlordPicks?.pickedCards] : [];
+        let newCards = [...(overlordPicks?.purchasedCards || [])].filter(cardName => !['Basic I', 'Basic II'].includes(overlordCards[cardName].className));
+        const newPickedCards: string[] = [...(overlordPicks?.pickedCards || [])].filter(cardName => !['Basic I', 'Basic II'].includes(overlordCards[cardName].className));
 
         if (!!basicDeckNameData?.value) {
             Object.keys(overlordCards).forEach(card => {
@@ -92,12 +104,12 @@ export const OverlordDeck = () => {
         <>
             <Select
                 className={'input'}
-                value={toSelectOption(overlordPicks?.basicDeck)}
+                value={toSelectOption(overlordPicks?.basicDeck, getControlTranslation(overlordPicks?.basicDeck?.toString() || ''))}
                 options={basicDecksOptions}
                 onChange={onBasicDeckPick}
                 isClearable
                 name="basic-deck"
-                placeholder={'Choose basic deck'}
+                placeholder={getControlTranslation('Choose basic deck')}
             />
 
             <MultiSelect options={overlordCardsOptions} selectedOptions={selectedCards} onItemsChange={(newValue) => {
@@ -106,30 +118,32 @@ export const OverlordDeck = () => {
 
             {!!overlordPicks?.purchasedCards?.length && (
                 <fieldset>
-                    <legend>Available cards</legend>
+                    <legend>{getControlTranslation('Available cards')}</legend>
 
-                    {overlordPicks?.purchasedCards?.map((card: string, index) => {
-                        return (
-                            <div className="list" key={`overlord-cards-block-${card}`}>
-                                <div className={styles.checkbox}>
-                                    {Array.from({length: overlordCards[card].quantity}, (_, index) => {
+                    {overlordPicks?.purchasedCards?.map((cardName: string) => {
+                            return (
+                                <div className={styles.listRow} key={`overlord-cards-block-${cardName}`}>
+                                    <div className={styles.checkbox}>
+                                        {Array.from({length: overlordCards[cardName].quantity}, (_, index) => {
 
-                                        const cardsAmount = Number(overlordPicks?.pickedCards?.filter(pickedCardName => pickedCardName === card).length);
+                                            const cardsAmount = Number(overlordPicks?.pickedCards?.filter(pickedCardName => pickedCardName === cardName).length);
 
-                                        return (
-                                            <input type="checkbox"
-                                                   key={`overlord-card-checkbox-${card}-${index}`}
-                                                       onChange={() => onPickedCardsChange(card)}
-                                                       checked={ cardsAmount >= (index + 1)}
+                                            return (
+                                                <input type="checkbox"
+                                                       key={`overlord-card-checkbox-${cardName}-${index}`}
+                                                       onChange={() => onPickedCardsChange(cardName)}
+                                                       checked={cardsAmount >= (index + 1)}
                                                 />
                                             );
                                         })}
                                     </div>
-                                    <input type="text" readOnly value={card}
-                                           key={`overlord-cards-list-${card}`}
-                                           onClick={() => onPickedCardsChange(card)}
+                                    <input type="text" readOnly value={getTranslation(cardName, 'name')}
+                                           key={`overlord-cards-list-${cardName}`}
+                                           onClick={() => onPickedCardsChange(cardName)}
                                            className={'input'}
                                     />
+
+                                    <SuggestTranslationButton stringToTranslate={cardName}/>
                                 </div>
                             )
                         }

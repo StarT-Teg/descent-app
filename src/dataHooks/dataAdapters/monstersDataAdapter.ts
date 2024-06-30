@@ -1,8 +1,8 @@
 import {ExcelDataRaw, MonstersDataAdapted, MonstersDataParametersEnum, MonsterTraitNamesEnum} from "../../shared";
 
-export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => {
+export const monstersDataAdapter = (data?: ExcelDataRaw): MonstersDataAdapted => {
 
-    return data.values.reduce((acc: MonstersDataAdapted, row, rowIndex) => {
+    return data?.values?.reduce((acc: MonstersDataAdapted, row, rowIndex) => {
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
 
             const monsterTraitsArray = Object.values(MonsterTraitNamesEnum);
@@ -40,8 +40,6 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
                 [MonstersDataParametersEnum.br]: row[42],
             };
 
-
-
             return {
                 ...acc,
                 [monsterName]: {
@@ -56,5 +54,5 @@ export const monstersDataAdapter = (data: ExcelDataRaw): MonstersDataAdapted => 
             }
         }
         return acc;
-    }, {})
+    }, {}) || {}
 }

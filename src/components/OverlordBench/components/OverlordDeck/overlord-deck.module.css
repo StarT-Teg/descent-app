@@ -1,4 +1,10 @@
 
+.listRow {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-column-gap: 4px;
+}
 
 .checkbox {
     display: grid;

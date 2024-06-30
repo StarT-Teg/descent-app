@@ -1,6 +1,7 @@
 import React from "react";
 import styles from './change-gold-modal.module.css'
 import {Button} from "../../../shared";
+import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 export interface ChangeGoldModalPropsInterface {
     onAddGold?(goldAmount: number): void;
@@ -27,6 +28,7 @@ const addGoldAmountArray = [25, 50, 75, 100]
 
 export const ChangeGoldModal = (props: ChangeGoldModalPropsInterface) => {
     const {onCloseModal, onAddGold, onSaveAndClose} = props;
+    const {getControlTranslation} = useGetControlTranslation()
 
     return (
         <div className={styles.root}>
@@ -43,11 +45,11 @@ export const ChangeGoldModal = (props: ChangeGoldModalPropsInterface) => {
             </div>
 
             <SimpleAddButton onClick={onCloseModal}>
-                Отменить
+                {getControlTranslation('Cancel')}
             </SimpleAddButton>
 
             <SimpleAddButton onClick={onSaveAndClose}>
-                Сохранить
+                {getControlTranslation('Save')}
             </SimpleAddButton>
         </div>
     )

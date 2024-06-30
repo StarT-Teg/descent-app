@@ -6,6 +6,7 @@ import {Swiper, SwiperSlide, useSwiper} from "swiper/react";
 import styles from './monster-showcase.module.css'
 import {MonsterCard} from "../MonsterCard/MonsterCard";
 import {useGetOverlordPicks} from "../../../../helpers";
+import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 export const MonsterShowcase = () => {
 
@@ -13,6 +14,8 @@ export const MonsterShowcase = () => {
         getOverlordOpenGroups,
     } = useGetOverlordPicks();
     const openGroupMonsters = getOverlordOpenGroups()
+
+    const {getControlTranslation} = useGetControlTranslation();
 
     const SwiperNextButton = () => {
         const swiper = useSwiper();
@@ -37,19 +40,20 @@ export const MonsterShowcase = () => {
             (onClose) => (
                 <Swiper className={styles.swiper} slidesPerView={1} spaceBetween={15} loop>
                     {openGroupMonsters?.map(monsterName => (
-                        <SwiperSlide>
+                        <SwiperSlide key={`monster-showcase-${monsterName}`}>
                             <MonsterCard monsterName={monsterName}/>
                         </SwiperSlide>
                     ))}
                     <div className={styles.swiperArrowContainer}>
                         <SwiperPreviousButton/>
+                        <button className={styles.swiperArrow} onClick={onClose}>CLOSE</button>
                         <SwiperNextButton/>
                     </div>
                 </Swiper>
             )
         } openModalButtonComponent={
             (onOpen) => (
-                <input type="text" readOnly value={'Monster Showcase'} onClick={onOpen}
+                <input type="text" readOnly value={getControlTranslation('Monster Showcase')} onClick={onOpen}
                        className={'input'}
                 />
             )

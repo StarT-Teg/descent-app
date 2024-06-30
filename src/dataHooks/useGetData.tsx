@@ -1,20 +1,9 @@
 import axios from "axios";
-import {campaignsDataAdapted} from "./dataAdapters/campaignsDataAdapted";
 import {useQuery, UseQueryResult} from "react-query";
 import {GameDataInterface} from "../shared";
-import {heroesRawDataAdapter} from "./dataAdapters/heroesRawDataAdapter";
-import {heroClassesDataAdapter} from "./dataAdapters/heroClassesDataAdapter";
-import {itemsDataAdapter} from "./dataAdapters/itemsDataAdapter";
-import {lieutenantsDataAdapter} from "./dataAdapters/lieutenantsDataAdapter";
-import {monstersDataAdapter} from "./dataAdapters/monstersDataAdapter";
-import {overlordDecksDataAdapted} from "./dataAdapters/overlordDecksDataAdapted";
-import {overlordRelicsDataAdapter} from "./dataAdapters/overlordRelicsDataAdapter";
-import {familiarsDataAdapted} from "./dataAdapters/familiarsDataAdapted";
-
 
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
-
-    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A1:B1000'].join('&ranges=');
+    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A:B', 'vote4TRAITS!A:C', 'vote4SURGE!A:C', 'vote4ACTIONS!A:C', 'Agents'].join('&ranges=');
 
     const params = {
         valueRenderOption: 'FORMATTED_VALUE',
@@ -24,23 +13,29 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
 
     const query = () => axios
         .get(`https://sheets.googleapis.com/v4/spreadsheets/${process.env.REACT_APP_GOOGLE_SHEETS_ID}/values:batchGet?&ranges=${ranges}`, {params})
-        .then(response => (
-            {
-                campaignData: campaignsDataAdapted(response.data?.valueRanges?.[0]),
-                heroClassesData: heroClassesDataAdapter(response.data?.valueRanges?.[1]),
-                heroesData: heroesRawDataAdapter(response.data?.valueRanges?.[2]),
-                itemsData: itemsDataAdapter(response.data?.valueRanges?.[3]),
-                lieutenantsData: lieutenantsDataAdapter(response.data?.valueRanges?.[4]),
-                monstersData: monstersDataAdapter(response.data?.valueRanges?.[5]),
-                overlordDecksData: overlordDecksDataAdapted(response.data?.valueRanges?.[6]),
-                relicsData: overlordRelicsDataAdapter(response.data?.valueRanges?.[7]),
-                familiars: familiarsDataAdapted(response.data?.valueRanges?.[8]),
-                translation: response.data?.valueRanges?.[9],
-            }
-        ));
+        .then((response) => {
+            return (
+                {
+                    campaignData: response.data?.valueRanges?.[0],
+                    heroClassesData: response.data?.valueRanges?.[1],
+                    heroesData: response.data?.valueRanges?.[2],
+                    itemsData: response.data?.valueRanges?.[3],
+                    lieutenantsData: response.data?.valueRanges?.[4],
+                    monstersData: response.data?.valueRanges?.[5],
+                    overlordDecksData: response.data?.valueRanges?.[6],
+                    relicsData: response.data?.valueRanges?.[7],
+                    familiars: response.data?.valueRanges?.[8],
+                    translation: response.data?.valueRanges?.[9],
+                    abilitiesData: {
+                        values: [...(response.data?.valueRanges?.[10].values || []), ...(response.data?.valueRanges?.[11].values || []), ...(response.data?.valueRanges?.[12].values || [])]
+                    },
+                    agentsData: response.data?.valueRanges?.[13],
+                }
+            )
+        });
 
-    return useQuery('get-data-request', query, {
-        enabled: false,
+    return useQuery(['get-data-request'], query, {
+        enabled: true,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,

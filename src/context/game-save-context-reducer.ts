@@ -1,4 +1,4 @@
-import {GameSavePicks} from "../shared";
+import {GameSavePicks, TranslationDataAdaptedInterface} from "../shared";
 
 export enum GameSaveReducerActionTypeEnum {
     changeAllPicks = 'changeAllPicks',
@@ -6,6 +6,8 @@ export enum GameSaveReducerActionTypeEnum {
     changeOverlordPicks = 'changeOverlordPicks',
     changeCampaignPicks = 'changeCampaignPicks',
     changeGold = 'changeGold',
+    changeTranslation = 'changeTranslation',
+    changeLanguage = 'changeLanguage',
 }
 
 interface setAllPicks {
@@ -33,7 +35,17 @@ interface setGold {
     payload?: number;
 }
 
-export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks | setGold;
+interface setLanguage {
+    actionType: GameSaveReducerActionTypeEnum.changeLanguage;
+    payload?: string;
+}
+
+interface setTranslation {
+    actionType: GameSaveReducerActionTypeEnum.changeTranslation;
+    payload?: TranslationDataAdaptedInterface;
+}
+
+export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks | setGold | setTranslation | setLanguage;
 
 export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveReducerActions): GameSavePicks => {
 
@@ -50,6 +62,10 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
             return {...state, campaignPicks: {...state.campaignPicks, ...payload.campaignPicks}};
         case GameSaveReducerActionTypeEnum.changeGold:
             return {...state, gold: payload};
+        case GameSaveReducerActionTypeEnum.changeTranslation:
+            return {...state, translation: payload};
+        case GameSaveReducerActionTypeEnum.changeLanguage:
+            return {...state, language: payload};
         default:
             return state;
     }
