@@ -2,11 +2,13 @@ import {ModalPortal} from "../Modal/ModalPortal";
 import React, {useState} from "react";
 import {Button} from "../shared";
 import classNames from "classnames";
-import styles from "../OverlordBench/components/CampaignSetup/campaign-setup.module.css";
+import styles from "./suggest-translation-button.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useGameSaveContext} from "../../context/game-save-context";
 import {useSetTranslation} from "../../dataHooks/useSetTranslation";
 import {useQueryClient} from "react-query";
+import {useGetControlTranslation} from "../../helpers/translationHelpers";
+import {translationDataAdapted} from "../../dataHooks/dataAdapters/translationDataAdapted";
 
 
 export const SuggestTranslationButton = ({
@@ -16,10 +18,13 @@ export const SuggestTranslationButton = ({
 
     const {language} = useGameSaveContext()
     const {mutate, isLoading} = useSetTranslation();
+    const {getControlTranslation} = useGetControlTranslation()
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+    const translation = translationDataAdapted(queryClient?.getQueryData('get-translation-request'))?.[stringToTranslate || '']?.[language || ''];
 
-    const [suggestedTranslation, setSuggestedTranslation] = useState<string>('');
+
+    const [suggestedTranslation, setSuggestedTranslation] = useState<string>(translation || '');
 
     const setTranslation = (callback?: () => void) => {
         if (!!language && !!suggestedTranslation && !!stringToTranslate) {
@@ -42,15 +47,32 @@ export const SuggestTranslationButton = ({
                 isLoading ? <div className='center'>
                     <LoadingSpinner/>
                 </div> : (
-                    <div>
-                        <input type="text" value={suggestedTranslation} onChange={(e) => {
-                            setSuggestedTranslation(e.target?.value || '')
-                        }}
-                               className={'input'}
-                        />
+                    <div className={styles.root}>
+                        <fieldset>
+                            <legend>en</legend>
+                            <input
+                                type="text"
+                                value={stringToTranslate}
+                                className={'input'}
+                                readOnly
+                            />
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>{language}</legend>
+                            <input
+                                type="text"
+                                value={suggestedTranslation}
+                                onChange={(e) => {
+                                    setSuggestedTranslation(e.target?.value || '')
+                                }}
+                                className={'input'}
+                            />
+                        </fieldset>
+
                         <Button theme={'simple'} onClick={() => {
                             setTranslation(onClose)
-                        }}>Send Translation</Button>
+                        }}>{getControlTranslation('Send Translation')}</Button>
                     </div>
                 )
             )}
@@ -72,6 +94,7 @@ export const SuggestTranslationButton = ({
                             clipRule="evenodd"
                         />
                     </svg>
-                </div>)}/>
+                </div>)}
+        />
     )
 }

@@ -47,6 +47,8 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
                 </>
             )
 
+
+
         if (!!text.match(/sss:/gi)?.length) {
             return <Icon iconType={ActionTypeToSymbolEnum.tripleSurge}/>;
         }

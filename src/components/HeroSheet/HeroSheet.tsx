@@ -250,6 +250,7 @@ export default function HeroSheet() {
                                     <legend>{getControlTranslation('Skills')}</legend>
 
                                     {heroAvailableSkills?.map((skillName: string, index) => {
+                                            const br = heroClasses?.[heroClassName]?.skills[skillName]?.br || heroClasses?.[heroSubclassName]?.skills[skillName]?.br || 0
                                             return (
                                                 <div className={styles.checkboxLine}
                                                      key={`${heroPlayerPosition}-skillBlock-${index}`}>
@@ -275,7 +276,7 @@ export default function HeroSheet() {
                                                     <SuggestTranslationButton stringToTranslate={skillName}/>
 
                                                     <div className={styles.br}>
-                                                        BR: {heroClasses?.[heroClassName]?.skills[skillName]?.br || 0}
+                                                        BR: {br}
                                                     </div>
                                                 </div>
                                             )

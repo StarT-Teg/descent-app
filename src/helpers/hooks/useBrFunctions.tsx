@@ -65,12 +65,16 @@ export function useBrFunctions() {
         }
 
         if (!!heroPicks?.heroSkills?.length) {
-            Object.keys(heroClasses).forEach((className) => {
-                Object.keys(heroClasses[className].skills).forEach((skillName) => {
-                    if (heroPicks.heroSkills?.includes(skillName)) {
-                        heroBr += floatClearing(heroClasses[className].skills[skillName].br)
-                    }
-                })
+            heroPicks.heroSkills.forEach((skillName) => {
+                const skillList = Object.values(heroClasses).reduce((acc: { [key in string]: string }, classData) => {
+                    const skills = Object.values(classData.skills).reduce((acc: { [key in string]: string }, skillData) => ({
+                        ...acc,
+                        [skillData.skillName]: skillData.br
+                    }), {});
+                    return {...acc, ...skills}
+                }, {})
+
+                heroBr += floatClearing(skillList[skillName])
             })
         }
 
