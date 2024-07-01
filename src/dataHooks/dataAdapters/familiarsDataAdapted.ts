@@ -1,7 +1,8 @@
-import {ExcelDataRaw, FamiliarsDataAdapted,} from "../../shared";
+import {ExcelDataRaw, FamiliarsDataAdapted, TranslationDataAdaptedInterface,} from "../../shared";
 import {floatClearing} from "../../helpers";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const familiarsDataAdapted = (data?: ExcelDataRaw) => {
+export const familiarsDataAdapted = (data?: ExcelDataRaw, translationData?: TranslationDataAdaptedInterface): FamiliarsDataAdapted => {
 
     const familiarsDataAdapted: FamiliarsDataAdapted = {};
 
@@ -18,6 +19,9 @@ export const familiarsDataAdapted = (data?: ExcelDataRaw) => {
             const attackDice = row[9];
             const surgeAbilities = row[12];
             const br = Math.round(floatClearing(row[15]));
+            const translation = {
+                ...getTranslationData({name}, translationData),
+            }
 
             familiarsDataAdapted[name] = {
                 source,
@@ -29,7 +33,8 @@ export const familiarsDataAdapted = (data?: ExcelDataRaw) => {
                 size,
                 surgeAbilities,
                 wounds,
-                br
+                br,
+                translation,
             }
         }
     })

@@ -34,7 +34,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Send Translation': {ru: 'Отправить перевод'},
 }
 
-export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): {[p: string]: {[language in string] : string} | undefined} => {
+export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {
 
     const getTranslationFromName = (itemName: string) => {
 

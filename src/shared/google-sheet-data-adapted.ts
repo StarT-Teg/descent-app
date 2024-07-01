@@ -2,7 +2,6 @@ import {
     CampaignsDataParametersEnum,
     ExcelDataRaw,
     HeroClassParametersEnum,
-    HeroParametersEnum,
     ItemDataParametersEnum,
     LieutenantDataParametersEnum,
     MonstersDataParametersEnum,
@@ -143,6 +142,7 @@ export interface FamiliarData {
     attackDice: string,
     surgeAbilities: string,
     br: number,
+    translation?: { name?: { [key in string]: string } };
 }
 
 export enum MonsterTypesEnum {
@@ -221,15 +221,29 @@ export interface ItemsDataAdapted {
     }
 }
 
-export interface HeroesDataAdapted {
+export type HeroesDataAdapted = {
     [key: string]: {
-        [key in HeroParametersEnum]: string;
+        name: string;
+        type: string;
+        speed: string;
+        health: string;
+        stamina: string;
+        defenceDie: string;
+        strength: string;
+        willpower: string;
+        knowledge: string;
+        awareness: string;
+        ability: string;
+        feat: string;
+        expansion: string;
+        br: string;
+        translation?: { name?: { [key in string]: string } };
     }
 }
 
 export interface AbilitiesDataAdaptedInterface {
     [key: string]: {
-        description: string
+        description: string;
         translation?: {
             name?: { [language in string]: string };
             description?: { [language in string]: string };
@@ -245,7 +259,7 @@ export interface HeroClass {
     [HeroClassParametersEnum.archetype]: string,
     [HeroClassParametersEnum.className]: string,
     skills: ClassSkill;
-    translation: { name?: { [key in string]: string } };
+    translation?: { name?: { [key in string]: string } };
 }
 
 export interface ClassSkill {

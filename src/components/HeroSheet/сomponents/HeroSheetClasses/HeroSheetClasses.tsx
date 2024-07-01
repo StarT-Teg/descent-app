@@ -1,11 +1,12 @@
 import React from "react";
 import Select from "react-select";
-import {SelectionOptionInterface} from "../../../../shared";
+import {HeroPlayerPicks, HeroPlayersEnum, SelectionOptionInterface} from "../../../../shared";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import styles from './hero-sheet-classes.module.css'
 import {useGameSaveContext} from "../../../../context/game-save-context";
 import {useHeroesDataContext} from "../../../../context";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {useParams} from "react-router-dom";
 
 export interface ClassesBundleViewProps {
     classList?: string[],
@@ -22,18 +23,24 @@ export interface ClassesBundleViewProps {
 
 export const HeroSheetClasses = (props: ClassesBundleViewProps) => {
 
+    const {playerRole} = useParams();
+    const heroPlayerPosition = playerRole as HeroPlayersEnum;
+
+    const {heroesPicks,language} = useGameSaveContext();
+    const {heroClasses} = useHeroesDataContext();
+    const {getControlTranslation} = useGetControlTranslation()
+
+    const {
+        heroClassName: className = '',
+        heroSubclassName: subclassName = '',
+    } = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
+
     const {
         classList = [],
         subclassList = [],
         handleChangeClassName,
         handleChangeSubclassName,
-        className,
-        subclassName,
     } = props;
-
-    const {language} = useGameSaveContext();
-    const {heroClasses} = useHeroesDataContext();
-    const {getControlTranslation} = useGetControlTranslation()
 
     const isClassPickAvailable = !!classList.length;
     const isSubClassPickAvailable = !!subclassList.length;

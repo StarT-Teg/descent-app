@@ -14,6 +14,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
 import {SuggestTranslationButton} from "../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../helpers/translationHelpers";
+import {HeroSheetFamiliars} from "./сomponents/HeroSheetFamiliars/HeroSheetFamiliars";
 
 export default function HeroSheet() {
 
@@ -22,7 +23,7 @@ export default function HeroSheet() {
 
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
 
-    const {heroes, heroClasses, items, familiars} = useHeroesDataContext()
+    const {heroes, heroClasses, items} = useHeroesDataContext()
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -31,11 +32,9 @@ export default function HeroSheet() {
 
     const playerPicks = gameSaveContext.heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
-    const heroNames = Object.keys(heroes);
     const itemList = Object.keys(items)
 
     const {
-        heroName,
         heroClassName = '',
         heroSubclassName = '',
         heroSkills = [],
@@ -45,7 +44,6 @@ export default function HeroSheet() {
     const [heroAvailableClasses, setHeroAvailableClasses] = useState<string[] | undefined>(undefined);
     const [heroAvailableSubclasses, setHeroAvailableSubclasses] = useState<string[] | undefined>(undefined);
     const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(heroSkills);
-    const [heroAvailableFamiliars, setHeroAvailableFamiliars] = useState<string[] | undefined>(undefined);
 
     const getClassListOfArchetype = (archetype: 'Warrior' | 'Mage' | 'Scout' | 'Healer') => (
         Object.values(heroClasses).filter(classData => classData.archetype === archetype).map(classData => classData.className)
@@ -60,7 +58,6 @@ export default function HeroSheet() {
 
         if (!newHeroPicks?.heroName) {
             newHeroPicks.heroClassName = '';
-            newHeroPicks.heroSubclassName = '';
         }
 
         if (!newHeroPicks.heroClassName) {
@@ -88,21 +85,7 @@ export default function HeroSheet() {
 
     useEffect(() => {
 
-        const newFamiliars: string[] = [];
-
         if (!!playerPicks?.heroName && !!heroes[playerPicks?.heroName]) {
-
-            if (playerPicks.heroName === 'Vyrah the Falconer') {
-                newFamiliars.push('Skye');
-            }
-
-            if (playerPicks.heroName === 'Ronan of the Wild') {
-                newFamiliars.push('Pico');
-            }
-
-            if (playerPicks.heroName === 'Challara') {
-                newFamiliars.push('Brightblaze');
-            }
 
             setHeroAvailableClasses(
                 Object.values(heroClasses)
@@ -124,18 +107,6 @@ export default function HeroSheet() {
             setHeroAvailableSkills(Object.keys(heroClasses[playerPicks.heroClassName].skills))
 
             switch (playerPicks.heroClassName) {
-                case "Necromancer":
-                    newFamiliars.push('Reanimate')
-                    break;
-                case "Geomancer":
-                    newFamiliars.push('The Summoned Stone')
-                    break;
-                case "Beastmaster":
-                    newFamiliars.push('Wolf')
-                    break;
-                case "Shadow Walker":
-                    newFamiliars.push('Shadow Soul')
-                    break;
                 case "Battlemage":
                 case "Ravager":
                 case "Crusader":
@@ -173,7 +144,6 @@ export default function HeroSheet() {
             )
         }
 
-        setHeroAvailableFamiliars(newFamiliars);
     }, [playerPicks, heroClasses, heroes])
 
     if (isLoading) {
@@ -186,15 +156,7 @@ export default function HeroSheet() {
 
                 <Accordion>
                     <AccordionItem header={getControlTranslation('Name/Class')}>
-                        <HeroSheetName
-                            selectedHeroName={heroName}
-                            heroNames={heroNames}
-                            handleChangeHeroName={(newHeroName) => {
-                                handleChangePlayerPicks({heroName: newHeroName})
-                            }}
-                            type={heroName ? heroes[heroName]?.type : undefined}
-                            heroPosition={heroPlayerPosition}
-                        />
+                        <HeroSheetName/>
 
                         <HeroSheetClasses
                             className={heroClassName}
@@ -210,36 +172,7 @@ export default function HeroSheet() {
                             heroPosition={heroPlayerPosition}
                         />
 
-                        {!!heroAvailableFamiliars?.length && (
-                            <fieldset>
-                                <legend>{getControlTranslation('Familiars')}</legend>
-
-                                {heroAvailableFamiliars?.map((familiarName: string, index) => {
-                                        return (
-                                            <div className={styles.checkboxLine}
-                                                 key={`${heroPlayerPosition}-familiar-${index}`}>
-                                                <input type="checkbox"
-                                                       onChange={() => {
-                                                       }}
-                                                       checked={heroAvailableFamiliars?.includes(familiarName)}
-                                                />
-
-                                                <input type="text" readOnly value={familiarName}
-                                                       onClick={() => {
-                                                       }}
-                                                       className={'input'}
-                                                />
-
-                                                <div className={styles.br}>
-                                                    BR: {familiars?.[familiarName]?.br || 0}
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                )
-                                }
-                            </fieldset>
-                        )}
+                        <HeroSheetFamiliars/>
                     </AccordionItem>
 
                     <AccordionItem header={getControlTranslation('Skills')} disabled={!heroAvailableSkills?.length}>
@@ -316,7 +249,5 @@ export default function HeroSheet() {
                 </Button>
             </div>
         </div>
-
-
     )
 }

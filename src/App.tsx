@@ -27,6 +27,7 @@ import {abilitiesDataAdapted} from "./dataHooks/dataAdapters/abilitiesDataAdapte
 import {translationDataAdapted} from "./dataHooks/dataAdapters/translationDataAdapted";
 import {useGetTranslation} from "./dataHooks/useGetTranslation";
 import {agentsDataAdapter} from "./dataHooks/dataAdapters/agentsDataAdapter";
+import {GameSavePicks} from "./shared";
 
 export const App = () => {
 
@@ -57,7 +58,7 @@ export const App = () => {
     useEffect(() => {
         if (!!saveGameUuid) {
             saveGameDataRefetch().then(response => {
-                const saveGameData = response.data;
+                const saveGameData: GameSavePicks | string = response.data;
 
                 if (typeof saveGameData !== 'string') {
                     dispatchPlayersPick({
@@ -111,7 +112,7 @@ export const App = () => {
 
             dispatchHeroesData({
                 payload: {
-                    heroes: heroesRawDataAdapter(heroesData),
+                    heroes: heroesRawDataAdapter(heroesData, translation),
                     heroClasses: heroClassesDataAdapter(heroClassesData, translation),
                     items: itemsDataAdapter(itemsData, translation),
                     familiars: familiarsDataAdapted(familiars),

@@ -3,12 +3,13 @@ import {floatClearing} from "../mathHelpers";
 import {useOverlordDataContext} from "../../context/overlord-data-context";
 import {useHeroesDataContext} from "../../context";
 import {useGameSaveContext} from "../../context/game-save-context";
+import {getHeroFamiliars} from "../heroesHelpers";
 
 
 export function useBrFunctions() {
 
     const {campaignsData, overlordCards, monsters, lieutenants, relics} = useOverlordDataContext();
-    const {heroes, heroClasses, items} = useHeroesDataContext()
+    const {heroes, heroClasses, items, familiars} = useHeroesDataContext()
 
     const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
@@ -59,7 +60,10 @@ export function useBrFunctions() {
     function getHeroBr(heroPosition: HeroPlayersEnum): number {
 
         const heroPicks = heroesPicks?.[heroPosition];
+        const heroAvailableFamiliars = getHeroFamiliars(heroPicks);
+
         let heroBr: number = 0;
+
         if (!!heroPicks?.heroName) {
             heroBr += floatClearing(heroes?.[heroPicks?.heroName]?.br);
         }
@@ -88,6 +92,12 @@ export function useBrFunctions() {
                         heroBr += floatClearing(itemData.br);
                     }
                 }
+            })
+        }
+
+        if (!!heroAvailableFamiliars?.length) {
+            heroAvailableFamiliars.forEach((familiarName) => {
+                heroBr += familiars[familiarName]?.br
             })
         }
 

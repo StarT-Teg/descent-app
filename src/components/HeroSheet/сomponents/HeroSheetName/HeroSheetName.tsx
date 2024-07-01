@@ -1,37 +1,67 @@
 import React from "react";
 import Select from "react-select";
 import styles from './hero-sheet-name.module.css'
-import {SelectionOptionInterface} from "../../../../shared";
+import {HeroPlayerPicks, HeroPlayersEnum, SelectionOptionInterface} from "../../../../shared";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
+import {useParams} from "react-router-dom";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
+import {useHeroesDataContext} from "../../../../context";
+import {toSelectOption} from "../../../../helpers";
 
-export interface HeroBundleViewProps {
-    handleChangeHeroName(newHeroName: string): void,
+export const HeroSheetName = () => {
 
-    heroNames: string[],
-    selectedHeroName?: string;
-    type?: string,
-    heroPosition?: string,
-}
+    const {playerRole} = useParams();
+    const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
-export const HeroSheetName = (props: HeroBundleViewProps) => {
+    const {heroesPicks, language} = useGameSaveContext();
+    const {heroes, heroClasses} = useHeroesDataContext();
+    const {getControlTranslation} = useGetControlTranslation();
+    const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const {
-        handleChangeHeroName,
-        heroNames = [],
-        selectedHeroName,
-    } = props;
+        heroName: selectedHeroName,
+    } = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
-    const {getControlTranslation} = useGetControlTranslation()
+    const getNameTranslation = (name: string) => {
+        return heroes?.[name]?.translation?.name?.[language || ''] || name;
+    }
 
-    const options: SelectionOptionInterface[] = heroNames.sort().map(heroName => ({value: heroName, label: heroName}))
-    const selectedHeroNameAdapted: SelectionOptionInterface | null = !!selectedHeroName ? {
-        value: selectedHeroName,
-        label: selectedHeroName
-    } : null;
+    const options: SelectionOptionInterface[] = Object.keys(heroes).sort().map(heroName => (toSelectOption(heroName, getNameTranslation(heroName || '')))!)
+    const selectedHeroNameAdapted: SelectionOptionInterface | null = toSelectOption(selectedHeroName, getNameTranslation(selectedHeroName || ''))
+
+    const handleChangeHeroName = (heroName: string) => {
+
+        const newHeroPicks: HeroPlayerPicks = {
+            ...heroesPicks[heroPlayerPosition],
+            heroName
+        };
+
+        if (!newHeroPicks?.heroName) {
+            newHeroPicks.heroClassName = '';
+        }
+
+        if (!newHeroPicks.heroClassName || heroClasses[newHeroPicks.heroClassName].archetype !== heroes[newHeroPicks?.heroName || ''].type) {
+            newHeroPicks.heroClassName = '';
+            newHeroPicks.heroSubclassName = '';
+            newHeroPicks.heroSkills = [];
+        }
+
+        dispatchPlayersPick({
+            actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
+            payload: {
+                heroesPicks: {
+                    ...heroesPicks,
+                    [heroPlayerPosition]: {
+                        ...newHeroPicks,
+                    }
+                }
+            }
+        })
+    }
 
     return (
-
         <div className={styles["sub-grid"]}>
 
             <fieldset>

@@ -1,38 +1,38 @@
-import {ExcelDataRaw, HeroesDataAdapted, HeroParametersEnum} from "../../shared";
+import {ExcelDataRaw, HeroesDataAdapted, TranslationDataAdaptedInterface} from "../../shared";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const heroesRawDataAdapter = (data?: ExcelDataRaw, maxColumns?: number): HeroesDataAdapted => {
+export const heroesRawDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): HeroesDataAdapted => {
 
-    const heroTemplateHeaders = Object.values(HeroParametersEnum);
-
-    if (!data) {
+    if (!data?.values) {
         return {}
     }
 
     return data.values.reduce((acc: HeroesDataAdapted, row, rowIndex) => {
         if (!!row[0] && rowIndex !== 0) {
 
-            const hero: { [key in HeroParametersEnum]: string } = {
-                name: "",
-                type: "",
-                speed: "",
-                health: "",
-                stamina: "",
-                defenceDie: "",
-                strength: "",
-                willpower: "",
-                knowledge: "",
-                awareness: "",
-                ability: "",
-                feat: "",
-                expansion: "",
-                br: ""
+            const name = row[0]
+
+            const heroData = {
+                name,
+                type: row[1],
+                speed: row[2],
+                health: row[3],
+                stamina: row[4],
+                defenceDie: row[5],
+                strength: row[6],
+                willpower: row[7],
+                knowledge: row[8],
+                awareness: row[9],
+                ability: row[10],
+                feat: row[11],
+                expansion: row[12],
+                br: row[13],
+                translation: {
+                    ...getTranslationData({name}, translation),
+                },
             };
 
-            for (let i = 0; i < (maxColumns || row.length); i++) {
-                hero[heroTemplateHeaders[i]] = row[i]
-            }
-
-            return {...acc, [row[0]]: hero}
+            return {...acc, [name]: heroData}
         }
         return acc;
     }, {})
