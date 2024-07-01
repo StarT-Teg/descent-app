@@ -33,13 +33,13 @@ export const ChangeGoldModal = (props: ChangeGoldModalPropsInterface) => {
     return (
         <div className={styles.root}>
             <div className={styles.column}>
-                {subtractGoldAmountArray.map(gold => <SimpleAddButton key={`add-button-gold-${gold}`} onClick={() => {
+                {subtractGoldAmountArray.map(gold => <SimpleAddButton key={`subtract-button-gold-${gold}`} onClick={() => {
                     onAddGold?.(gold)
                 }}>{gold}</SimpleAddButton>)}
             </div>
 
             <div className={styles.column}>
-                {addGoldAmountArray.map(gold => <SimpleAddButton onClick={() => {
+                {addGoldAmountArray.map(gold => <SimpleAddButton key={`add-button-gold-${gold}`} onClick={() => {
                     onAddGold?.(gold)
                 }}>+{gold}</SimpleAddButton>)}
             </div>

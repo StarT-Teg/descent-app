@@ -58,9 +58,9 @@ export const App = () => {
     useEffect(() => {
         if (!!saveGameUuid) {
             saveGameDataRefetch().then(response => {
-                const saveGameData: GameSavePicks | string = response.data;
+                const saveGameData = response.data;
 
-                if (typeof saveGameData !== 'string') {
+                if (!!saveGameData && typeof saveGameData !== 'string') {
                     dispatchPlayersPick({
                         actionType: GameSaveReducerActionTypeEnum.changeAllPicks,
                         payload: saveGameData,

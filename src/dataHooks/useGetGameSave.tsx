@@ -1,6 +1,7 @@
 import axios from "axios";
 import {useQuery} from "react-query";
-import {AxiosRequestConfig} from "axios/index";
+import {AxiosRequestConfig} from "axios";
+import {GameSavePicks} from "../shared";
 
 export const useGetGameSave = (uuid: string) => {
 
@@ -10,7 +11,7 @@ export const useGetGameSave = (uuid: string) => {
         validateStatus: (status) => status !== 302,
     }
 
-    const query = () => axios
+    const query = (): Promise<GameSavePicks | string> => axios
         .get(`https://script.google.com/macros/s/AKfycbwrM4AbrDT_-rA55bg0TIXxAg_aI85kcJTXgqItL0twcBIT0K94I01Vicllcj2wnQBf9Q/exec`, config)
         .then(response => {
             try {
