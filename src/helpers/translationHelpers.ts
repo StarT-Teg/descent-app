@@ -32,6 +32,8 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Open Groups': {ru: 'Открытые группы'},
     'Monster Showcase': {ru: 'Витрина Монстров'},
     'Send Translation': {ru: 'Отправить перевод'},
+    'Overlord': {ru: 'Властелин'},
+    'Hero': {ru: 'Герой'}
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

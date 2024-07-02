@@ -27,7 +27,6 @@ import {abilitiesDataAdapted} from "./dataHooks/dataAdapters/abilitiesDataAdapte
 import {translationDataAdapted} from "./dataHooks/dataAdapters/translationDataAdapted";
 import {useGetTranslation} from "./dataHooks/useGetTranslation";
 import {agentsDataAdapter} from "./dataHooks/dataAdapters/agentsDataAdapter";
-import {GameSavePicks} from "./shared";
 
 export const App = () => {
 

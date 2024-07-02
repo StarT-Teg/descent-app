@@ -24,7 +24,7 @@ export const Header = () => {
 
     const {getOverlordAvailableBr} = useBrFunctions();
 
-    const [isBackArrowVisible, setIsBackArrowVisible] = useState<boolean>(false);
+    const [isBackArrowVisible, setIsBackArrowVisible] = useState<boolean>(false)
     const [freeBr, setFreeBr] = useState<number>(getOverlordAvailableBr());
 
     const navigate = useNavigate();
