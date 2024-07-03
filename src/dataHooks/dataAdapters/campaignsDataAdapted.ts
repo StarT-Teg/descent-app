@@ -23,7 +23,7 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
         if (!!row[0] && ![0, 1, 2].includes(rowIndex)) {
             const campaignName = row[0];
             const missionName = row[1];
-            const encounterNumber = Number(row[2]);
+            const encounterNumber = row[2];
             const act = Number(row[3]);
 
             const lieutenants = getCleanArrayFromString(row[11]);
@@ -58,7 +58,7 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
                                 cantChangeActMonsterList,
                             }
                         },
-                        translation: {...getTranslationData({campaignName, missionName }, translation),}
+                        translation: {...getTranslationData({campaignName, missionName}, translation),}
                     }
             }
         }

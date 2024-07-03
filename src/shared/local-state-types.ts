@@ -63,7 +63,7 @@ export interface CampaignPicksInterface {
     selectedCampaign?: string;
     selectedAct?: number;
     selectedMission?: string;
-    selectedEncounter?: number;
+    selectedEncounter?: string;
     pickedMonsters?: string[];
 }
 
@@ -71,7 +71,7 @@ export interface GameSavePicks {
     heroesPicks: CurrentPlayersPicks;
     overlordPicks: CurrentOverlordPicks;
     campaignPicks: CampaignPicksInterface;
+    language: string;
     gold?: number;
-    language?: string;
     translation?: TranslationDataAdaptedInterface;
 }

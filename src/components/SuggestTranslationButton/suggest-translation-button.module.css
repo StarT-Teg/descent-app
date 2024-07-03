@@ -25,7 +25,9 @@
     align-items: center;
     justify-content: center;
 
+    min-height: 29px;
     height: 100%;
+    max-width: 40px;
 
     background-color: hsl(0, 0%, 100%);
     border-color: hsl(0, 0%, 80%);

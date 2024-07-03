@@ -48,7 +48,6 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
             )
 
 
-
         if (!!text.match(/sss:/gi)?.length) {
             return <Icon iconType={ActionTypeToSymbolEnum.tripleSurge}/>;
         }
@@ -79,6 +78,10 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
     const getDescriptionTranslation = (abilityName: string): string => {
         return abilitiesData?.[abilityName]?.translation?.description?.[language || ''] || abilitiesData?.[abilityName].description || '';
     }
+
+    const getMonsterNameTranslation = (monsterName: string) => (
+        monsters[monsterName || '']['act1']?.master?.translation?.name?.[language] || monsterName
+    )
 
     const handleRotateCard = () => {
         setCardRotated(prevState => !prevState)
@@ -134,7 +137,7 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
                                     </div>
 
                                     <div className={styles.cardMonsterName}>
-                                        {monsterName}
+                                        {getMonsterNameTranslation(monsterName)}
                                     </div>
                                 </div>
 
@@ -181,7 +184,7 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
                                     <div>2</div>
                                 </div>
                                 <div className={styles.backCardMonsterName}>
-                                    {monsterName}
+                                    {getMonsterNameTranslation(monsterName)}
                                 </div>
                                 <div className={styles.backCardAbilities}>
                                     {[...minionAbilities, ...masterAbilities]

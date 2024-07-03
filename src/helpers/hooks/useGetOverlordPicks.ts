@@ -7,9 +7,9 @@ export function useGetOverlordPicks() {
 
     const {getMonsterGroupBr} = useBrFunctions();
 
-    const {campaignsData, overlordCards, monsters, lieutenants, relics} = useOverlordDataContext();
+    const {campaignsData, monsters} = useOverlordDataContext();
 
-    const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
+    const {overlordPicks, campaignPicks} = useGameSaveContext();
     const {pickedCards} = overlordPicks;
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
 
@@ -26,7 +26,7 @@ export function useGetOverlordPicks() {
     }
 
     function getOverlordDefaultMonsters(): string[] {
-        const defaultMonsters = (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || 0]?.monsters || []);
+        const defaultMonsters = (campaignsData?.[selectedCampaign || '']?.[selectedMission || '']?.encounters?.[selectedEncounter || '']?.monsters || []);
         const familiars = getOverlordFamiliars();
 
         return defaultMonsters.concat(familiars);

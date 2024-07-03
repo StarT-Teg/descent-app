@@ -6,7 +6,6 @@ import styles from './campaign-monsters.module.css'
 import classNames from 'classnames';
 import {useBrFunctions} from "../../../../helpers/hooks/useBrFunctions";
 import {toSelectOption, useGetOverlordPicks} from "../../../../helpers";
-import {Accordion, AccordionItem} from "../../../shared";
 import Select from "react-select";
 import {useOverlordDataContext} from "../../../../context/overlord-data-context";
 import ReactSwitch from "react-switch";
@@ -28,8 +27,8 @@ export const CampaignMonsters = () => {
         isMonsterChangeActAvailable
     } = useGetOverlordPicks();
 
-    const {relics, monsters} = useOverlordDataContext()
-    const {overlordPicks, campaignPicks} = useGameSaveContext();
+    const {relics, monsters, lieutenants} = useOverlordDataContext()
+    const {overlordPicks, campaignPicks, language} = useGameSaveContext();
     const {pickedMonsters = [], customActPicks = []} = overlordPicks;
 
     const {getControlTranslation} = useGetControlTranslation()
@@ -77,6 +76,18 @@ export const CampaignMonsters = () => {
         dispatchOverlordPicks({pickedMonsters: newMonsters})
     }
 
+    const getMonsterNameTranslation = (monsterName: string) => (
+        monsters[monsterName || '']['act1']?.master?.translation?.name?.[language] || monsterName
+    )
+
+    const getLieutenantNameTranslation = (lieutenantName: string) => (
+        lieutenants[lieutenantName]?.translation?.name?.[language] || lieutenantName
+    )
+
+    const getRelicTranslation = (relicName?: string) => (
+        relics[relicName || '']?.translation?.name?.[language] || relicName
+    )
+
     return (
         <>
             <fieldset>
@@ -89,64 +100,63 @@ export const CampaignMonsters = () => {
                     <legend>{getControlTranslation('Lieutenants')}</legend>
 
                     {defaultLieutenants.map((lieutenantName: string, index) => {
+                            const pickedRelic = overlordPicks?.pickedRelics?.[lieutenantName];
                             const isCanChangeAct = isMonsterChangeActAvailable(lieutenantName);
                             const minMonsterGroupBr = getLieutenantBr(lieutenantName, 1);
                             const maxMonsterGroupBr = getLieutenantBr(lieutenantName, 2);
                             const isSwitchDisabled = !(customActPicks.includes(lieutenantName) || campaignPicks.selectedAct === 2) && (maxMonsterGroupBr - minMonsterGroupBr) > freeBr
 
                             return (
-                                <Accordion key={`${lieutenantName}-${index}`}>
-                                    <AccordionItem
-                                        chevronDisabled
-                                        initialEntered
-                                        theme='buttonWithOptions'
-                                        header={<div key={`default-monster-${index}`}
-                                                     className={styles.defaultMonsterLine}>
-                                            <div className="input">
-                                                {lieutenantName}
-                                            </div>
-                                            <div className={styles.br}>
-                                                BR: {getLieutenantBr(lieutenantName)}
-                                            </div>
-                                        </div>}>
+                                <div key={`lieutenant-${lieutenantName}-${index}`}>
+                                    <div className={styles.defaultMonsterLine}>
+                                        <input type="text" readOnly value={getLieutenantNameTranslation(lieutenantName)}
+                                               disabled
+                                               className={'input'}
+                                        />
 
-                                        <div className={styles.unitOptions}>
-
-                                            {isCanChangeAct && (
-                                                <ReactSwitch
-                                                    uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
-                                                    checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
-                                                    checked={campaignPicks.selectedAct === 2 ? customActPicks.includes(lieutenantName) : !customActPicks.includes(lieutenantName)}
-                                                    onChange={() => {
-                                                        onCustomActPick(lieutenantName)
-                                                    }}
-                                                    className={styles.extraSwitch}
-                                                    offColor={'#fc8245'}
-                                                    onColor={'#627a83'}
-                                                    disabled={isSwitchDisabled}
-                                                />
-                                            )}
-
-                                            <Select
-                                                className={'smallInput'}
-                                                value={toSelectOption(overlordPicks?.pickedRelics?.[lieutenantName])}
-                                                options={availableRelics}
-                                                onChange={(value) => {
-                                                    dispatchOverlordPicks({
-                                                        pickedRelics: {
-                                                            ...overlordPicks?.pickedRelics,
-                                                            [lieutenantName]: value?.value || undefined
-                                                        }
-                                                    })
-                                                }}
-                                                isClearable
-                                                name={`${lieutenantName}-relic-select`}
-                                                placeholder={getControlTranslation('Relic')}
-                                            />
+                                        <SuggestTranslationButton stringToTranslate={lieutenantName}/>
+                                        <div className={styles.br}>
+                                            {getLieutenantBr(lieutenantName)}
                                         </div>
+                                    </div>
 
-                                    </AccordionItem>
-                                </Accordion>
+                                    <div className={styles.unitOptions}>
+
+                                        {isCanChangeAct && (
+                                            <ReactSwitch
+                                                uncheckedIcon={<div className={styles.switchIcon}><p>II</p></div>}
+                                                checkedIcon={<div className={styles.switchIcon}><p>I</p></div>}
+                                                checked={campaignPicks.selectedAct === 2 ? customActPicks.includes(lieutenantName) : !customActPicks.includes(lieutenantName)}
+                                                onChange={() => {
+                                                    onCustomActPick(lieutenantName)
+                                                }}
+                                                className={styles.extraSwitch}
+                                                offColor={'#fc8245'}
+                                                onColor={'#627a83'}
+                                                disabled={isSwitchDisabled}
+                                            />
+                                        )}
+
+                                        <Select
+                                            className={'smallInput'}
+                                            value={toSelectOption(pickedRelic, getRelicTranslation(pickedRelic))}
+                                            options={availableRelics}
+                                            onChange={(value) => {
+                                                dispatchOverlordPicks({
+                                                    pickedRelics: {
+                                                        ...overlordPicks?.pickedRelics,
+                                                        [lieutenantName]: value?.value || undefined
+                                                    }
+                                                })
+                                            }}
+                                            isClearable
+                                            name={`${lieutenantName}-relic-select`}
+                                            placeholder={getControlTranslation('Relic')}
+                                        />
+
+                                        <SuggestTranslationButton stringToTranslate={pickedRelic}/>
+                                    </div>
+                                </div>
                             )
                         }
                     )
@@ -168,13 +178,35 @@ export const CampaignMonsters = () => {
                             return (
                                 <div key={`default-monster-${index}`}>
                                     <div className={styles.defaultMonsterLine}>
-                                        <div className="list">
-                                            <input type="text" readOnly value={monsterName} disabled
-                                                   className={'input'}
-                                            />
-                                        </div>
+                                        <input type="text" readOnly value={getMonsterNameTranslation(monsterName)}
+                                               disabled
+                                               className={'input'}
+                                        />
 
-                                        <SuggestTranslationButton stringToTranslate={monsterName} />
+                                        <ModalPortal modalComponent={
+                                            () => (
+                                                <MonsterCard monsterName={monsterName}/>
+                                            )
+                                        } openModalButtonComponent={
+                                            (onOpen) => (
+                                                <div className={styles.monsterPreviewIcon} onClick={onOpen}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width={16}
+                                                        height={16}
+                                                        fill="currentColor"
+                                                        className="bi bi-eye"
+                                                    >
+                                                        <path
+                                                            d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                                        <path
+                                                            d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                                    </svg>
+                                                </div>
+                                            )
+                                        }/>
+
+                                        <SuggestTranslationButton stringToTranslate={monsterName}/>
 
                                         <div className={styles.br}>
                                             {getMonsterGroupBr(monsterName)}
@@ -227,14 +259,14 @@ export const CampaignMonsters = () => {
                                                onOpenGroupPicked(monsterName)
                                            }}
                                            checked={isMonsterPicked}
-                                           className={isDisabled ? styles.disabled : undefined }
+                                           className={isDisabled ? styles.disabled : undefined}
                                     />
 
-                                    <input type="text" readOnly value={monsterName}
+                                    <input type="text" readOnly value={getMonsterNameTranslation(monsterName)}
                                            onClick={() => {
                                                onOpenGroupPicked(monsterName)
                                            }}
-                                           className={ classNames({[styles.disabled]: isDisabled}, 'input')}
+                                           className={classNames({[styles.disabled]: isDisabled}, 'input')}
                                     />
 
                                     <ModalPortal modalComponent={
@@ -260,7 +292,7 @@ export const CampaignMonsters = () => {
                                         )
                                     }/>
 
-                                    <SuggestTranslationButton stringToTranslate={monsterName} />
+                                    <SuggestTranslationButton stringToTranslate={monsterName}/>
 
                                     <div className={styles.br}>
                                         {getMonsterGroupBr(monsterName)}

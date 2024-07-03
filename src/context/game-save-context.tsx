@@ -32,6 +32,7 @@ export const INITIAL_GAME_PICKS: GameSavePicks = {
     overlordPicks: Initial_Overlord_Picks,
     heroesPicks: Heroes_Current_Picks_Initial_State,
     gold: 0,
+    language: 'en'
 }
 
 export const GameSaveContext = createContext<GameSavePicks>(INITIAL_GAME_PICKS);

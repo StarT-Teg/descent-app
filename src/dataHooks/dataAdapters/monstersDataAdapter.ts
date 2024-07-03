@@ -1,6 +1,13 @@
-import {ExcelDataRaw, MonstersDataAdapted, MonstersDataParametersEnum, MonsterTraitNamesEnum} from "../../shared";
+import {
+    ExcelDataRaw,
+    MonstersDataAdapted,
+    MonstersDataParametersEnum,
+    MonsterTraitNamesEnum,
+    TranslationDataAdaptedInterface
+} from "../../shared";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const monstersDataAdapter = (data?: ExcelDataRaw): MonstersDataAdapted => {
+export const monstersDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): MonstersDataAdapted => {
 
     return data?.values?.reduce((acc: MonstersDataAdapted, row, rowIndex) => {
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
@@ -38,6 +45,7 @@ export const monstersDataAdapter = (data?: ExcelDataRaw): MonstersDataAdapted =>
                     '4': Number(row[39])
                 },
                 [MonstersDataParametersEnum.br]: row[42],
+                translation: {...getTranslationData({name: monsterName}, translation),}
             };
 
             return {

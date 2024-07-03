@@ -1,7 +1,14 @@
-import {ExcelDataRaw, LieutenantActData, LieutenantDataParametersEnum, LieutenantsDataAdapted} from "../../shared";
+import {
+    ExcelDataRaw,
+    LieutenantActData,
+    LieutenantDataParametersEnum,
+    LieutenantsDataAdapted,
+    TranslationDataAdaptedInterface
+} from "../../shared";
 import {floatClearing} from "../../helpers";
+import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const lieutenantsDataAdapter = (data?: ExcelDataRaw): LieutenantsDataAdapted => {
+export const lieutenantsDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): LieutenantsDataAdapted => {
 
     return data?.values?.reduce((acc: LieutenantsDataAdapted, row, rowIndex) => {
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
@@ -57,6 +64,7 @@ export const lieutenantsDataAdapter = (data?: ExcelDataRaw): LieutenantsDataAdap
                     [LieutenantDataParametersEnum.name]: lieutenantName,
                     [LieutenantDataParametersEnum.expansion]: row[3],
                     [LieutenantDataParametersEnum.description]: row[4],
+                    translation: {...getTranslationData({name: lieutenantName}, translation)},
                     ['act' + lieutenantAct]: lieutenant
                 }
             }

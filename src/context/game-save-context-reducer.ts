@@ -37,7 +37,7 @@ interface setGold {
 
 interface setLanguage {
     actionType: GameSaveReducerActionTypeEnum.changeLanguage;
-    payload?: string;
+    payload: string;
 }
 
 interface setTranslation {
@@ -45,7 +45,14 @@ interface setTranslation {
     payload?: TranslationDataAdaptedInterface;
 }
 
-export type GameSaveReducerActions = setAllPicks | setHeroesPicks | setOverlordPicks | setCampaignPicks | setGold | setTranslation | setLanguage;
+export type GameSaveReducerActions =
+    setAllPicks
+    | setHeroesPicks
+    | setOverlordPicks
+    | setCampaignPicks
+    | setGold
+    | setTranslation
+    | setLanguage;
 
 export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveReducerActions): GameSavePicks => {
 

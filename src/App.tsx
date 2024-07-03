@@ -7,8 +7,7 @@ import {ChoosePlayerButtons} from "./components/ChoosePlayerButtons/ChoosePlayer
 import {OverlordBench} from "./components/OverlordBench/OverlordBench";
 import {useOverlordDataDispatchContext} from "./context/overlord-data-context";
 import {Header} from "./components/Header/Header";
-import {useGetData} from "./dataHooks";
-import {useGetGameSave} from "./dataHooks";
+import {useGetData, useGetGameSave} from "./dataHooks";
 import {useGameSaveDispatchContext} from "./context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "./context/game-save-context-reducer";
 import {useQuery} from "./helpers/hooks/useQuery";
@@ -122,10 +121,10 @@ export const App = () => {
                 payload: {
                     overlordCards: overlordDecksDataAdapted(overlordDecksData, translation),
                     plotCards: undefined,
-                    lieutenants: lieutenantsDataAdapter(lieutenantsData),
-                    relics: overlordRelicsDataAdapter(relicsData),
+                    lieutenants: lieutenantsDataAdapter(lieutenantsData, translation),
+                    relics: overlordRelicsDataAdapter(relicsData, translation),
                     agents: agentsDataAdapter(agentsData),
-                    monsters: monstersDataAdapter(monstersData),
+                    monsters: monstersDataAdapter(monstersData, translation),
                     campaignsData: campaignsDataAdapted(campaignData, translation),
                     abilitiesData: abilitiesDataAdapted(abilitiesData, translation),
                 }, actionType: DataReducerActionsEnum.update

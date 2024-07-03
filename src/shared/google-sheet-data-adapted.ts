@@ -47,12 +47,12 @@ export interface MissionDataAdapted {
         missionName?: { [key in string]?: string }
     },
     'encounters'?: {
-        [key in number]: EncounterData;
+        [key in string]: EncounterData;
     }
 }
 
 export interface EncounterData {
-    [CampaignsDataParametersEnum.encounterNumber]: number,
+    [CampaignsDataParametersEnum.encounterNumber]: string,
     [CampaignsDataParametersEnum.lieutenants]: string[],
     [CampaignsDataParametersEnum.monsters]: string[],
     [CampaignsDataParametersEnum.openGroupsAmount]: number,
@@ -86,6 +86,7 @@ export interface LieutenantData {
     [LieutenantDataParametersEnum.name]: string;
     [LieutenantDataParametersEnum.expansion]: string,
     [LieutenantDataParametersEnum.description]: string,
+    translation?: { name?: { [key in string]: string } };
 
     'act1'?: LieutenantActData;
     'act2'?: LieutenantActData;
@@ -187,6 +188,7 @@ export interface MonsterData {
     };
     [MonstersDataParametersEnum.br]: string;
     serialNumber?: string;
+    translation?: { name?: { [key in string]: string } };
 }
 
 
@@ -198,6 +200,7 @@ export interface OverlordRelicsDataAdapted {
         [OverlordRelicDataParametersEnum.traits]?: string;
         [OverlordRelicDataParametersEnum.surgeAbilities]?: string;
         [OverlordRelicDataParametersEnum.br]: number;
+        translation?: { name?: { [key in string]: string } };
     }
 }
 

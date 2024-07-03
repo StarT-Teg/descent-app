@@ -16,6 +16,8 @@ export const CampaignSetup = () => {
     const {getControlTranslation} = useGetControlTranslation()
 
     const {campaignPicks, overlordPicks, language} = useGameSaveContext();
+    const {selectedCampaign: selectedCampaignFromContext, selectedMission: selectedMissionFromContext} = campaignPicks;
+
     const dispatch = useGameSaveDispatchContext();
 
     const getCampaignTranslation = (campaignName: string | undefined) => {
@@ -35,9 +37,13 @@ export const CampaignSetup = () => {
     }
 
     const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => (toSelectOption(campaignName, getCampaignTranslation(campaignName))!))
-    const availableActs = [{value: 1, label: `${getControlTranslation('Act')} 1`}, {value: 2, label: `${getControlTranslation('Act')} 2`}]
+    const availableActs = [{value: 1, label: `${getControlTranslation('Act')} 1`}, {
+        value: 2,
+        label: `${getControlTranslation('Act')} 2`
+    }]
     const [availableMissions, setAvailableMissions] = useState<SelectionOptionInterface[] | undefined>(undefined);
-    const availableEncounters = [{value: 1, label: `${getControlTranslation('Encounter')} 1`}, {value: 2, label: `${getControlTranslation('Encounter')} 2`}]
+    const availableEncounters = Object.keys(campaignsData?.[selectedCampaignFromContext || '']?.[selectedMissionFromContext || '']?.encounters || {})
+        .map(encounter => toSelectOption(encounter, `${getControlTranslation('Encounter')} ${encounter}`)!)
 
     const selectedCampaign: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedCampaign, getCampaignTranslation(campaignPicks?.selectedCampaign));
     const selectedAct: SelectionOptionInterface | null = toSelectOption(campaignPicks?.selectedAct, `${getControlTranslation('Act')} ${campaignPicks.selectedAct}`);
@@ -60,7 +66,8 @@ export const CampaignSetup = () => {
             if (!!newCampaignPicks.selectedMission && !!campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission]) {
                 const missionName = newCampaignPicks.selectedMission;
 
-                newCampaignPicks.selectedEncounter = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {}).length < 2 ? 1 : newCampaignPicks?.selectedEncounter;
+                const encounters = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {});
+                newCampaignPicks.selectedEncounter = encounters.length < 2 ? encounters[0] : newCampaignPicks?.selectedEncounter;
                 newCampaignPicks.selectedAct = newCampaignPicks?.selectedAct || campaignsData?.[campaignName]?.[missionName]?.act;
 
                 if (campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission].act !== newCampaignPicks.selectedAct) {
