@@ -15,6 +15,7 @@ import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
 import {SuggestTranslationButton} from "../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../helpers/translationHelpers";
 import {HeroSheetFamiliars} from "./сomponents/HeroSheetFamiliars/HeroSheetFamiliars";
+import {useBrFunctions} from "../../helpers/hooks/useBrFunctions";
 
 export default function HeroSheet() {
 
@@ -24,6 +25,8 @@ export default function HeroSheet() {
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
 
     const {heroes, heroClasses, items} = useHeroesDataContext()
+
+    const {getSkillBr} = useBrFunctions();
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -183,7 +186,7 @@ export default function HeroSheet() {
                                     <legend>{getControlTranslation('Skills')}</legend>
 
                                     {heroAvailableSkills?.map((skillName: string, index) => {
-                                            const br = heroClasses?.[heroClassName]?.skills[skillName]?.br || heroClasses?.[heroSubclassName]?.skills[skillName]?.br || 0
+                                            const br = Math.round(getSkillBr(skillName));
                                             return (
                                                 <div className={styles.checkboxLine}
                                                      key={`${heroPlayerPosition}-skillBlock-${index}`}>
@@ -209,7 +212,7 @@ export default function HeroSheet() {
                                                     <SuggestTranslationButton stringToTranslate={skillName}/>
 
                                                     <div className={styles.br}>
-                                                        BR: {br}
+                                                        {br}
                                                     </div>
                                                 </div>
                                             )

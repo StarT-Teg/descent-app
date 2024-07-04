@@ -107,9 +107,9 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
                                                key={`${heroPosition}-item-${itemName}-${index}`}
                                                onClick={onOpen}
                                         />
-                                        <SuggestTranslationButton stringToTranslate={itemName} />
+                                        <SuggestTranslationButton stringToTranslate={itemName}/>
                                         <div className={styles.br}>
-                                            BR: {itemBr}
+                                            {itemBr}
                                         </div>
                                     </div>
                                 )

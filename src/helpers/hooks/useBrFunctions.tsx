@@ -18,6 +18,14 @@ export function useBrFunctions() {
     const numberOfHeroes = Object.keys(heroesPicks).length;
     const currentAct = ('act' + selectedAct) as 'act1' | 'act2';
 
+    const skillList = Object.values(heroClasses).reduce((acc: { [key in string]: string }, classData) => {
+        const skills = Object.values(classData.skills).reduce((acc: { [key in string]: string }, skillData) => ({
+            ...acc,
+            [skillData.skillName]: skillData.br
+        }), {});
+        return {...acc, ...skills}
+    }, {})
+
     function getMonsterGroupBr(monsterName: string, customSelectedAct?: 1 | 2) {
         if (!selectedAct && !customSelectedAct) {
             return 0;
@@ -70,14 +78,6 @@ export function useBrFunctions() {
 
         if (!!heroPicks?.heroSkills?.length) {
             heroPicks.heroSkills.forEach((skillName) => {
-                const skillList = Object.values(heroClasses).reduce((acc: { [key in string]: string }, classData) => {
-                    const skills = Object.values(classData.skills).reduce((acc: { [key in string]: string }, skillData) => ({
-                        ...acc,
-                        [skillData.skillName]: skillData.br
-                    }), {});
-                    return {...acc, ...skills}
-                }, {})
-
                 heroBr += floatClearing(skillList[skillName])
             })
         }
@@ -167,12 +167,17 @@ export function useBrFunctions() {
         return Math.round(floatClearing(items[itemName]?.br));
     }
 
+    function getSkillBr(skillName: string) {
+        return floatClearing(skillList[skillName]);
+    }
+
     return {
         getMonsterGroupBr,
         getLieutenantBr,
         getHeroBr,
         getOverlordBr,
         getOverlordAvailableBr,
-        getItemBr
+        getItemBr,
+        getSkillBr
     }
 }

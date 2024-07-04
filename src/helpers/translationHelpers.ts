@@ -23,6 +23,8 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Mission': {ru: 'Миссия'},
     'Encounter': {ru: 'Столкновение'},
     'Basic': {ru: 'Базовая'},
+    'Basic I': {ru: 'Базовая I'},
+    'Basic II': {ru: 'Базовая II'},
     'Choose basic deck': {ru: 'Выберите Базовую Колоду'},
     'Available cards': {ru: 'Купленные карты'},
     'Monster serial numbers': {ru: 'Серийные Номера Монстров'},
