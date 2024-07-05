@@ -90,10 +90,12 @@ export const CampaignMonsters = () => {
 
     return (
         <>
-            <fieldset>
-                <legend>{getControlTranslation('Monster serial numbers')}</legend>
-                <p className="input">{[...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master?.serialNumber).filter(monsterBr => !!monsterBr).sort((a, b) => (Number(a) - Number(b))).join(', ')}</p>
-            </fieldset>
+            {!![...defaultMonsters, ...pickedMonsters]?.length && (
+                <fieldset>
+                    <legend>{getControlTranslation('Monster serial numbers')}</legend>
+                    <p className="input">{[...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master?.serialNumber).filter(monsterBr => !!monsterBr).sort((a, b) => (Number(a) - Number(b))).join(', ')}</p>
+                </fieldset>
+            )}
 
             {!!defaultLieutenants.length && (
                 <fieldset>
@@ -240,7 +242,9 @@ export const CampaignMonsters = () => {
             <fieldset>
                 <legend>{`${getControlTranslation('Open Groups')} ( ${openGroupsLimit} )`}</legend>
 
-                <MonsterShowcase/>
+                {!!openGroupMonsters?.length && (
+                    <MonsterShowcase/>
+                )}
 
                 {openGroupMonsters.map((monsterName: string, index) => {
                         const isMonsterPicked = pickedMonsters?.includes(monsterName);

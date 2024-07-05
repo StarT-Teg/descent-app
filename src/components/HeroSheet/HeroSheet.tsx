@@ -12,10 +12,9 @@ import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-red
 import {Accordion, AccordionItem, Button} from "../shared";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
-import {SuggestTranslationButton} from "../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../helpers/translationHelpers";
 import {HeroSheetFamiliars} from "./сomponents/HeroSheetFamiliars/HeroSheetFamiliars";
-import {useBrFunctions} from "../../helpers/hooks/useBrFunctions";
+import {HeroSheetSkills} from "./сomponents/HeroSheetSkills";
 
 export default function HeroSheet() {
 
@@ -25,8 +24,6 @@ export default function HeroSheet() {
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
 
     const {heroes, heroClasses, items} = useHeroesDataContext()
-
-    const {getSkillBr} = useBrFunctions();
 
     const gameSaveContext = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -179,61 +176,7 @@ export default function HeroSheet() {
                     </AccordionItem>
 
                     <AccordionItem header={getControlTranslation('Skills')} disabled={!heroAvailableSkills?.length}>
-                        {!!heroAvailableSkills?.length && (
-
-                            <div className="sub-grid">
-                                <fieldset>
-                                    <legend>{getControlTranslation('Skills')}</legend>
-
-                                    {heroAvailableSkills?.map((skillName: string, index) => {
-                                            const br = Math.round(getSkillBr(skillName));
-                                            return (
-                                                <div className={styles.checkboxLine}
-                                                     key={`${heroPlayerPosition}-skillBlock-${index}`}>
-                                                    <input type="checkbox" id={`${heroPlayerPosition}-skill-${skillName}`}
-                                                           key={`${heroPlayerPosition}-skill-${skillName}-${index}`}
-                                                           onChange={() => {
-                                                               const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
-                                                               handleChangePlayerPicks({heroSkills: newSkills})
-                                                           }}
-
-                                                           checked={heroSkills.includes(skillName)}
-                                                    />
-
-                                                    <input type="text" readOnly value={skillName}
-                                                           key={`${heroPlayerPosition}-skill-${skillName}-br-${index}`}
-                                                           onClick={() => {
-                                                               const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
-                                                               handleChangePlayerPicks({heroSkills: newSkills})
-                                                           }}
-                                                           className={'input'}
-                                                    />
-
-                                                    <SuggestTranslationButton stringToTranslate={skillName}/>
-
-                                                    <div className={styles.br}>
-                                                        {br}
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                    )
-                                    }
-
-                                </fieldset>
-                            </div>
-
-                            // <HeroSheetSkills
-                            //     familiars={familiars}
-                            //     pickedSkills={heroSkills}
-                            //     availableSkillsList={heroAvailableSkills}
-                            //     heroPosition={heroPlayerPosition}
-                            //     onCheckboxChange={(checkedSkillName) => {
-                            //         const newSkills = heroSkills.includes(checkedSkillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== checkedSkillName))] : [...heroSkills, checkedSkillName]
-                            //         handleChangePlayerPicks({heroSkills: newSkills})
-                            //     }}
-                            // />
-                        )}
+                        <HeroSheetSkills/>
                     </AccordionItem>
 
                     <AccordionItem header={getControlTranslation('Items')}>

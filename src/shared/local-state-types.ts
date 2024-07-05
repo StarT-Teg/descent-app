@@ -8,6 +8,7 @@ import {
     LieutenantsDataAdapted,
     MonstersDataAdapted,
     OverlordCardsDataAdapted,
+    OverlordPlotCardsDataAdapted,
     OverlordRelicsDataAdapted,
     TranslationDataAdaptedInterface
 } from "./google-sheet-data-adapted";
@@ -22,7 +23,7 @@ export interface HeroesDataInterface {
 
 export interface OverlordDataInterface {
     overlordCards: OverlordCardsDataAdapted;
-    plotCards: unknown;
+    plotCards: OverlordPlotCardsDataAdapted;
     lieutenants: LieutenantsDataAdapted;
     relics: OverlordRelicsDataAdapted;
     agents: unknown;
@@ -40,6 +41,8 @@ export enum HeroPlayersEnum {
 
 export type CurrentOverlordPicks = {
     basicDeck?: OverlordBasicDecksEnum;
+    plotDeck?: string;
+    pickedPlotCards?: string[];
     purchasedCards?: string[];
     pickedCards?: string[];
     pickedMonsters?: string[];

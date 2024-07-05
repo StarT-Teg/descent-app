@@ -3,7 +3,7 @@ import {useQuery, UseQueryResult} from "react-query";
 import {GameDataInterface} from "../shared";
 
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
-    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A:B', 'vote4TRAITS!A:C', 'vote4SURGE!A:C', 'vote4ACTIONS!A:C', 'Agents'].join('&ranges=');
+    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A:B', 'vote4TRAITS!A:C', 'vote4SURGE!A:C', 'vote4ACTIONS!A:C', 'Agents', 'Plot Deck!A:F'].join('&ranges=');
 
     const params = {
         valueRenderOption: 'FORMATTED_VALUE',
@@ -30,6 +30,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
                         values: [...(response.data?.valueRanges?.[10].values || []), ...(response.data?.valueRanges?.[11].values || []), ...(response.data?.valueRanges?.[12].values || [])]
                     },
                     agentsData: response.data?.valueRanges?.[13],
+                    plotDeckData: response.data?.valueRanges?.[14],
                 }
             )
         });

@@ -8,12 +8,12 @@ import {getHeroFamiliars} from "../heroesHelpers";
 
 export function useBrFunctions() {
 
-    const {campaignsData, overlordCards, monsters, lieutenants, relics} = useOverlordDataContext();
+    const {campaignsData, overlordCards, monsters, lieutenants, relics, plotCards} = useOverlordDataContext();
     const {heroes, heroClasses, items, familiars} = useHeroesDataContext()
 
     const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
-    const {pickedCards, pickedMonsters, pickedRelics, customActPicks} = overlordPicks;
+    const {pickedCards, pickedMonsters, pickedRelics, customActPicks, pickedPlotCards, plotDeck} = overlordPicks;
 
     const numberOfHeroes = Object.keys(heroesPicks).length;
     const currentAct = ('act' + selectedAct) as 'act1' | 'act2';
@@ -123,6 +123,12 @@ export function useBrFunctions() {
             if (pickedCards?.includes('Ties That Bind')) {
                 overlordBr += getMonsterGroupBr('Scourge')
             }
+        }
+
+        if (!!pickedPlotCards?.length) {
+            pickedPlotCards?.forEach(plotCardName => {
+                overlordBr += plotCards?.[plotDeck || '']?.[plotCardName]?.br || 0;
+            })
         }
 
         if (!!pickedMonsters?.length && !!campaignPicks?.selectedAct) {

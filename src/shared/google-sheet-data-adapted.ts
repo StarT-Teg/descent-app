@@ -22,6 +22,7 @@ export enum GameDataEnum {
     abilitiesData = 'abilitiesData',
     translation = 'translation',
     agentsData = 'agentsData',
+    plotDeckData = 'plotDeckData',
 }
 
 export type GameDataInterface = {
@@ -63,6 +64,23 @@ export interface EncounterData {
 
 export interface OverlordCardsDataAdapted {
     [key: string]: OverlordDeckSkill;
+}
+
+export type OverlordPlotCardsDataAdapted = {
+    [packName in string]?: {
+        [cardName in string]?: {
+            cardName: string;
+            packName: string;
+            buyCost: number;
+            playCost: number;
+            description: string;
+            br: number;
+            translations: {
+                cardName: { [language in string]: string };
+                packName: { [language in string]: string }
+            };
+        }
+    };
 }
 
 export interface OverlordDeckSkill {

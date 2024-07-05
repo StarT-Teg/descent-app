@@ -13,6 +13,7 @@ import {useHeroesDataContext} from "../../../../context";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {BrButton} from "../../../BrButton/BrButton";
 
 
 export interface ItemsBundleViewProps {
@@ -27,7 +28,6 @@ export interface ItemsBundleViewProps {
 export const HeroSheetItems = (props: ItemsBundleViewProps) => {
 
     const {
-        itemList,
         heroItems,
         handleChangeHeroItems,
         heroPosition
@@ -35,6 +35,8 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
 
     const {items} = useHeroesDataContext();
     const {language} = useGameSaveContext()
+
+    const itemList = Object.keys(items)
 
     const {getControlTranslation} = useGetControlTranslation()
 
@@ -74,7 +76,7 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
             <fieldset>
                 <legend>{getControlTranslation('Items')}</legend>
 
-                <MultiSelect options={itemOptions} selectedOptions={selectedItems} onItemsChange={onItemSelect}/>
+                <MultiSelect options={itemOptions} value={selectedItems} onItemsChange={onItemSelect}/>
 
                 {heroItems?.map((itemName: string, index) => {
                         const itemBr = getItemBr(itemName);
@@ -108,9 +110,7 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
                                                onClick={onOpen}
                                         />
                                         <SuggestTranslationButton stringToTranslate={itemName}/>
-                                        <div className={styles.br}>
-                                            {itemBr}
-                                        </div>
+                                        <BrButton br={itemBr}/>
                                     </div>
                                 )
                             }/>

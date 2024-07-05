@@ -1,6 +1,7 @@
 import Select, {ActionMeta, OnChangeValue, StylesConfig} from "react-select";
 import {SelectionOptionInterface} from "../../../../../shared";
 import React from "react";
+import {PublicBaseSelectProps} from "react-select/dist/declarations/src/Select";
 
 const orderOptions = (values: readonly SelectionOptionInterface[]) => {
     return values
@@ -22,19 +23,17 @@ const selectStyles: StylesConfig<SelectionOptionInterface, true> = {
     },
 };
 
-export interface MultiSelectProps {
-    options: SelectionOptionInterface[];
-    selectedOptions?: SelectionOptionInterface[] | null;
-
+export interface MultiSelectProps extends Partial<PublicBaseSelectProps<SelectionOptionInterface, true, any>> {
     onItemsChange?(items: SelectionOptionInterface[]): void;
 }
 
 export const MultiSelect = (props: MultiSelectProps) => {
 
     const {
-        options,
-        selectedOptions = null,
+        options = [],
+        value = null,
         onItemsChange,
+        ...otherProps
     } = props;
 
     const onChange = (
@@ -53,22 +52,23 @@ export const MultiSelect = (props: MultiSelectProps) => {
                 break;
         }
 
-        !!onItemsChange && onItemsChange(orderOptions(newValue));
+        onItemsChange?.(orderOptions(newValue));
     };
 
 
     return (
         <Select
-            value={selectedOptions}
+            value={value}
             isMulti
             styles={selectStyles}
             isClearable={false}
             className="multiSelect"
             classNamePrefix="select"
-            onChange={onChange}
             options={orderOptions(options)}
             blurInputOnSelect={false}
             closeMenuOnSelect={false}
+            {...otherProps}
+            onChange={onChange}
         />
     )
 }

@@ -32,7 +32,7 @@
 
 .checkboxLine {
     display: grid;
-    grid-template-columns: auto 1fr 42px 50px;
+    grid-auto-flow: column;
     grid-column-gap: 4px;
 }
 

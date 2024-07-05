@@ -26,7 +26,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Basic I': {ru: 'Базовая I'},
     'Basic II': {ru: 'Базовая II'},
     'Choose basic deck': {ru: 'Выберите Базовую Колоду'},
-    'Available cards': {ru: 'Купленные карты'},
+    'Available cards': {ru: 'Доступные карты'},
     'Monster serial numbers': {ru: 'Серийные Номера Монстров'},
     'Lieutenants': {ru: 'Лейтенанты'},
     'Relic': {ru: 'Реликвия'},
@@ -35,7 +35,10 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Monster Showcase': {ru: 'Витрина Монстров'},
     'Send Translation': {ru: 'Отправить перевод'},
     'Overlord': {ru: 'Властелин'},
-    'Hero': {ru: 'Герой'}
+    'Hero': {ru: 'Герой'},
+    'Choose Overlord Cards': {ru: 'Выберите Карты Властелина'},
+    'Plot Deck': {ru: 'Колода Замыслов'},
+    'Choose Plot Deck': {ru: 'Выберите Колоду Замыслов'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

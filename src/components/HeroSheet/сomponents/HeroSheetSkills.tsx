@@ -1,69 +1,101 @@
-import React from "react";
-import {HeroPlayersEnum} from "../../../shared";
+import React, {useEffect, useState} from "react";
+import styles from "../hero-sheet.module.css";
+import {SuggestTranslationButton} from "../../SuggestTranslationButton/SuggestTranslationButton";
+import {HeroPlayerPicks, HeroPlayersEnum} from "../../../shared";
+import {useParams} from "react-router-dom";
+import {useBrFunctions} from "../../../helpers/hooks/useBrFunctions";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../../context/game-save-context";
+import {useGetControlTranslation} from "../../../helpers/translationHelpers";
+import {GameSaveReducerActionTypeEnum} from "../../../context/game-save-context-reducer";
+import {useHeroesDataContext} from "../../../context";
 
-export interface SkillsBundleViewProps {
-    familiars?: string[]
-    pickedSkills?: string[]
-    availableSkillsList?: string[],
-    heroPosition: HeroPlayersEnum,
+export const HeroSheetSkills = () => {
 
-    onCheckboxChange(skillName: string): void,
-}
+    const {playerRole} = useParams();
+    const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
-export const HeroSheetSkills = (props: SkillsBundleViewProps) => {
+    const {heroClasses} = useHeroesDataContext()
+    const gameSaveContext = useGameSaveContext();
+    const dispatchPlayersPick = useGameSaveDispatchContext();
+
+    const playerPicks = gameSaveContext.heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
+
+    const {getSkillBr} = useBrFunctions();
+    const {getControlTranslation} = useGetControlTranslation();
+
 
     const {
-        pickedSkills = [],
-        availableSkillsList = [],
-        familiars = [],
-        heroPosition,
-        onCheckboxChange
-    } = props;
+        heroSkills = [],
+    } = playerPicks;
+
+    const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(heroSkills);
+
+    const handleChangeHeroSkills = (heroSkills: string[]) => {
+        dispatchPlayersPick({
+            actionType: GameSaveReducerActionTypeEnum.changeHeroesPicks,
+            payload: {
+                heroesPicks: {
+                    [heroPlayerPosition]: {
+                        ...playerPicks,
+                        heroSkills,
+                    }
+                }
+            }
+        })
+    }
+
+    useEffect(() => {
+
+        const classSkillList = Object.keys(heroClasses[playerPicks?.heroClassName || '']?.skills || {});
+        const subclassSkillList = Object.keys(heroClasses[playerPicks?.heroSubclassName || '']?.skills || {})
+
+        setHeroAvailableSkills([...classSkillList, ...subclassSkillList])
+
+    }, [playerPicks.heroClassName, heroClasses])
+
+    if (!heroAvailableSkills?.length) {
+        return null;
+    }
 
     return (
-        <div className="sub-grid">
-            <fieldset>
-                <legend>Familiars</legend>
+        <fieldset>
+            <legend>{getControlTranslation('Skills')}</legend>
 
-                {familiars?.map((familiarName: string, index) => {
-                        return (
-                            <div className="list" key={`${heroPosition}-familiar-${index}`}>
-                                <input type="text" readOnly value={familiarName}
-                                       className={'input'}
-                                />
-                            </div>
-                        )
-                    }
-                )
-                }
-
-            </fieldset>
-            <fieldset>
-                <legend>Skills</legend>
-
-                {availableSkillsList?.map((skill: string, index) => {
+            {heroAvailableSkills?.map((skillName: string, index) => {
+                    const br = Math.round(getSkillBr(skillName));
                     return (
-                        <div className="list" key={`${heroPosition}-skillBlock-${index}`}>
-                            {/*{brBeautifier(props.skills[skill]?.br, "br" + index)}*/}
-                            <input type="checkbox" id={`${heroPosition}-skill-${skill}`}
-                                // defaultChecked={skills[skill]?.['xp cost'] === 0}
-                                   key={`${heroPosition}-skill-${skill}-${index}`}
-                                   onChange={() => onCheckboxChange(skill)}
-                                   checked={pickedSkills.includes(skill)}
-                            />
-                            {/*<label htmlFor={skill} key={"label" + index}> {skill} </label>*/}
-                                <input type="text" readOnly value={skill}
-                                       key={`${heroPosition}-skill-${skill}-br-${index}`}
-                                       onClick={() => onCheckboxChange(skill)}
-                                       className={'input'}
-                                />
-                            </div>
-                        )
-                    }
-                )
-                }
+                        <div className={styles.checkboxLine}
+                             key={`${heroPlayerPosition}-skillBlock-${index}`}>
+                            <input type="checkbox" id={`${heroPlayerPosition}-skill-${skillName}`}
+                                   key={`${heroPlayerPosition}-skill-${skillName}-${index}`}
+                                   onChange={() => {
+                                       const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                       handleChangeHeroSkills([...newSkills])
+                                   }}
 
-            </fieldset>
-        </div>
+                                   checked={heroSkills.includes(skillName)}
+                            />
+
+                            <input type="text" readOnly value={skillName}
+                                   key={`${heroPlayerPosition}-skill-${skillName}-br-${index}`}
+                                   onClick={() => {
+                                       const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                       handleChangeHeroSkills(newSkills)
+                                   }}
+                                   className={'input'}
+                            />
+
+                            <SuggestTranslationButton stringToTranslate={skillName}/>
+
+                            <div className={styles.br}>
+                                {br}
+                            </div>
+                        </div>
+                    )
+                }
+            )
+            }
+
+        </fieldset>
     )
 }

@@ -7,7 +7,7 @@ export const Overlord_Data_Initial_State: OverlordDataInterface = {
     lieutenants: {},
     monsters: {},
     overlordCards: {},
-    plotCards: undefined,
+    plotCards: {},
     relics: {},
     campaignsData: {},
     abilitiesData: {}

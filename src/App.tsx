@@ -26,6 +26,7 @@ import {abilitiesDataAdapted} from "./dataHooks/dataAdapters/abilitiesDataAdapte
 import {translationDataAdapted} from "./dataHooks/dataAdapters/translationDataAdapted";
 import {useGetTranslation} from "./dataHooks/useGetTranslation";
 import {agentsDataAdapter} from "./dataHooks/dataAdapters/agentsDataAdapter";
+import {plotCardsDataAdapted} from "./dataHooks/dataAdapters/plotCardsDataAdapted";
 
 export const App = () => {
 
@@ -104,6 +105,7 @@ export const App = () => {
                 familiars,
                 abilitiesData,
                 agentsData,
+                plotDeckData
             } = gameData;
 
             const translation = translationDataAdapted(translationData);
@@ -120,7 +122,7 @@ export const App = () => {
             dispatchOverlordData({
                 payload: {
                     overlordCards: overlordDecksDataAdapted(overlordDecksData, translation),
-                    plotCards: undefined,
+                    plotCards: plotCardsDataAdapted(plotDeckData, translation),
                     lieutenants: lieutenantsDataAdapter(lieutenantsData, translation),
                     relics: overlordRelicsDataAdapter(relicsData, translation),
                     agents: agentsDataAdapter(agentsData),

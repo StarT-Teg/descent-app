@@ -52,7 +52,7 @@ export const OverlordDeck = () => {
         label: `${getControlTranslation('Basic')} II`,
     }]
 
-    const selectedCards = overlordPicks?.purchasedCards?.map(cardName => toSelectOption(cardName, getTranslation(cardName, 'name'), ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!);
+    const selectedCards = overlordPicks?.purchasedCards?.map(cardName => toSelectOption(cardName, getTranslation(cardName, 'name'), ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!) || null;
 
     const dispatchOverlordPicks = (newOverlordPicks: CurrentOverlordPicks) => {
         dispatch({
@@ -112,9 +112,11 @@ export const OverlordDeck = () => {
                 placeholder={getControlTranslation('Choose basic deck')}
             />
 
-            <MultiSelect options={overlordCardsOptions} selectedOptions={selectedCards} onItemsChange={(newValue) => {
-                dispatchOverlordPicks({purchasedCards: newValue.map(cardData => cardData.value)})
-            }}/>
+            <MultiSelect options={overlordCardsOptions} value={selectedCards}
+                         placeholder={getControlTranslation('Choose Overlord Cards')}
+                         onItemsChange={(newValue) => {
+                             dispatchOverlordPicks({purchasedCards: newValue.map(cardData => cardData.value)})
+                         }}/>
 
             {!!overlordPicks?.purchasedCards?.length && (
                 <fieldset>

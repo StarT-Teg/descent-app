@@ -8,6 +8,7 @@ import {useGameSaveContext} from "../../context/game-save-context";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useSetSaveAndUpdate} from "../../helpers/hooks/useSetSaveAndUpdate";
 import {useGetControlTranslation} from "../../helpers/translationHelpers";
+import {PlotDeck} from "./components/PlotDeck/PlotDeck";
 
 export const OverlordBench = () => {
 
@@ -32,6 +33,10 @@ export const OverlordBench = () => {
 
                 <AccordionItem header={getControlTranslation('Overlord Deck')}>
                     <OverlordDeck/>
+                </AccordionItem>
+
+                <AccordionItem header={getControlTranslation('Plot Deck')}>
+                    <PlotDeck/>
                 </AccordionItem>
 
                 <AccordionItem header={getControlTranslation('Army')}>
