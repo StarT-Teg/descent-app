@@ -34,7 +34,12 @@ export const PlotDeck = () => {
 
     const onPlotDeckPick = (plotDeckName: string | undefined) => {
         dispatch({
-            payload: {overlordPicks: {plotDeck: plotDeckName}},
+            payload: {
+                overlordPicks: {
+                    plotDeck: plotDeckName,
+                    pickedPlotCards: [...Object.values(plotCards[plotDeckName || ''] || {}).filter(plotDeckCard => plotDeckCard?.buyCost === 0).map(plotDeckCard => plotDeckCard?.cardName || '')]
+                }
+            },
             actionType: GameSaveReducerActionTypeEnum.changeOverlordPicks
         })
     }

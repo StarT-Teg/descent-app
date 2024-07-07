@@ -8,6 +8,7 @@ import {useGameSaveContext, useGameSaveDispatchContext} from "../../../context/g
 import {useGetControlTranslation} from "../../../helpers/translationHelpers";
 import {GameSaveReducerActionTypeEnum} from "../../../context/game-save-context-reducer";
 import {useHeroesDataContext} from "../../../context";
+import {BrButton} from "../../BrButton/BrButton";
 
 export const HeroSheetSkills = () => {
 
@@ -87,9 +88,7 @@ export const HeroSheetSkills = () => {
 
                             <SuggestTranslationButton stringToTranslate={skillName}/>
 
-                            <div className={styles.br}>
-                                {br}
-                            </div>
+                            <BrButton br={br}></BrButton>
                         </div>
                     )
                 }

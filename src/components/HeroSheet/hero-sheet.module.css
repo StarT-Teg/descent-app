@@ -1,8 +1,4 @@
 
-.root {
-
-}
-
 .hero-container {
     background-position: top;
     background-size: contain;
@@ -35,25 +31,3 @@
     grid-auto-flow: column;
     grid-column-gap: 4px;
 }
-
-.br {
-    display: flex;
-    align-items: center;
-
-    height: 100%;
-    width: 40px;
-
-    background-color: hsl(0, 0%, 100%);
-    border-color: black;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-
-    font-family: DescentFont, sans-serif !important;
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    padding: 0 8px;
-}
-

@@ -6,6 +6,7 @@ import {HeroPlayerPicks, HeroPlayersEnum} from "../../../../shared";
 import {useHeroesDataContext} from "../../../../context";
 import {getHeroFamiliars} from "../../../../helpers";
 import {useGameSaveContext} from "../../../../context/game-save-context";
+import {BrButton} from "../../../BrButton/BrButton";
 
 export const HeroSheetFamiliars = () => {
 
@@ -28,14 +29,15 @@ export const HeroSheetFamiliars = () => {
             <legend>{getControlTranslation('Familiars')}</legend>
 
             {heroAvailableFamiliars?.map((familiarName: string, index) => {
+                    const br = familiars?.[familiarName]?.br || 0;
                     return (
                         <div className={styles.checkboxLine}
                              key={`${heroPlayerPosition}-familiar-${index}`}>
-                            <input type="checkbox"
-                                   onChange={() => {
-                                   }}
-                                   checked={heroAvailableFamiliars?.includes(familiarName)}
-                            />
+                            {/*<input type="checkbox"*/}
+                            {/*       onChange={() => {*/}
+                            {/*       }}*/}
+                            {/*       checked={heroAvailableFamiliars?.includes(familiarName)}*/}
+                            {/*/>*/}
 
                             <input type="text" readOnly value={familiarName}
                                    onClick={() => {
@@ -43,9 +45,7 @@ export const HeroSheetFamiliars = () => {
                                    className={'input'}
                             />
 
-                            <div className={styles.br}>
-                                BR: {familiars?.[familiarName]?.br || 0}
-                            </div>
+                            <BrButton br={br}/>
                         </div>
                     )
                 }
