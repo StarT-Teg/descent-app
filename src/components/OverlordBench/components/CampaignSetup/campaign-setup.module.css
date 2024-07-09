@@ -1,7 +1,7 @@
 
 .listRow {
     display: grid;
-    grid-template-columns: 1fr min-content;
+    grid-auto-flow: column;
     grid-column-gap: 4px;
 }
 
