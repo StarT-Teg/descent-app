@@ -7,12 +7,13 @@ import {useHeroesDataContext} from "../../../../context";
 import {getHeroFamiliars} from "../../../../helpers";
 import {useGameSaveContext} from "../../../../context/game-save-context";
 import {BrButton} from "../../../BrButton/BrButton";
+import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 
 export const HeroSheetFamiliars = () => {
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
-    const {heroesPicks} = useGameSaveContext();
+    const {heroesPicks, language} = useGameSaveContext();
     const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
     const {familiars} = useHeroesDataContext()
@@ -23,6 +24,10 @@ export const HeroSheetFamiliars = () => {
     if (!heroAvailableFamiliars?.length) {
         return null;
     }
+
+    const getFamiliarNameTranslation = (familiarName: string) => (
+        familiars[familiarName]?.translation?.name?.[language] || familiarName
+    )
 
     return (
         <fieldset>
@@ -39,11 +44,13 @@ export const HeroSheetFamiliars = () => {
                             {/*       checked={heroAvailableFamiliars?.includes(familiarName)}*/}
                             {/*/>*/}
 
-                            <input type="text" readOnly value={familiarName}
+                            <input type="text" readOnly value={getFamiliarNameTranslation(familiarName)}
                                    onClick={() => {
                                    }}
                                    className={'input'}
                             />
+
+                            <SuggestTranslationButton stringToTranslate={familiarName}/>
 
                             <BrButton br={br}/>
                         </div>

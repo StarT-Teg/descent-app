@@ -19,5 +19,6 @@ export const useGetTranslation = (): UseQueryResult<ExcelDataRaw> => {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
+        refetchIntervalInBackground: false,
     })
 }

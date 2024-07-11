@@ -1,7 +1,7 @@
 import {ExcelDataRaw, HeroClassesDataAdapted, TranslationDataAdaptedInterface,} from "../../shared";
 import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface) => {
+export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): HeroClassesDataAdapted => {
 
     const heroClassesAdapted: HeroClassesDataAdapted = {};
 
@@ -35,6 +35,9 @@ export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: Transl
                             fatigueCost,
                             skillDescription,
                             br,
+                            translation: {
+                                ...getTranslationData({name: skillName}, translation),
+                            },
                         }
                     },
                 }

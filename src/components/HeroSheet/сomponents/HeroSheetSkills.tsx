@@ -16,10 +16,10 @@ export const HeroSheetSkills = () => {
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
     const {heroClasses} = useHeroesDataContext()
-    const gameSaveContext = useGameSaveContext();
+    const {heroesPicks, language} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
-    const playerPicks = gameSaveContext.heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
+    const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
     const {getSkillBr} = useBrFunctions();
     const {getControlTranslation} = useGetControlTranslation();
@@ -29,7 +29,17 @@ export const HeroSheetSkills = () => {
         heroSkills = [],
     } = playerPicks;
 
+    const skillList = Object.values(heroClasses).reduce((acc: { [key in string]?: { name?: { [key in string]?: string } } }, classData) => {
+        const skills = Object.values(classData.skills).reduce((acc: { [key in string]?: { name?: { [key in string]?: string } } }, skillData) => ({
+            ...acc,
+            [skillData.skillName]: skillData.translation
+        }), {});
+        return {...acc, ...skills}
+    }, {})
+
     const [heroAvailableSkills, setHeroAvailableSkills] = useState<string[] | undefined>(heroSkills);
+
+    const getSkillNameTranslation = (skillName: string) => (skillList?.[skillName]?.name?.[language] || skillName)
 
     const handleChangeHeroSkills = (heroSkills: string[]) => {
         dispatchPlayersPick({
@@ -73,11 +83,10 @@ export const HeroSheetSkills = () => {
                                        const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
                                        handleChangeHeroSkills([...newSkills])
                                    }}
-
                                    checked={heroSkills.includes(skillName)}
                             />
 
-                            <input type="text" readOnly value={skillName}
+                            <input type="text" readOnly value={getSkillNameTranslation(skillName)}
                                    key={`${heroPlayerPosition}-skill-${skillName}-br-${index}`}
                                    onClick={() => {
                                        const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]

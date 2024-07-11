@@ -293,4 +293,5 @@ export interface SkillClassDataAdapted {
     [HeroClassParametersEnum.fatigueCost]?: string,
     [HeroClassParametersEnum.skillDescription]: string,
     [HeroClassParametersEnum.br]: string,
+    translation?: { name?: { [key in string]: string } };
 }

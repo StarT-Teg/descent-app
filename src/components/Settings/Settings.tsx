@@ -56,16 +56,27 @@ export const Settings = () => {
         })
     }
 
-    const handleSendInviteLink = () => {
+    const handleSendInviteLink = async () => {
         const url = `${process.env.REACT_APP_BASE_PATH}?inviteUuid=${saveGameUuid}`
 
-        try {
-            // navigator.share({url}).then()
-            navigator.clipboard.writeText(url).then()
-        } catch (e) {
-            console.log('error:', e)
+        if (navigator?.share) {
+            try {
+                await navigator.share({url});
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
+    //     () => {
+    //     const url = `${process.env.REACT_APP_BASE_PATH}?inviteUuid=${saveGameUuid}`
+    //
+    //     try {
+    //         // navigator.share({url}).then()
+    //         navigator.clipboard.writeText(url).then()
+    //     } catch (e) {
+    //         console.log('error:', e)
+    //     }
+    // }
 
     // const handleExpansionsSettings = () => {
     //     navigate('/expansions')

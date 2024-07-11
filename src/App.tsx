@@ -115,7 +115,7 @@ export const App = () => {
                     heroes: heroesRawDataAdapter(heroesData, translation),
                     heroClasses: heroClassesDataAdapter(heroClassesData, translation),
                     items: itemsDataAdapter(itemsData, translation),
-                    familiars: familiarsDataAdapted(familiars),
+                    familiars: familiarsDataAdapted(familiars, translation),
                 }, actionType: DataReducerActionsEnum.update
             })
 
