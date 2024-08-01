@@ -1,0 +1,9 @@
+
+.multiSelect {
+    width: 100%;
+    height: fit-content;
+
+    text-align: center;
+
+    font-family: DescentFont, sans-serif !important;
+}

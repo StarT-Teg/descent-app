@@ -26,7 +26,11 @@ const CloseIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => 
     </svg>
 )
 
-export const ModalPortal = ({modalComponent, openModalButtonComponent, isAutoCloseDisabled = false}: ModalPropsInterface) => {
+export const ModalPortal = ({
+                                modalComponent,
+                                openModalButtonComponent,
+                                isAutoCloseDisabled = false
+                            }: ModalPropsInterface) => {
 
     const modalRef = useRef<any>(null)
     const [showModal, setShowModal] = useState(false);
@@ -57,7 +61,7 @@ export const ModalPortal = ({modalComponent, openModalButtonComponent, isAutoClo
     }, [modalRef, isAutoCloseDisabled])
 
     return (
-        <div>
+        <>
             {openModalButtonComponent(onOpen)}
             {showModal && createPortal(
                 <div className={styles.modalRoot} ref={modalRef} onClick={() => {
@@ -73,6 +77,6 @@ export const ModalPortal = ({modalComponent, openModalButtonComponent, isAutoClo
                 </div>,
                 document.getElementById('modal-root') || document.body
             )}
-        </div>
+        </>
     );
 }

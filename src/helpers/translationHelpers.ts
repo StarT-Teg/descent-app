@@ -39,6 +39,9 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Choose Overlord Cards': {ru: 'Выберите Карты Властелина'},
     'Plot Deck': {ru: 'Колода Замыслов'},
     'Choose Plot Deck': {ru: 'Выберите Колоду Замыслов'},
+    'Buy': {ru: 'Купить'},
+    'Sell': {ru: 'Продать'},
+    'Quit': {ru: 'Выйти'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

@@ -104,6 +104,12 @@ export function useBrFunctions() {
         return Math.round(heroBr);
     }
 
+    function getAllHeroesBr(): number {
+        return Object.values(HeroPlayersEnum).reduce((acc: number, heroPosition) => {
+            return acc + getHeroBr(heroPosition);
+        }, 0)
+    }
+
     function getOverlordBr() {
 
         let overlordBr: number = 0;
@@ -181,6 +187,7 @@ export function useBrFunctions() {
         getMonsterGroupBr,
         getLieutenantBr,
         getHeroBr,
+        getAllHeroesBr,
         getOverlordBr,
         getOverlordAvailableBr,
         getItemBr,

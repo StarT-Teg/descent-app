@@ -2,6 +2,7 @@ import Select, {ActionMeta, OnChangeValue, StylesConfig} from "react-select";
 import {SelectionOptionInterface} from "../../../../../shared";
 import React from "react";
 import {PublicBaseSelectProps} from "react-select/dist/declarations/src/Select";
+import styles from './multi-select.module.css'
 
 const orderOptions = (values: readonly SelectionOptionInterface[]) => {
     return values
@@ -62,7 +63,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
             isMulti
             styles={selectStyles}
             isClearable={false}
-            className="multiSelect"
+            className={styles.multiSelect}
             classNamePrefix="select"
             options={orderOptions(options)}
             blurInputOnSelect={false}

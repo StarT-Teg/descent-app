@@ -1,8 +1,7 @@
 
 .listRow {
-    display: grid;
-    grid-auto-flow: column;
-    grid-column-gap: 4px;
+    display: flex;
+    column-gap: 4px;
 }
 
 .checkbox {

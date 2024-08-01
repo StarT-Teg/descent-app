@@ -4,7 +4,9 @@
     align-items: center;
 
     height: 100%;
-    width: 40px;
+    max-height: 30px;
+    min-width: 40px;
+    max-width: 40px;
 
     background-color: hsl(0, 0%, 100%);
     border-color: black;

@@ -11,9 +11,8 @@ import {useSetGameSave} from "../../../../dataHooks/useSetGameSave";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {useHeroesDataContext} from "../../../../context";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
-import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
-import {BrButton} from "../../../BrButton/BrButton";
+import {InputLine} from "../../../shared/InputLine/InputLine";
 
 
 export interface ItemsBundleViewProps {
@@ -90,28 +89,27 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
                                                  isLoading ? <LoadingSpinner/> : (<div className={styles.buttonColumn}>
                                                      <Button onClick={() => {
                                                          onBuyOrSellButtonClick(-itemCost);
-                                                     }} theme={'simple'}>Buy</Button>
+                                                     }} theme={'simple'}>{getControlTranslation('Buy')}</Button>
                                                      <Button onClick={() => {
                                                          onBuyOrSellButtonClick(itemCostForSale, () => {
                                                              onItemSelect(selectedItems?.filter(item => item.value !== itemName) || []);
                                                              onClose();
                                                          });
-                                                     }} theme={'simple'}>Sell</Button>
-                                                     <Button onClick={onClose} theme={'simple'}>Quit</Button>
+                                                     }} theme={'simple'}>{getControlTranslation('Sell')}</Button>
+                                                     <Button onClick={onClose}
+                                                             theme={'simple'}>{getControlTranslation('Quit')}</Button>
                                                  </div>)
                                              )
                                          } openModalButtonComponent={
                                 (onOpen) => (
-                                    <div className={styles.itemLine}>
-                                        <input type="text" readOnly
-                                               value={getTranslation(itemName, 'name')}
-                                               className={'input'}
-                                               key={`${heroPosition}-item-${itemName}-${index}`}
-                                               onClick={onOpen}
-                                        />
-                                        <SuggestTranslationButton stringToTranslate={itemName}/>
-                                        <BrButton br={itemBr}/>
-                                    </div>
+                                    <InputLine
+                                        inputProps={{
+                                            inputValue: getTranslation(itemName, 'name'),
+                                            onClick: () => onOpen
+                                        }}
+                                        suggestTranslationProps={{stringToTranslate: itemName}}
+                                        brButtonProps={{br: itemBr}}
+                                    />
                                 )
                             }/>
                         )

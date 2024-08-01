@@ -143,36 +143,39 @@ export const App = () => {
     }
 
     return (
-        <Routes>
-            <Route
-                path={'/:inviteUuid?'}
-                element={<Settings/>}/>
-
-            <Route
-                path={'/settings'}
-                element={<Settings/>}/>
-
-            <Route
-                path={'/expansions'}
-                element={<ExpansionsSettings/>}/>
-
-            <Route path="/players" element={<Header/>}>
+        <>
+            <div className={'background'}/>
+            <Routes>
                 <Route
-                    path={'/players'}
-                    element={<ChoosePlayerButtons/>}/>
-                <Route
-                    path={'/players/:playerRole'}
-                    element={<HeroSheet/>}/>
-                <Route
-                    path={'/players/overlord'}
-                    element={<OverlordBench/>}/>
+                    path={'/:inviteUuid?'}
+                    element={<Settings/>}/>
 
-                {/* Using path="*"" means "match anything", so this route
+                <Route
+                    path={'/settings'}
+                    element={<Settings/>}/>
+
+                <Route
+                    path={'/expansions'}
+                    element={<ExpansionsSettings/>}/>
+
+                <Route path="/players" element={<Header/>}>
+                    <Route
+                        path={'/players'}
+                        element={<ChoosePlayerButtons/>}/>
+                    <Route
+                        path={'/players/:playerRole'}
+                        element={<HeroSheet/>}/>
+                    <Route
+                        path={'/players/overlord'}
+                        element={<OverlordBench/>}/>
+
+                    {/* Using path="*"" means "match anything", so this route
                 acts like a catch-all for URLs that we don't have explicit
                 routes for. */}
-                <Route path="*" element={<div>error route</div>}/>
-            </Route>
-        </Routes>
+                    <Route path="*" element={<div>error route</div>}/>
+                </Route>
+            </Routes>
+        </>
     )
 
 

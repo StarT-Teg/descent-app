@@ -14,6 +14,7 @@ import {ModalPortal} from "../../../Modal/ModalPortal";
 import {MonsterCard} from "../MonsterCard/MonsterCard";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
+import {InputLine} from "../../../shared/InputLine/InputLine";
 
 export const CampaignMonsters = () => {
 
@@ -93,7 +94,8 @@ export const CampaignMonsters = () => {
             {!![...defaultMonsters, ...pickedMonsters]?.length && (
                 <fieldset>
                     <legend>{getControlTranslation('Monster serial numbers')}</legend>
-                    <p className="input">{[...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master?.serialNumber).filter(monsterBr => !!monsterBr).sort((a, b) => (Number(a) - Number(b))).join(', ')}</p>
+                    <InputLine
+                        inputProps={{inputValue: [...defaultMonsters, ...pickedMonsters].map(monsterName => monsters[monsterName].act1.master?.serialNumber).filter(monsterBr => !!monsterBr).sort((a, b) => (Number(a) - Number(b))).join(', ')}}/>
                 </fieldset>
             )}
 

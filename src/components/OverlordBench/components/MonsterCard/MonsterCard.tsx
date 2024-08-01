@@ -15,7 +15,11 @@ const replaceAbilityNameNumbers = (abilityName: string) => {
     return abilityName.replace(/[0-9]+/gi, 'X').trim()
 }
 
-export const MonsterCard = ({monsterName}: { monsterName: string }) => {
+export interface MonsterCardPropsInterface {
+    monsterName: string
+}
+
+export const MonsterCard = ({monsterName}: MonsterCardPropsInterface) => {
 
     const swiper = useSwiper();
 
@@ -38,7 +42,6 @@ export const MonsterCard = ({monsterName}: { monsterName: string }) => {
     const masterAbilities = [...(monsterData.master?.abilities || []), ...(monsterData.master?.surgeAbilities || []), ...(monsterData.master?.actions || [])];
 
     const getAbilityIconsReplaced = (text: string) => {
-
         const Icon = ({iconType}: { iconType: ActionTypeToSymbolEnum }) =>
             (
                 <>

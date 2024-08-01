@@ -10,11 +10,15 @@ import {useQueryClient} from "react-query";
 import {useGetControlTranslation} from "../../helpers/translationHelpers";
 import {translationDataAdapted} from "../../dataHooks/dataAdapters/translationDataAdapted";
 
+export interface SuggestTranslationButtonPropsInterface {
+    stringToTranslate?: string;
+    disabled?: boolean
+}
 
 export const SuggestTranslationButton = ({
                                              stringToTranslate,
                                              disabled
-                                         }: { stringToTranslate?: string, disabled?: boolean }) => {
+                                         }: SuggestTranslationButtonPropsInterface) => {
 
     const {language} = useGameSaveContext()
     const {mutate, isLoading} = useSetTranslation();
@@ -43,6 +47,7 @@ export const SuggestTranslationButton = ({
 
     return (
         <ModalPortal
+            key={`suggest-translation-${stringToTranslate}`}
             modalComponent={(onClose) => (
                 isLoading ? <div className='center'>
                     <LoadingSpinner/>

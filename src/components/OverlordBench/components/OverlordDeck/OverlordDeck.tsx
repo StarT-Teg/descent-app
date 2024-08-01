@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './overlord-deck.module.css'
 import Select, {SingleValue} from 'react-select';
 import {
     CurrentOverlordPicks,
@@ -12,8 +11,8 @@ import {useOverlordDataContext} from "../../../../context/overlord-data-context"
 import {MultiSelect} from "../shared/MultiSelect/MultiSelect";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
-import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {InputLine} from "../../../shared/InputLine/InputLine";
 
 export const OverlordDeck = () => {
 
@@ -124,29 +123,23 @@ export const OverlordDeck = () => {
 
                     {overlordPicks?.purchasedCards?.map((cardName: string) => {
                             return (
-                                <div className={styles.listRow} key={`overlord-cards-block-${cardName}`}>
-                                    <div className={styles.checkbox}>
-                                        {Array.from({length: overlordCards[cardName].quantity}, (_, index) => {
-
+                                <InputLine
+                                    checkboxProps={
+                                        Array.from({length: overlordCards[cardName].quantity}, (_, index) => {
                                             const cardsAmount = Number(overlordPicks?.pickedCards?.filter(pickedCardName => pickedCardName === cardName).length);
-
-                                            return (
-                                                <input type="checkbox"
-                                                       key={`overlord-card-checkbox-${cardName}-${index}`}
-                                                       onChange={() => onPickedCardsChange(cardName)}
-                                                       checked={cardsAmount >= (index + 1)}
-                                                />
-                                            );
-                                        })}
-                                    </div>
-                                    <input type="text" readOnly value={getTranslation(cardName, 'name')}
-                                           key={`overlord-cards-list-${cardName}`}
-                                           onClick={() => onPickedCardsChange(cardName)}
-                                           className={'input'}
-                                    />
-
-                                    <SuggestTranslationButton stringToTranslate={cardName}/>
-                                </div>
+                                            return {
+                                                onChange: () => onPickedCardsChange(cardName),
+                                                checked: cardsAmount >= (index + 1)
+                                            };
+                                        })
+                                    }
+                                    inputProps={{
+                                        inputValue: getTranslation(cardName, 'name'),
+                                        onClick: () => onPickedCardsChange(cardName)
+                                    }}
+                                    suggestTranslationProps={{stringToTranslate: cardName}}
+                                    brButtonProps={{br: overlordCards[cardName].br}}
+                                />
                             )
                         }
                     )
