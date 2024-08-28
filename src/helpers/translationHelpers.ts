@@ -1,6 +1,18 @@
 import {TranslationDataAdaptedInterface} from "../shared";
 import {useGameSaveContext} from "../context/game-save-context";
 
+export const ControlsNameEnum = {
+    nameAndClass: 'Name/Class',
+    heroName: 'Hero Name',
+    campaignProgress: 'Campaign Progress',
+    campaign: 'Campaign',
+    act1: 'Act 1',
+    act2: 'Act 2',
+    interlude: 'Interlude',
+    final: 'Final'
+}
+
+// TODO заменить контролы на енамы
 const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Name/Class': {ru: 'Имя/Класс'},
     'Hero Name': {ru: 'Имя Героя'},
@@ -15,7 +27,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Copy Invite Link': {ru: 'Скопировать Приглашение'},
     'Back To Game': {ru: 'Назад В Игру'},
     'Cancel': {ru: 'Отменить'},
-    'Campaign': {ru: 'Кампания'},
+    [ControlsNameEnum.campaign]: {ru: 'Кампания'},
     'Campaign Setup': {ru: 'Настройки Кампании'},
     'Overlord Deck': {ru: 'Колода Властелина'},
     'Army': {ru: 'Армия'},
@@ -42,6 +54,11 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Buy': {ru: 'Купить'},
     'Sell': {ru: 'Продать'},
     'Quit': {ru: 'Выйти'},
+    [ControlsNameEnum.campaignProgress]: {ru: 'Прогресс Кампании'},
+    [ControlsNameEnum.act1]: {ru: 'Акт 1'},
+    [ControlsNameEnum.act2]: {ru: 'Акт 2'},
+    [ControlsNameEnum.interlude]: {ru: 'Интерлюдия'},
+    [ControlsNameEnum.final]: {ru: 'Финал'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

@@ -28,9 +28,9 @@ export const CampaignMonsters = () => {
         isMonsterChangeActAvailable
     } = useGetOverlordPicks();
 
-    const {relics, monsters, lieutenants} = useOverlordDataContext()
+    const {relics, monsters, lieutenants, campaignsData} = useOverlordDataContext()
     const {overlordPicks, campaignPicks, language} = useGameSaveContext();
-    const {pickedMonsters = [], customActPicks = []} = overlordPicks;
+    const {pickedMonsters = [], customActPicks = [], excludedUnits = []} = overlordPicks;
 
     const {getControlTranslation} = useGetControlTranslation()
 
@@ -109,10 +109,31 @@ export const CampaignMonsters = () => {
                             const minMonsterGroupBr = getLieutenantBr(lieutenantName, 1);
                             const maxMonsterGroupBr = getLieutenantBr(lieutenantName, 2);
                             const isSwitchDisabled = !(customActPicks.includes(lieutenantName) || campaignPicks.selectedAct === 2) && (maxMonsterGroupBr - minMonsterGroupBr) > freeBr
+                            const isLieutenantOptional = !!campaignsData?.[campaignPicks?.selectedCampaign || '']?.[campaignPicks?.selectedMission || '']?.encounters?.[campaignPicks?.selectedEncounter || '']?.optionalUnits?.includes(lieutenantName)
 
                             return (
                                 <div key={`lieutenant-${lieutenantName}-${index}`}>
                                     <div className={styles.defaultMonsterLine}>
+                                        {isLieutenantOptional && (
+                                            <input type="checkbox"
+                                                   onChange={() => {
+                                                       let newExcludedUnits = [...excludedUnits];
+
+                                                       if (newExcludedUnits?.includes(lieutenantName)) {
+                                                           newExcludedUnits = newExcludedUnits.filter((name) => name !== lieutenantName);
+                                                       } else {
+                                                           newExcludedUnits.push(lieutenantName);
+                                                       }
+
+                                                       dispatchOverlordPicks({
+                                                           excludedUnits: [...newExcludedUnits],
+                                                       })
+
+                                                   }}
+                                                   checked={!excludedUnits.includes(lieutenantName)}
+                                                // className={styles.disabled}
+                                            />
+                                        )}
                                         <input type="text" readOnly value={getLieutenantNameTranslation(lieutenantName)}
                                                disabled
                                                className={'input'}

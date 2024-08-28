@@ -27,6 +27,7 @@ import {translationDataAdapted} from "./dataHooks/dataAdapters/translationDataAd
 import {useGetTranslation} from "./dataHooks/useGetTranslation";
 import {agentsDataAdapter} from "./dataHooks/dataAdapters/agentsDataAdapter";
 import {plotCardsDataAdapted} from "./dataHooks/dataAdapters/plotCardsDataAdapted";
+import {CampaignProgress} from "./components/CampaignProgress/CampaignProgress";
 
 export const App = () => {
 
@@ -105,7 +106,7 @@ export const App = () => {
                 familiars,
                 abilitiesData,
                 agentsData,
-                plotDeckData
+                plotDeckData,
             } = gameData;
 
             const translation = translationDataAdapted(translationData);
@@ -162,6 +163,9 @@ export const App = () => {
                     <Route
                         path={'/players'}
                         element={<ChoosePlayerButtons/>}/>
+                    <Route
+                        path={'/players/campaignProgress'}
+                        element={<CampaignProgress/>}/>
                     <Route
                         path={'/players/:playerRole'}
                         element={<HeroSheet/>}/>

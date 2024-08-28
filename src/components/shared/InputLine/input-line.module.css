@@ -1,5 +1,7 @@
 
 .input {
+    transition: all 300ms;
+
     display: flex;
     align-items: center;
     justify-content: center;

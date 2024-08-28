@@ -13,7 +13,15 @@ export function useBrFunctions() {
 
     const {overlordPicks, campaignPicks, heroesPicks} = useGameSaveContext();
     const {selectedCampaign, selectedMission, selectedEncounter, selectedAct} = campaignPicks
-    const {pickedCards, pickedMonsters, pickedRelics, customActPicks, pickedPlotCards, plotDeck} = overlordPicks;
+    const {
+        pickedCards,
+        pickedMonsters,
+        pickedRelics,
+        customActPicks,
+        pickedPlotCards,
+        plotDeck,
+        excludedUnits
+    } = overlordPicks;
 
     const numberOfHeroes = Object.keys(heroesPicks).length;
     const currentAct = ('act' + selectedAct) as 'act1' | 'act2';
@@ -157,7 +165,11 @@ export function useBrFunctions() {
             }
 
             campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants.forEach(lieutenantName => {
-                overlordBr += getLieutenantBr(lieutenantName);
+
+                if (
+                    !excludedUnits?.includes(lieutenantName)) {
+                    overlordBr += getLieutenantBr(lieutenantName);
+                }
             })
 
             campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].monsters.forEach(monsterName => {

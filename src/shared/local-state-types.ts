@@ -48,6 +48,7 @@ export type CurrentOverlordPicks = {
     pickedMonsters?: string[];
     pickedRelics?: { [lieutenantName: string]: string | undefined };
     customActPicks?: string[];
+    excludedUnits?: string[];
 }
 
 export type CurrentPlayersPicks = {
@@ -70,11 +71,19 @@ export interface CampaignPicksInterface {
     pickedMonsters?: string[];
 }
 
+export interface CampaignProgressInterface {
+    selectedCampaign?: string;
+    availableMissions?: {
+        [missionName: string]: null | 'overlord' | 'heroes';
+    }
+}
+
 export interface GameSavePicks {
     heroesPicks: CurrentPlayersPicks;
     overlordPicks: CurrentOverlordPicks;
     campaignPicks: CampaignPicksInterface;
     language: string;
+    campaignProgressPicks?: CampaignProgressInterface;
     gold?: number;
     translation?: TranslationDataAdaptedInterface;
 }

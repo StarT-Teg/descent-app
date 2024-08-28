@@ -1,4 +1,4 @@
-import {GameSavePicks, TranslationDataAdaptedInterface} from "../shared";
+import {CampaignProgressInterface, GameSavePicks, TranslationDataAdaptedInterface} from "../shared";
 
 export enum GameSaveReducerActionTypeEnum {
     changeAllPicks = 'changeAllPicks',
@@ -8,6 +8,8 @@ export enum GameSaveReducerActionTypeEnum {
     changeGold = 'changeGold',
     changeTranslation = 'changeTranslation',
     changeLanguage = 'changeLanguage',
+    changeCampaignProgressPicks = 'changeCampaignProgressPicks',
+    changeCampaignProgressMissions = 'changeCampaignProgressMissions'
 }
 
 interface setAllPicks {
@@ -30,6 +32,16 @@ interface setCampaignPicks {
     payload: Pick<GameSavePicks, 'campaignPicks'>;
 }
 
+interface setCampaignProgressPicks {
+    actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressPicks;
+    payload: CampaignProgressInterface;
+}
+
+interface setCampaignProgressMissions {
+    actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressMissions;
+    payload: { [missionName: string]: null | 'overlord' | 'heroes' };
+}
+
 interface setGold {
     actionType: GameSaveReducerActionTypeEnum.changeGold;
     payload?: number;
@@ -50,6 +62,8 @@ export type GameSaveReducerActions =
     | setHeroesPicks
     | setOverlordPicks
     | setCampaignPicks
+    | setCampaignProgressPicks
+    | setCampaignProgressMissions
     | setGold
     | setTranslation
     | setLanguage;
@@ -67,6 +81,16 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
             return {...state, overlordPicks: {...state.overlordPicks, ...payload.overlordPicks}};
         case GameSaveReducerActionTypeEnum.changeCampaignPicks:
             return {...state, campaignPicks: {...state.campaignPicks, ...payload.campaignPicks}};
+        case GameSaveReducerActionTypeEnum.changeCampaignProgressPicks:
+            return {...state, campaignProgressPicks: {...state?.campaignProgressPicks, ...payload}};
+        case GameSaveReducerActionTypeEnum.changeCampaignProgressMissions:
+            return {
+                ...state,
+                campaignProgressPicks: {
+                    ...state?.campaignProgressPicks,
+                    availableMissions: {...state?.campaignProgressPicks?.availableMissions, ...payload}
+                }
+            };
         case GameSaveReducerActionTypeEnum.changeGold:
             return {...state, gold: payload};
         case GameSaveReducerActionTypeEnum.changeTranslation:

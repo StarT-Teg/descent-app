@@ -8,6 +8,7 @@ import {SelectionOptionInterface} from "../../../../shared";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
 import styles from './plot-deck.module.css';
+import {InputLine} from "../../../shared/InputLine/InputLine";
 
 
 export const PlotDeck = () => {
@@ -87,26 +88,21 @@ export const PlotDeck = () => {
                             const br = Math.round(plotCardData?.br || 0);
 
                             return (
-                                <div className={styles.plotDeckLine} key={`plot-card-${cardName}`}>
-                                    <input type="checkbox"
-                                           onChange={() => {
-                                               onPlotCardPicked(cardName)
-                                           }}
-                                           checked={!!overlordPicks.pickedPlotCards?.includes(cardName)}
-                                    />
-
-                                    <input type="text" readOnly value={getPlotCardNameTranslation(cardName)}
-                                           className={'input'} onClick={() => {
-                                        onPlotCardPicked(cardName)
+                                <InputLine
+                                    checkboxProps={[{
+                                        onChange: () => onPlotCardPicked(cardName),
+                                        checked: !!overlordPicks.pickedPlotCards?.includes(cardName)
+                                    }]}
+                                    inputProps={{
+                                        inputValue: getPlotCardNameTranslation(cardName),
+                                        onClick: () => {
+                                            onPlotCardPicked(cardName)
+                                        }
                                     }}
-                                    />
-
-                                    <SuggestTranslationButton stringToTranslate={plotCardData?.cardName}/>
-
-                                    <div className={styles.br}>
-                                        {br}
-                                    </div>
-                                </div>
+                                    suggestTranslationProps={{stringToTranslate: cardName}}
+                                    brButtonProps={{br}}
+                                    key={`plot-card-${cardName}`}
+                                />
                             )
                         })}
                     </div>

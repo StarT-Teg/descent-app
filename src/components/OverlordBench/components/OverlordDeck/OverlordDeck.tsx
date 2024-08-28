@@ -139,6 +139,7 @@ export const OverlordDeck = () => {
                                     }}
                                     suggestTranslationProps={{stringToTranslate: cardName}}
                                     brButtonProps={{br: overlordCards[cardName].br}}
+                                    key={`overlordPicks-purchasedCards-${cardName}`}
                                 />
                             )
                         }

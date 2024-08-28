@@ -9,17 +9,30 @@ import {useGetControlTranslation} from "../../../helpers/translationHelpers";
 import {GameSaveReducerActionTypeEnum} from "../../../context/game-save-context-reducer";
 import {useHeroesDataContext} from "../../../context";
 import {BrButton} from "../../BrButton/BrButton";
+import {useOverlordDataContext} from "../../../context/overlord-data-context";
 
 export const HeroSheetSkills = () => {
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
 
+    const {campaignsData} = useOverlordDataContext();
     const {heroClasses} = useHeroesDataContext()
-    const {heroesPicks, language} = useGameSaveContext();
+    const {heroesPicks, language, campaignProgressPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
+    const availableXp = Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
+        if (!campaignProgressPicks?.availableMissions?.[missionName]) {
+            return acc;
+        }
+
+        if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
+            return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardHeroWin || 0)
+        }
+
+        return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardHeroDefeat || 0)
+    }, 0)
 
     const {getSkillBr} = useBrFunctions();
     const {getControlTranslation} = useGetControlTranslation();
@@ -70,7 +83,7 @@ export const HeroSheetSkills = () => {
 
     return (
         <fieldset>
-            <legend>{getControlTranslation('Skills')}</legend>
+            <legend>{getControlTranslation('Skills')} - {availableXp}</legend>
 
             {heroAvailableSkills?.map((skillName: string, index) => {
                     const br = Math.round(getSkillBr(skillName));

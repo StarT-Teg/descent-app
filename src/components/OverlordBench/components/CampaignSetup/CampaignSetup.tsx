@@ -7,7 +7,7 @@ import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../contex
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import styles from "./campaign-setup.module.css";
 import {SuggestTranslationButton} from "../../../SuggestTranslationButton/SuggestTranslationButton";
-import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {ControlsNameEnum, useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 
 export const CampaignSetup = () => {
@@ -63,7 +63,7 @@ export const CampaignSetup = () => {
         if (!!campaignsData && !!newCampaignPicks.selectedCampaign) {
             const campaignName = newCampaignPicks.selectedCampaign;
 
-            if (!!newCampaignPicks.selectedMission && !!campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission]) {
+            if (!!newCampaignPicks?.selectedMission && !!campaignsData?.[campaignName]?.[newCampaignPicks.selectedMission]) {
                 const missionName = newCampaignPicks.selectedMission;
 
                 const encounters = Object.keys(campaignsData?.[campaignName]?.[missionName]?.encounters || {});
@@ -137,7 +137,7 @@ export const CampaignSetup = () => {
                     }}
                     isClearable
                     name="select-campaign"
-                    placeholder={getControlTranslation('Campaign')}
+                    placeholder={getControlTranslation(ControlsNameEnum.campaign)}
                 />
 
                 <SuggestTranslationButton stringToTranslate={campaignPicks?.selectedCampaign}

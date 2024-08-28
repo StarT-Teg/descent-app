@@ -45,10 +45,21 @@ export interface MissionDataAdapted {
     [CampaignsDataParametersEnum.missionName]: string,
     [CampaignsDataParametersEnum.translation]?: {
         campaignName?: { [key in string]?: string },
-        missionName?: { [key in string]?: string }
+        missionName?: { [key in string]?: string },
+        act2MissionNameHeroWin?: { [key in string]?: string },
+        act2MissionNameOverlordWin?: { [key in string]?: string },
     },
     'encounters'?: {
         [key in string]: EncounterData;
+    }
+    missionType?: string
+    act2MissionNameHeroWin?: string;
+    act2MissionNameOverlordWin?: string;
+    rewards?: {
+        xpRewardHeroWin?: number;
+        xpRewardHeroDefeat?: number;
+        xpRewardOverlordWin?: number;
+        xpRewardOverlordDefeat?: number;
     }
 }
 
@@ -59,7 +70,8 @@ export interface EncounterData {
     [CampaignsDataParametersEnum.openGroupsAmount]: number,
     [CampaignsDataParametersEnum.openGroupsTraits]: MonsterTraitNamesEnum[],
     [CampaignsDataParametersEnum.isOnlySmallMonsters]: boolean,
-    [CampaignsDataParametersEnum.cantChangeActMonsterList]: string[],
+    [CampaignsDataParametersEnum.cantChangeActMonsterList]?: string[],
+    optionalUnits?: string[],
 }
 
 export interface OverlordCardsDataAdapted {

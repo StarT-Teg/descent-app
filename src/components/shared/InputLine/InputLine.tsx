@@ -7,6 +7,7 @@ import {
 import {ModalPortal} from "../../Modal/ModalPortal";
 import {MonsterCard, MonsterCardPropsInterface} from "../../OverlordBench/components/MonsterCard/MonsterCard";
 import {BrButton, BrButtonPropsInterface} from "../../BrButton/BrButton";
+import classNames from "classnames";
 
 export interface InputLinePropsInterface {
     inputProps: { inputValue: ReactNode | string, onClick?(): void };
@@ -14,6 +15,7 @@ export interface InputLinePropsInterface {
     suggestTranslationProps?: SuggestTranslationButtonPropsInterface;
     monsterCardProps?: MonsterCardPropsInterface;
     brButtonProps?: BrButtonPropsInterface;
+    extraStyles?: Record<'input', string>;
 }
 
 export const InputLine = ({
@@ -22,6 +24,7 @@ export const InputLine = ({
                               suggestTranslationProps,
                               monsterCardProps,
                               brButtonProps,
+                              extraStyles,
                           }: InputLinePropsInterface) => {
 
     const {inputValue, onClick} = inputProps;
@@ -29,10 +32,11 @@ export const InputLine = ({
     return <div className={styles.listRow}>
         {!!checkboxProps && (
             <div className={styles.checkbox}>
-                {checkboxProps.map((checkboxProps) => (
+                {checkboxProps.map((checkboxProps, index) => (
                     <input type="checkbox"
                            onChange={checkboxProps.onChange}
                            checked={checkboxProps.checked}
+                           key={`${inputValue}-checkbox-${index}`}
                     />
                 ))}
             </div>
@@ -40,7 +44,7 @@ export const InputLine = ({
 
         <div
             onClick={onClick}
-            className={styles.input}>
+            className={classNames(styles.input, extraStyles?.input)}>
             {inputValue}
         </div>
 

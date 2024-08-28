@@ -1,10 +1,8 @@
-
 .root {
     width: 100%;
 }
 
-.content {
-    margin-top: 60px;
+.missionsColumn {
     display: grid;
     grid-auto-flow: row;
     grid-row-gap: 15px;
