@@ -9,7 +9,11 @@ export const ControlsNameEnum = {
     act1: 'Act 1',
     act2: 'Act 2',
     interlude: 'Interlude',
-    final: 'Final'
+    final: 'Final',
+    heroes: 'Heroes',
+    overlord: 'Overlord',
+    sendTranslation: 'Send Translation',
+    save: 'Save',
 }
 
 // TODO заменить контролы на енамы
@@ -22,7 +26,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Familiars': {ru: 'Фамильяры'},
     'Skills': {ru: 'Навыки'},
     'Items': {ru: 'Предметы'},
-    'Save': {ru: 'Сохранить'},
+    [ControlsNameEnum.save]: {ru: 'Сохранить'},
     'Create New Game': {ru: 'Создать Новую Игру'},
     'Copy Invite Link': {ru: 'Скопировать Приглашение'},
     'Back To Game': {ru: 'Назад В Игру'},
@@ -45,7 +49,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     'Default Groups': {ru: 'Обязательные группы'},
     'Open Groups': {ru: 'Открытые группы'},
     'Monster Showcase': {ru: 'Витрина Монстров'},
-    'Send Translation': {ru: 'Отправить перевод'},
+    [ControlsNameEnum.sendTranslation]: {ru: 'Отправить перевод'},
     'Overlord': {ru: 'Властелин'},
     'Hero': {ru: 'Герой'},
     'Choose Overlord Cards': {ru: 'Выберите Карты Властелина'},
@@ -59,6 +63,8 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     [ControlsNameEnum.act2]: {ru: 'Акт 2'},
     [ControlsNameEnum.interlude]: {ru: 'Интерлюдия'},
     [ControlsNameEnum.final]: {ru: 'Финал'},
+    [ControlsNameEnum.heroes]: {ru: 'Герои'},
+    [ControlsNameEnum.overlord]: {ru: 'Властелин'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

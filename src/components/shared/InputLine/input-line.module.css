@@ -1,10 +1,16 @@
 
-.input {
-    transition: all 300ms;
-
+.inputWrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
+
+    width: 100%;
+    min-height: 30px;
+    overflow: hidden;
+}
+
+.input {
+    transition: all 300ms;
 
     background-color: hsl(0, 0%, 100%);
     border-color: hsl(0, 0%, 80%);
@@ -13,7 +19,6 @@
     border-width: 1px;
 
     width: 100%;
-    min-height: 30px;
     box-sizing: border-box;
 
     padding: 0 4px;
@@ -22,11 +27,11 @@
     color: hsl(0, 0%, 20%);
     text-align: center;
 
+    font-family: DescentFont, sans-serif !important;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    font-family: DescentFont, sans-serif !important;
 }
 
 .listRow {

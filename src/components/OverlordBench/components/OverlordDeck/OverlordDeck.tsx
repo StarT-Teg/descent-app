@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Select, {SingleValue} from 'react-select';
 import {
     CurrentOverlordPicks,
@@ -16,32 +16,35 @@ import {InputLine} from "../../../shared/InputLine/InputLine";
 
 export const OverlordDeck = () => {
 
-    const {overlordCards} = useOverlordDataContext();
-    const {overlordPicks, language} = useGameSaveContext();
+    const {overlordCards, campaignsData} = useOverlordDataContext();
+    const {overlordPicks, language, campaignProgressPicks, heroesPicks} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
 
+    const {purchasedCards} = overlordPicks;
+
     const {getControlTranslation} = useGetControlTranslation()
+
+    const numberOfHeroes = Object.keys(heroesPicks).length;
+    const overlordXP = Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
+        const heroesCoef = numberOfHeroes - 2;
+
+        if (campaignProgressPicks?.availableMissions?.[missionName] === 'overlord') {
+            return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordWin || 0) + heroesCoef;
+        }
+
+        if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
+            return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordDefeat || 0) + heroesCoef;
+        }
+
+        return acc;
+    }, numberOfHeroes)
 
     const getTranslation = (cardName: string, translationName: 'name') => {
         return !!language ? overlordCards[cardName]?.translations?.[translationName]?.[language] || cardName : cardName;
     }
 
-    const overlordCardsOptions =
-        Object.keys(overlordCards).reduce((acc: SelectionOptionInterface[], cardName) => {
+    const [overlordCardsOptions, setOverlordCardOptions] = useState<SelectionOptionInterface[]>([]);
 
-            const className = overlordCards[cardName][OverlordDeckDataParametersEnum.className];
-            const cardNameTranslated = getTranslation(cardName, 'name');
-
-            if (!Object.keys(OverlordBasicDecksEnum).includes(className)) {
-                acc.push(toSelectOption(cardName, cardNameTranslated)!)
-            }
-
-            if (overlordPicks?.basicDeck === className as unknown as OverlordBasicDecksEnum) {
-                acc.push(toSelectOption(cardName, cardNameTranslated, true)!)
-            }
-
-            return acc;
-        }, [])
 
     const basicDecksOptions: SelectionOptionInterface[] = [{
         value: 'Basic I',
@@ -51,7 +54,7 @@ export const OverlordDeck = () => {
         label: `${getControlTranslation('Basic')} II`,
     }]
 
-    const selectedCards = overlordPicks?.purchasedCards?.map(cardName => toSelectOption(cardName, getTranslation(cardName, 'name'), ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!) || null;
+    const selectedCards = purchasedCards?.map(cardName => toSelectOption(cardName, getTranslation(cardName, 'name'), ['Basic I', 'Basic II'].includes(overlordCards[cardName].className))!) || null;
 
     const dispatchOverlordPicks = (newOverlordPicks: CurrentOverlordPicks) => {
         dispatch({
@@ -98,9 +101,29 @@ export const OverlordDeck = () => {
 
         dispatchOverlordPicks({pickedCards: newCards})
     }
+    useEffect(() => {
+
+        setOverlordCardOptions(
+            Object.keys(overlordCards).reduce((acc: SelectionOptionInterface[], cardName) => {
+                const className = overlordCards[cardName][OverlordDeckDataParametersEnum.className];
+                const cardNameTranslated = getTranslation(cardName, 'name');
+
+                if (!Object.keys(OverlordBasicDecksEnum).includes(className)) {
+                    acc.push(toSelectOption(cardName, cardNameTranslated, false)!)
+                }
+
+                if (overlordPicks?.basicDeck === className as unknown as OverlordBasicDecksEnum) {
+                    acc.push(toSelectOption(cardName, cardNameTranslated, true)!)
+                }
+
+                return acc;
+            }, [])
+        )
+    }, [overlordCards, purchasedCards])
 
     return (
         <>
+            <div>Всего опыта {overlordXP}</div>
             <Select
                 className={'input'}
                 value={toSelectOption(overlordPicks?.basicDeck, getControlTranslation(overlordPicks?.basicDeck?.toString() || ''))}

@@ -1,0 +1,67 @@
+
+.root {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 20px;
+
+    align-self: center;
+
+    margin: 0 auto;
+    padding: 20px;
+
+    width: calc(100vw - 40px);
+
+    box-sizing: border-box;
+
+    border: 10px solid;
+    border-image: url('/src/assets/img/buttons/overlord/border.png') 100 / 35px round;
+    background-image: url('/src/assets/img/bg/spotsBG.png');
+    background-clip: padding-box;
+    background-size: contain;
+}
+
+.translateIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 29px;
+    height: 100%;
+    max-width: 40px;
+
+    background-color: hsl(0, 0%, 100%);
+    border-color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+
+    box-sizing: border-box;
+
+    padding: 0 8px;
+}
+
+.textarea {
+    transition: all 100ms;
+    background-color: hsl(0, 0%, 100%);
+    border-color: hsl(0, 0%, 80%);
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+
+    padding: 4px 6px;
+
+    width: 100%;
+    min-height: 30px;
+    resize: none;
+    box-sizing: border-box;
+
+    font-size: 18px;
+    color: hsl(0, 0%, 20%);
+
+    font-family: DescentFont, sans-serif !important;
+}
+
+.translateIconDisabled {
+    opacity: 0.3;
+    pointer-events: none;
+}

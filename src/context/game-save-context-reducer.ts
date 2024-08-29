@@ -9,7 +9,13 @@ export enum GameSaveReducerActionTypeEnum {
     changeTranslation = 'changeTranslation',
     changeLanguage = 'changeLanguage',
     changeCampaignProgressPicks = 'changeCampaignProgressPicks',
-    changeCampaignProgressMissions = 'changeCampaignProgressMissions'
+    changeCampaignProgressMissions = 'changeCampaignProgressMissions',
+    changeCampaignProgressComments = 'changeCampaignProgressComments'
+}
+
+interface setCampaignProgressComments {
+    actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressComments;
+    payload: { [missionName: string]: string; }
 }
 
 interface setAllPicks {
@@ -64,6 +70,7 @@ export type GameSaveReducerActions =
     | setCampaignPicks
     | setCampaignProgressPicks
     | setCampaignProgressMissions
+    | setCampaignProgressComments
     | setGold
     | setTranslation
     | setLanguage;
@@ -89,6 +96,14 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
                 campaignProgressPicks: {
                     ...state?.campaignProgressPicks,
                     availableMissions: {...state?.campaignProgressPicks?.availableMissions, ...payload}
+                }
+            };
+        case GameSaveReducerActionTypeEnum.changeCampaignProgressComments:
+            return {
+                ...state,
+                campaignProgressPicks: {
+                    ...state?.campaignProgressPicks,
+                    comments: {...state?.campaignProgressPicks?.comments, ...payload}
                 }
             };
         case GameSaveReducerActionTypeEnum.changeGold:

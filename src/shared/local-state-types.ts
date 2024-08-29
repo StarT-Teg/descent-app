@@ -75,6 +75,9 @@ export interface CampaignProgressInterface {
     selectedCampaign?: string;
     availableMissions?: {
         [missionName: string]: null | 'overlord' | 'heroes';
+    };
+    comments?: {
+        [missionName: string]: string;
     }
 }
 

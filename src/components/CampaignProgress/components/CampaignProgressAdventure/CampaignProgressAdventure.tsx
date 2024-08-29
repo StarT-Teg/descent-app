@@ -6,14 +6,21 @@ import styles from './campaign-progress-adventure.module.css'
 import classNames from "classnames";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
+import {useOverlordDataContext} from "../../../../context/overlord-data-context";
+import {ControlsNameEnum, useGetControlTranslation} from "../../../../helpers/translationHelpers";
 
 export const CampaignProgressAdventure = ({missionName}: { missionName: string }) => {
 
-    const {campaignProgressPicks} = useGameSaveContext();
+    const {campaignsData} = useOverlordDataContext();
+    const {campaignProgressPicks, language} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
+    const {getControlTranslation} = useGetControlTranslation();
 
     const selectedOption = toSelectOption(campaignProgressPicks?.availableMissions?.[missionName]);
-    const selectOptions: SelectionOptionInterface[] = toSelectOptionArray([{value: 'heroes'}, {value: 'overlord'}])!;
+    const selectOptions: SelectionOptionInterface[] = toSelectOptionArray([{
+        value: 'heroes',
+        label: getControlTranslation(ControlsNameEnum.heroes)
+    }, {value: 'overlord', label: getControlTranslation(ControlsNameEnum.overlord)}])!;
 
     const dispatchCampaignProgress = (selectValue: "overlord" | "heroes" | null) => {
         dispatch({
@@ -22,9 +29,31 @@ export const CampaignProgressAdventure = ({missionName}: { missionName: string }
         },)
     }
 
+    const dispatchProgressComment = (comment: string) => {
+        dispatch({
+            payload: {[missionName]: comment},
+            actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressComments
+        },)
+    }
+
+    const getMissionTranslation = (missionName?: string) => {
+        if (!!language && !!campaignProgressPicks?.selectedCampaign && !!missionName) {
+            return campaignsData[campaignProgressPicks.selectedCampaign][missionName]?.translation?.missionName?.[language] || missionName;
+        }
+
+        return missionName;
+    }
+
     return (
         <div className={styles.root}>
-            <InputLine inputProps={{inputValue: missionName}}
+            <InputLine inputProps={{inputValue: getMissionTranslation(missionName)}}
+                       suggestTranslationProps={{stringToTranslate: missionName}}
+                       commentButtonProps={{
+                           comment: campaignProgressPicks?.comments?.[missionName],
+                           onCommentSave: (comment: string) => {
+                               dispatchProgressComment(comment);
+                           }
+                       }}
                        extraStyles={{
                            input: classNames({
                                [styles.heroesColor]: selectedOption?.value === 'heroes',
@@ -38,7 +67,7 @@ export const CampaignProgressAdventure = ({missionName}: { missionName: string }
                         key={`${missionName}-options-${option.label}-${index}`}
                         onClick={() => {
                             dispatchCampaignProgress(option?.value)
-                        }}>{option.value}</div>
+                        }}>{option.label}</div>
                 ))}
             </div>
         </div>

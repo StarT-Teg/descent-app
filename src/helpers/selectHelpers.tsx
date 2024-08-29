@@ -1,6 +1,6 @@
 import {SelectionOptionInterface} from "../shared";
 
-export const toSelectOption = <T,> (value?: T, label?: string, isFixed = false): SelectionOptionInterface | null => {
+export const toSelectOption = <T, >(value?: T, label?: string, isFixed = false, isDisabled = false): SelectionOptionInterface | null => {
 
     if (value === undefined || value === null) {
         return null;
@@ -10,10 +10,11 @@ export const toSelectOption = <T,> (value?: T, label?: string, isFixed = false):
         value: value,
         label: label || String(value),
         isFixed: isFixed,
+        isDisabled: isDisabled,
     }
 }
 
-export const toSelectOptionArray = <T,> (valuesArray?: {value: T, label?: string, isFixed?: boolean}[] | null): SelectionOptionInterface[] | null => {
+export const toSelectOptionArray = <T, >(valuesArray?: { value: T, label?: string, isFixed?: boolean }[] | null): SelectionOptionInterface[] | null => {
 
     if (valuesArray === undefined || valuesArray === null) {
         return null;

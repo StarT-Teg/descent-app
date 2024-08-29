@@ -7,7 +7,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import {useGameSaveContext} from "../../context/game-save-context";
 import {useSetTranslation} from "../../dataHooks/useSetTranslation";
 import {useQueryClient} from "react-query";
-import {useGetControlTranslation} from "../../helpers/translationHelpers";
+import {ControlsNameEnum, useGetControlTranslation} from "../../helpers/translationHelpers";
 import {translationDataAdapted} from "../../dataHooks/dataAdapters/translationDataAdapted";
 
 export interface SuggestTranslationButtonPropsInterface {
@@ -77,7 +77,7 @@ export const SuggestTranslationButton = ({
 
                         <Button theme={'simple'} onClick={() => {
                             setTranslation(onClose)
-                        }}>{getControlTranslation('Send Translation')}</Button>
+                        }}>{getControlTranslation(ControlsNameEnum.sendTranslation)}</Button>
                     </div>
                 )
             )}

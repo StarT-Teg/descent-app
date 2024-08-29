@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from "react";
-import styles from "../hero-sheet.module.css";
-import {SuggestTranslationButton} from "../../SuggestTranslationButton/SuggestTranslationButton";
 import {HeroPlayerPicks, HeroPlayersEnum} from "../../../shared";
 import {useParams} from "react-router-dom";
 import {useBrFunctions} from "../../../helpers/hooks/useBrFunctions";
@@ -8,8 +6,8 @@ import {useGameSaveContext, useGameSaveDispatchContext} from "../../../context/g
 import {useGetControlTranslation} from "../../../helpers/translationHelpers";
 import {GameSaveReducerActionTypeEnum} from "../../../context/game-save-context-reducer";
 import {useHeroesDataContext} from "../../../context";
-import {BrButton} from "../../BrButton/BrButton";
 import {useOverlordDataContext} from "../../../context/overlord-data-context";
+import {InputLine} from "../../shared/InputLine/InputLine";
 
 export const HeroSheetSkills = () => {
 
@@ -39,6 +37,7 @@ export const HeroSheetSkills = () => {
 
 
     const {
+        heroClassName,
         heroSkills = [],
     } = playerPicks;
 
@@ -83,35 +82,36 @@ export const HeroSheetSkills = () => {
 
     return (
         <fieldset>
-            <legend>{getControlTranslation('Skills')} - {availableXp}</legend>
+            <legend>{getControlTranslation('Skills')} - {availableXp}xp</legend>
 
-            {heroAvailableSkills?.map((skillName: string, index) => {
+            {heroAvailableSkills?.sort((skillA, skillB) => {
+                const skillAXp = heroClasses?.[heroClassName || '']?.skills?.[skillA].xpCost || 0;
+                const skillBXp = heroClasses?.[heroClassName || '']?.skills?.[skillB].xpCost || 0;
+
+                return skillAXp - skillBXp;
+            })?.map((skillName: string, index) => {
                     const br = Math.round(getSkillBr(skillName));
+
                     return (
-                        <div className={styles.checkboxLine}
-                             key={`${heroPlayerPosition}-skillBlock-${index}`}>
-                            <input type="checkbox" id={`${heroPlayerPosition}-skill-${skillName}`}
-                                   key={`${heroPlayerPosition}-skill-${skillName}-${index}`}
-                                   onChange={() => {
-                                       const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
-                                       handleChangeHeroSkills([...newSkills])
-                                   }}
-                                   checked={heroSkills.includes(skillName)}
-                            />
-
-                            <input type="text" readOnly value={getSkillNameTranslation(skillName)}
-                                   key={`${heroPlayerPosition}-skill-${skillName}-br-${index}`}
-                                   onClick={() => {
-                                       const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
-                                       handleChangeHeroSkills(newSkills)
-                                   }}
-                                   className={'input'}
-                            />
-
-                            <SuggestTranslationButton stringToTranslate={skillName}/>
-
-                            <BrButton br={br}></BrButton>
-                        </div>
+                        <InputLine
+                            checkboxProps={[{
+                                checked: heroSkills.includes(skillName),
+                                onChange: () => {
+                                    const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                    handleChangeHeroSkills([...newSkills])
+                                }
+                            }]}
+                            inputProps={{
+                                inputValue: getSkillNameTranslation(skillName),
+                                onClick: () => {
+                                    const newSkills = heroSkills.includes(skillName) ? [...heroSkills?.filter((heroAddedSkill) => (heroAddedSkill !== skillName))] : [...heroSkills, skillName]
+                                    handleChangeHeroSkills(newSkills)
+                                }
+                            }}
+                            suggestTranslationProps={{stringToTranslate: skillName}}
+                            brButtonProps={{br}}
+                            key={`${heroPlayerPosition}-skillBlock-${index}`}
+                        />
                     )
                 }
             )

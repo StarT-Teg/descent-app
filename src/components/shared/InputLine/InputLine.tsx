@@ -8,6 +8,7 @@ import {ModalPortal} from "../../Modal/ModalPortal";
 import {MonsterCard, MonsterCardPropsInterface} from "../../OverlordBench/components/MonsterCard/MonsterCard";
 import {BrButton, BrButtonPropsInterface} from "../../BrButton/BrButton";
 import classNames from "classnames";
+import {CommentButton, CommentButtonPropsInterface} from "../../CommentButton/CommentButton";
 
 export interface InputLinePropsInterface {
     inputProps: { inputValue: ReactNode | string, onClick?(): void };
@@ -15,13 +16,15 @@ export interface InputLinePropsInterface {
     suggestTranslationProps?: SuggestTranslationButtonPropsInterface;
     monsterCardProps?: MonsterCardPropsInterface;
     brButtonProps?: BrButtonPropsInterface;
-    extraStyles?: Record<'input', string>;
+    commentButtonProps?: CommentButtonPropsInterface;
+    extraStyles?: Record<string, string>;
 }
 
 export const InputLine = ({
                               inputProps,
                               checkboxProps,
                               suggestTranslationProps,
+                              commentButtonProps,
                               monsterCardProps,
                               brButtonProps,
                               extraStyles,
@@ -44,8 +47,8 @@ export const InputLine = ({
 
         <div
             onClick={onClick}
-            className={classNames(styles.input, extraStyles?.input)}>
-            {inputValue}
+            className={classNames(styles.inputWrapper, extraStyles?.inputWrapper)}>
+            <span className={classNames(styles.input, extraStyles?.input)}>{inputValue}</span>
         </div>
 
         {!!monsterCardProps && (
@@ -73,11 +76,9 @@ export const InputLine = ({
             }/>
         )}
 
-        {!!suggestTranslationProps &&
-            <SuggestTranslationButton {...suggestTranslationProps}/>
-        }
-
+        {!!suggestTranslationProps && <SuggestTranslationButton {...suggestTranslationProps}/>}
         {!!brButtonProps && <BrButton {...brButtonProps}/>}
+        {!!commentButtonProps && <CommentButton {...commentButtonProps} />}
 
     </div>
 }
