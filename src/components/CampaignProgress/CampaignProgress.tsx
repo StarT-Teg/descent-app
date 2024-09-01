@@ -26,21 +26,20 @@ export const CampaignProgress = () => {
         if (!!language && !!campaignName) {
             return Object.values(campaignsData[campaignName] || {})?.[0]?.translation?.campaignName?.[language] || campaignName;
         }
-
         return campaignName;
     }
 
     const availableCampaigns = Object.keys(campaignsData || {}).map((campaignName) => (toSelectOption(campaignName, getCampaignTranslation(campaignName))!))
     const selectedCampaign: SelectionOptionInterface | null = toSelectOption(campaignProgressPicks?.selectedCampaign, getCampaignTranslation(campaignProgressPicks?.selectedCampaign));
 
-    const introMission = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || ''])?.find((missionName) => campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.missionType === 'intro')
+    const introMission = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || ''] || {})?.find((missionName) => campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.missionType === 'intro')
     const [act1Missions, setAct1Missions] = useState<string[]>([])
     const [interludeMission, setInterludeMission] = useState<string | undefined>()
     const [act2Missions, setAct2Missions] = useState<string[]>([])
     const [finalMission, setFinalMission] = useState<string | undefined>()
 
     useEffect(() => {
-        const selectedCampaignData = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || '']);
+        const selectedCampaignData = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || ''] || {});
         const heroesAct2Wins = Object.keys(campaignProgressPicks?.availableMissions || {}).reduce((acc: number, missionName: string) => {
             if (
                 campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName].act === 2 &&
@@ -58,7 +57,7 @@ export const CampaignProgress = () => {
                 ));
             const finalMissionData = campaignsData[campaignProgressPicks?.selectedCampaign || ''][finalMissionName || '']
 
-            setFinalMission(!!finalMissionData && heroesAct2Wins >= 2 ? finalMissionData.act2MissionNameHeroWin : finalMissionData.act2MissionNameOverlordWin)
+            setFinalMission(!!finalMissionData && heroesAct2Wins >= 2 ? finalMissionData?.act2MissionNameHeroWin : finalMissionData?.act2MissionNameOverlordWin)
 
         } else {
             setFinalMission(undefined);
@@ -66,8 +65,8 @@ export const CampaignProgress = () => {
     }, [act2Missions])
 
     useEffect(() => {
-        const selectedCampaignData = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || '']);
-        const heroesAct1Wins = Object.keys(campaignProgressPicks?.availableMissions || {}).reduce((acc: number, missionName: string) => {
+        const selectedCampaignData = Object.keys(campaignsData?.[campaignProgressPicks?.selectedCampaign || ''] || {});
+        const heroesAct1Wins = Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName: string) => {
             if (
                 campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName].act === 1 &&
                 campaignProgressPicks?.availableMissions?.[missionName] === 'heroes'
@@ -80,11 +79,11 @@ export const CampaignProgress = () => {
         if (!!selectedCampaignData.length) {
             const interludeMissionName = selectedCampaignData.find(
                 (missionName) => (
-                    campaignsData[campaignProgressPicks?.selectedCampaign || ''][missionName]?.missionType === 'interlude'
+                    campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.missionType === 'interlude'
                 ));
-            const interludeMissionData = campaignsData[campaignProgressPicks?.selectedCampaign || ''][interludeMissionName || '']
+            const interludeMissionData = campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[interludeMissionName || '']
 
-            setInterludeMission(!!interludeMissionData && heroesAct1Wins >= 2 ? interludeMissionData.act2MissionNameHeroWin : interludeMissionData.act2MissionNameOverlordWin)
+            setInterludeMission(!!interludeMissionData && heroesAct1Wins >= 2 ? interludeMissionData?.act2MissionNameHeroWin : interludeMissionData?.act2MissionNameOverlordWin)
         } else {
             setInterludeMission(undefined);
         }
@@ -129,7 +128,7 @@ export const CampaignProgress = () => {
             const excludedMissions = act1Missions?.reduce((acc: string[], missionName) => {
                 const missionResult = campaignProgressPicks?.availableMissions?.[missionName];
                 const missionData = campaignsData[campaignProgressPicks?.selectedCampaign || ''][missionName];
-                const missionToExclude = missionResult === 'heroes' ? missionData.act2MissionNameOverlordWin : missionData.act2MissionNameHeroWin;
+                const missionToExclude = missionResult === 'heroes' ? missionData?.act2MissionNameOverlordWin : missionData?.act2MissionNameHeroWin;
 
                 if (!!missionToExclude) {
                     return [
@@ -164,7 +163,8 @@ export const CampaignProgress = () => {
                     )
                 }
                 return acc;
-            }, [])
+            }, []);
+
             setAct2Missions(newAct2Missions)
         } else {
             setAct2Missions([])
@@ -172,10 +172,12 @@ export const CampaignProgress = () => {
     }, [campaignsData, act1Missions, campaignProgressPicks?.availableMissions, campaignProgressPicks?.selectedCampaign])
 
     const dispatchCampaignProgress = (campaignName: string) => {
-        dispatch({
-            payload: {selectedCampaign: campaignName},
-            actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressPicks
-        },)
+        if (campaignProgressPicks?.selectedCampaign !== campaignName) {
+            dispatch({
+                payload: {selectedCampaign: campaignName, availableMissions: {}},
+                actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressPicks
+            },)
+        }
     }
 
     const handleSaveChanges = () => {
@@ -210,13 +212,15 @@ export const CampaignProgress = () => {
                 </fieldset>
             )}
 
-            <fieldset>
-                <legend>{getControlTranslation(ControlsNameEnum.act1)}</legend>
-                <div className={styles.missionsColumn}>{act1Missions?.map((missionName) => (
-                    <CampaignProgressAdventure missionName={missionName}
-                                               key={`${ControlsNameEnum.act1}-${missionName}`}/>
-                ))}</div>
-            </fieldset>
+            {!!act1Missions?.length && (
+                <fieldset>
+                    <legend>{getControlTranslation(ControlsNameEnum.act1)}</legend>
+                    <div className={styles.missionsColumn}>{act1Missions.map((missionName) => (
+                        <CampaignProgressAdventure missionName={missionName}
+                                                   key={`${ControlsNameEnum.act1}-${missionName}`}/>
+                    ))}</div>
+                </fieldset>
+            )}
 
             {!!interludeMission && (
                 <fieldset>
@@ -225,13 +229,15 @@ export const CampaignProgress = () => {
                 </fieldset>
             )}
 
-            <fieldset>
-                <legend>{getControlTranslation(ControlsNameEnum.act2)}</legend>
-                <div className={styles.missionsColumn}>{act2Missions?.map((missionName) => (
-                    <CampaignProgressAdventure missionName={missionName}
-                                               key={`${ControlsNameEnum.act2}-${missionName}`}/>
-                ))}</div>
-            </fieldset>
+            {!!act2Missions?.length && (
+                <fieldset>
+                    <legend>{getControlTranslation(ControlsNameEnum.act2)}</legend>
+                    <div className={styles.missionsColumn}>{act2Missions?.map((missionName) => (
+                        <CampaignProgressAdventure missionName={missionName}
+                                                   key={`${ControlsNameEnum.act2}-${missionName}`}/>
+                    ))}</div>
+                </fieldset>
+            )}
 
             {!!finalMission && (
                 <fieldset>
@@ -240,8 +246,10 @@ export const CampaignProgress = () => {
                 </fieldset>
             )}
 
-            <Button theme='outlineRed' onClick={handleSaveChanges}>
-                {getControlTranslation('Save')}
-            </Button>
+            <div className={styles.buttonWrapper}>
+                <Button theme='outlineRed' onClick={handleSaveChanges}>
+                    {getControlTranslation('Save')}
+                </Button>
+            </div>
         </div>)
 }

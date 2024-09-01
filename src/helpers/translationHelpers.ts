@@ -14,6 +14,8 @@ export const ControlsNameEnum = {
     overlord: 'Overlord',
     sendTranslation: 'Send Translation',
     save: 'Save',
+    basicDeck: 'Basic Deck',
+    purchasedCards: 'Purchased Cards',
 }
 
 // TODO заменить контролы на енамы
@@ -65,6 +67,8 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     [ControlsNameEnum.final]: {ru: 'Финал'},
     [ControlsNameEnum.heroes]: {ru: 'Герои'},
     [ControlsNameEnum.overlord]: {ru: 'Властелин'},
+    [ControlsNameEnum.basicDeck]: {ru: 'Базовая Колода'},
+    [ControlsNameEnum.purchasedCards]: {ru: 'Купленные Карты'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

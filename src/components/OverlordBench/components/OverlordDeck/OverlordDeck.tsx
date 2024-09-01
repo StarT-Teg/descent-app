@@ -11,7 +11,7 @@ import {useOverlordDataContext} from "../../../../context/overlord-data-context"
 import {MultiSelect} from "../shared/MultiSelect/MultiSelect";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
-import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
+import {ControlsNameEnum, useGetControlTranslation} from "../../../../helpers/translationHelpers";
 import {InputLine} from "../../../shared/InputLine/InputLine";
 
 export const OverlordDeck = () => {
@@ -25,19 +25,7 @@ export const OverlordDeck = () => {
     const {getControlTranslation} = useGetControlTranslation()
 
     const numberOfHeroes = Object.keys(heroesPicks).length;
-    const overlordXP = Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
-        const heroesCoef = numberOfHeroes - 2;
-
-        if (campaignProgressPicks?.availableMissions?.[missionName] === 'overlord') {
-            return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordWin || 0) + heroesCoef;
-        }
-
-        if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
-            return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordDefeat || 0) + heroesCoef;
-        }
-
-        return acc;
-    }, numberOfHeroes)
+    const [overlordXP, setOverlordXP] = useState(numberOfHeroes);
 
     const getTranslation = (cardName: string, translationName: 'name') => {
         return !!language ? overlordCards[cardName]?.translations?.[translationName]?.[language] || cardName : cardName;
@@ -101,8 +89,26 @@ export const OverlordDeck = () => {
 
         dispatchOverlordPicks({pickedCards: newCards})
     }
-    useEffect(() => {
 
+    useEffect(() => {
+        setOverlordXP(
+            Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
+                const heroesCoef = numberOfHeroes - 2;
+
+                if (campaignProgressPicks?.availableMissions?.[missionName] === 'overlord') {
+                    return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordWin || 0) + heroesCoef;
+                }
+
+                if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
+                    return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordDefeat || 0) + heroesCoef;
+                }
+
+                return acc;
+            }, numberOfHeroes)
+        )
+    }, [campaignProgressPicks?.availableMissions, numberOfHeroes])
+
+    useEffect(() => {
         setOverlordCardOptions(
             Object.keys(overlordCards).reduce((acc: SelectionOptionInterface[], cardName) => {
                 const className = overlordCards[cardName][OverlordDeckDataParametersEnum.className];
@@ -123,22 +129,28 @@ export const OverlordDeck = () => {
 
     return (
         <>
-            <div>Всего опыта {overlordXP}</div>
-            <Select
-                className={'input'}
-                value={toSelectOption(overlordPicks?.basicDeck, getControlTranslation(overlordPicks?.basicDeck?.toString() || ''))}
-                options={basicDecksOptions}
-                onChange={onBasicDeckPick}
-                isClearable
-                name="basic-deck"
-                placeholder={getControlTranslation('Choose basic deck')}
-            />
+            <InputLine inputProps={{inputValue: `Всего опыта - ${overlordXP}`}}/>
+            <fieldset>
+                <legend>{getControlTranslation(ControlsNameEnum.basicDeck)}</legend>
+                <Select
+                    className={'input'}
+                    value={toSelectOption(overlordPicks?.basicDeck, getControlTranslation(overlordPicks?.basicDeck?.toString() || ''))}
+                    options={basicDecksOptions}
+                    onChange={onBasicDeckPick}
+                    isClearable
+                    name="basic-deck"
+                    placeholder={getControlTranslation('Choose basic deck')}
+                />
+            </fieldset>
 
-            <MultiSelect options={overlordCardsOptions} value={selectedCards}
-                         placeholder={getControlTranslation('Choose Overlord Cards')}
-                         onItemsChange={(newValue) => {
-                             dispatchOverlordPicks({purchasedCards: newValue.map(cardData => cardData.value)})
-                         }}/>
+            <fieldset>
+                <legend>{getControlTranslation(ControlsNameEnum.purchasedCards)}</legend>
+                <MultiSelect options={overlordCardsOptions} value={selectedCards}
+                             placeholder={getControlTranslation('Choose Overlord Cards')}
+                             onItemsChange={(newValue) => {
+                                 dispatchOverlordPicks({purchasedCards: newValue.map(cardData => cardData.value)})
+                             }}/>
+            </fieldset>
 
             {!!overlordPicks?.purchasedCards?.length && (
                 <fieldset>
