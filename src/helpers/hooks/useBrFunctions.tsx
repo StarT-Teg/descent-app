@@ -155,7 +155,7 @@ export function useBrFunctions() {
 
             if (!!Object.keys(pickedRelics || {}).length) {
                 Object.keys(pickedRelics || {}).forEach((lieutenantName) => {
-                    const isLieutenantAvailable = !!campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants.includes(lieutenantName)
+                    const isLieutenantAvailable = !!campaignsData?.[selectedCampaign]?.[selectedMission]?.encounters?.[selectedEncounter].lieutenants.includes(lieutenantName)
                     const relicName = pickedRelics?.[lieutenantName];
 
                     if (isLieutenantAvailable && !!relicName) {
@@ -164,7 +164,7 @@ export function useBrFunctions() {
                 })
             }
 
-            campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].lieutenants.forEach(lieutenantName => {
+            campaignsData?.[selectedCampaign]?.[selectedMission]?.encounters?.[selectedEncounter].lieutenants.forEach(lieutenantName => {
 
                 if (
                     !excludedUnits?.includes(lieutenantName)) {
@@ -172,7 +172,7 @@ export function useBrFunctions() {
                 }
             })
 
-            campaignsData[selectedCampaign][selectedMission]?.encounters?.[selectedEncounter].monsters.forEach(monsterName => {
+            campaignsData?.[selectedCampaign]?.[selectedMission]?.encounters?.[selectedEncounter].monsters.forEach(monsterName => {
                 overlordBr += getMonsterGroupBr(monsterName);
             })
         }

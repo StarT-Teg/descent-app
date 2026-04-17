@@ -15,6 +15,7 @@ export const useGetTranslation = (): UseQueryResult<ExcelDataRaw> => {
     return useQuery(['get-translation-request'], query, {
         enabled: true,
         keepPreviousData: true,
+        retry: () => false,
         refetchInterval: false,
         refetchOnMount: false,
         refetchOnWindowFocus: false,
