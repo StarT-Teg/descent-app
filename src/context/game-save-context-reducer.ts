@@ -1,4 +1,5 @@
 import {CampaignProgressInterface, GameSavePicks, TranslationDataAdaptedInterface} from "../shared";
+import {INITIAL_GAME_PICKS} from "./game-save-context";
 
 export enum GameSaveReducerActionTypeEnum {
     changeAllPicks = 'changeAllPicks',
@@ -81,7 +82,7 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
 
     switch (actionType) {
         case GameSaveReducerActionTypeEnum.changeAllPicks:
-            return {...payload};
+            return {...INITIAL_GAME_PICKS, ...payload};
         case GameSaveReducerActionTypeEnum.changeHeroesPicks:
             return {...state, heroesPicks: {...state.heroesPicks, ...payload.heroesPicks}};
         case GameSaveReducerActionTypeEnum.changeOverlordPicks:

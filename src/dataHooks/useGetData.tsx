@@ -1,36 +1,64 @@
-import axios from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import {useQuery, UseQueryResult} from "react-query";
-import {GameDataInterface} from "../shared";
+import {GameDataEnum, GameDataInterface} from "../shared";
 
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
-    const ranges = ['Campaigns', 'vote4Classes', 'vote4Heroes', 'Items', 'Lieutenants', 'monsters', 'Overlord Deck', 'Overlord Relics', 'Familiars', 'Translation!A:B', 'vote4TRAITS!A:C', 'vote4SURGE!A:C', 'vote4ACTIONS!A:C', 'Agents', 'Plot Deck!A:F'].join('&ranges=');
+    const gameDataRanges: Record<GameDataEnum, string[]> = {
+        campaignData: ['Campaigns'],
+        heroClassesData: ['vote4Classes'],
+        heroesData: ['vote4Heroes'],
+        itemsData: ['Items'],
+        lieutenantsData: ['Lieutenants'],
+        monstersData: ['monsters'],
+        overlordDecksData: ['verlord Deck'],
+        relicsData: ['Overlord Relics'],
+        familiars: ['Familiars'],
+        translation: [],
+        abilitiesData: ['vote4TRAITS!A:C', 'vote4SURGE!A:C', 'vote4ACTIONS!A:C'],
+        agentsData: ['Agents'],
+        plotDeckData: ['Plot Deck!A:F'],
+    }
 
-    const params = {
-        valueRenderOption: 'FORMATTED_VALUE',
-        majorDimension: 'ROWS',
-        key: process.env.REACT_APP_GOOGLE_API_KEY,
+    const ranges = Object.values(gameDataRanges).reduce((acc: string[], rangeArr) => {
+        if (!rangeArr?.length) {
+            return acc
+        }
+
+        return [...acc, ...rangeArr]
+    }, [])
+
+    const config: AxiosRequestConfig<string> = {
+        params: {ranges: ranges.join(',')},
+        headers: {"Content-Type": "text/plain"},
+        validateStatus: (status) => status !== 302,
     }
 
     const query = () => axios
-        .get(`https://sheets.googleapis.com/v4/spreadsheets/${process.env.REACT_APP_GOOGLE_SHEETS_ID}/values:batchGet?&ranges=${ranges}`, {params})
+        .get(`https://script.google.com/macros/s/AKfycbwfWRsI5bpoo2pK-YMFsZs16O2-Nour35EwYtwvbwpNFBMdI8XIxYEP0Fq5cVCrn4OwZw/exec`, config)
         .then((response) => {
+            const responseData: { [key in string]: { values: string[][] } } = response?.data
+            const responseDataFormatted: { [key in string]: { values: string[][] } } = {}
+
+            for (const gameDataName in gameDataRanges) {
+                const gameDataRangeList = gameDataRanges[gameDataName as GameDataEnum]
+
+                const dataCombined = gameDataRangeList.reduce((acc: string[][], rangeName) => {
+                    console.log('rangeName: ', rangeName)
+                    const rangeData = responseData?.[rangeName]?.values
+                    console.log('rangeData: ', rangeData)
+                    if (rangeData?.length) {
+                        return [...acc, ...rangeData]
+                    }
+
+                    return acc
+                }, [])
+
+                responseDataFormatted[gameDataName] = {values: [...dataCombined]}
+            }
+            console.log('responseDataFormatted: ', responseDataFormatted)
             return (
                 {
-                    campaignData: response.data?.valueRanges?.[0],
-                    heroClassesData: response.data?.valueRanges?.[1],
-                    heroesData: response.data?.valueRanges?.[2],
-                    itemsData: response.data?.valueRanges?.[3],
-                    lieutenantsData: response.data?.valueRanges?.[4],
-                    monstersData: response.data?.valueRanges?.[5],
-                    overlordDecksData: response.data?.valueRanges?.[6],
-                    relicsData: response.data?.valueRanges?.[7],
-                    familiars: response.data?.valueRanges?.[8],
-                    translation: response.data?.valueRanges?.[9],
-                    abilitiesData: {
-                        values: [...(response.data?.valueRanges?.[10].values || []), ...(response.data?.valueRanges?.[11].values || []), ...(response.data?.valueRanges?.[12].values || [])]
-                    },
-                    agentsData: response.data?.valueRanges?.[13],
-                    plotDeckData: response.data?.valueRanges?.[14],
+                    ...responseDataFormatted
                 }
             )
         });

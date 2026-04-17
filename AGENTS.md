@@ -129,7 +129,6 @@ npx eslint src/ --fix
 
 ### Google Sheets Integration
 
-- API key and spreadsheet ID come from environment variables: `REACT_APP_GOOGLE_API_KEY`, `REACT_APP_GOOGLE_SHEETS_ID`.
 - All data ranges are defined in `useGetData.tsx`.
 
 ## Architecture
@@ -195,6 +194,5 @@ src/
 ```
 REACT_APP_BASE_PATH        # Optional base path for routing
 PUBLIC_URL                 # Set by CRA, public URL
-REACT_APP_GOOGLE_API_KEY  # Google Sheets API key
-REACT_APP_GOOGLE_SHEETS_ID # Target spreadsheet ID
+
 ```

@@ -1,8 +1,8 @@
 import {CampaignsDataAdapted, ExcelDataRaw, MonsterTraitNamesEnum, TranslationDataAdaptedInterface} from "../../shared";
 import {getTranslationData} from "../../helpers/translationHelpers";
 
-const getCleanArrayFromString = (dirtyString?: string, separator: string | RegExp = ',') => {
-    if (!dirtyString) {
+const getCleanArrayFromString = (dirtyString?: any, separator: string | RegExp = ',') => {
+    if (!dirtyString || typeof dirtyString !== 'string') {
         return []
     }
 
@@ -45,7 +45,8 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
                     }
                     return acc
                 }, []);
-            const isOnlySmallMonsters = !!row[27]?.trim()
+            console.log('row[27]: ', row[0], missionName, row[27])
+            const isOnlySmallMonsters = !!(row[27]?.trim())
             const cantChangeActMonsterList: string[] = getCleanArrayFromString(row?.[28]);
             const optionalUnits = getCleanArrayFromString(row?.[29]);
 

@@ -7,8 +7,6 @@ declare namespace NodeJS {
     readonly NODE_ENV: 'development' | 'production' | 'test';
     readonly REACT_APP_BASE_PATH: string;
     readonly PUBLIC_URL: string;
-    readonly REACT_APP_GOOGLE_API_KEY: string;
-    readonly REACT_APP_GOOGLE_SHEETS_ID: string;
   }
 }
 

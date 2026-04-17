@@ -1,6 +1,9 @@
-export const floatClearing = (number?: string) => {
-    if (!number) {
+export const floatClearing = (initialNumber?: any) => {
+    if (!initialNumber || !['number', 'string'].includes(typeof initialNumber)) {
         return 0
     }
-    return parseFloat(number.replace(',', '.'));
+
+    const numberFormatted = typeof initialNumber === 'number' ? initialNumber : initialNumber.replace(',', '.')
+
+    return parseFloat(numberFormatted);
 }

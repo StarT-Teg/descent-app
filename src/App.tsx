@@ -94,6 +94,7 @@ export const App = () => {
 
     useEffect(() => {
         if (!!gameData) {
+            console.log('gameData: ', gameData)
             const {
                 heroesData,
                 heroClassesData,
