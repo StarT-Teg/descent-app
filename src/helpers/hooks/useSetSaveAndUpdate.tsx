@@ -2,11 +2,12 @@ import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 import {useGameSaveDispatchContext} from "../../context/game-save-context";
 import {GameSavePicks} from "../../shared";
+import {LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
 
 
 export const useSetSaveAndUpdate = () => {
 
-    const uuid = localStorage.getItem('descent-save-game-uuid')!;
+    const uuid = localStorage.getItem(LOCAL_STORAGE_SAVE_KEY)!;
 
     const {mutate, isLoading} = useSetGameSave();
     const dispatch = useGameSaveDispatchContext();
