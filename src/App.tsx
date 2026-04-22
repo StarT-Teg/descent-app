@@ -30,10 +30,6 @@ export const App = () => {
             <div className={'background'}/>
             <Routes>
                 <Route
-                    path={'/:inviteUuid?'}
-                    element={<Settings/>}/>
-
-                <Route
                     path={'/settings'}
                     element={<Settings/>}/>
 

@@ -4,6 +4,7 @@ import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-red
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
 import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import {LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
 import {ModalPortal} from "../Modal/ModalPortal";
 import {ChangeGoldModal} from "./components/ChangeGoldModal/ChangeGoldModal";
 
@@ -12,7 +13,7 @@ export const GoldButton = () => {
     const {gold = 0} = useGameSaveContext()
     const dispatch = useGameSaveDispatchContext();
 
-    const uuid = localStorage.getItem('descent-save-game-uuid')!;
+    const uuid = localStorage.getItem(LOCAL_STORAGE_SAVE_KEY)!;
     const {mutate, isLoading} = useSetGameSave()
 
     const [localGoldState, setLocalGoldState] = useState<number>(gold)

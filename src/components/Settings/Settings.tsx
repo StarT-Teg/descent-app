@@ -1,5 +1,6 @@
 import uuid from "react-uuid";
 import {INITIAL_GAME_PICKS, useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
+import {LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
 import {useNavigate} from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import React, {useEffect, useState} from "react";
@@ -15,8 +16,7 @@ import {useGetControlTranslation} from "../../helpers/translationHelpers";
 
 export const Settings = () => {
 
-    const localStorageSaveKey = 'descent-save-game-uuid';
-    const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(localStorageSaveKey));
+    const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(LOCAL_STORAGE_SAVE_KEY));
 
     const {language} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
@@ -34,7 +34,7 @@ export const Settings = () => {
 
     const handleCreateUuid = () => {
         const newUuid = uuid();
-        localStorage.setItem(localStorageSaveKey, newUuid);
+        localStorage.setItem(LOCAL_STORAGE_SAVE_KEY, newUuid);
 
         setSave({uuid: newUuid, data: {...INITIAL_GAME_PICKS}}, {
             onSuccess: (response) => {
@@ -57,7 +57,7 @@ export const Settings = () => {
     }
 
     const handleSendInviteLink = async () => {
-        const url = `${process.env.REACT_APP_BASE_PATH}?inviteUuid=${saveGameUuid}`
+        const url = `${location.origin}?inviteUuid=${saveGameUuid}`
 
         if (navigator?.share) {
             try {
@@ -83,7 +83,7 @@ export const Settings = () => {
     // }
 
     useEffect(() => {
-        setSaveGameUuid(localStorage.getItem(localStorageSaveKey))
+        setSaveGameUuid(localStorage.getItem(LOCAL_STORAGE_SAVE_KEY))
     }, [])
 
     return (

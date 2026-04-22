@@ -13,6 +13,7 @@ import {useHeroesDataContext} from "../../../../context";
 import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 import {InputLine} from "../../../shared/InputLine/InputLine";
+import {LOCAL_STORAGE_SAVE_KEY} from "../../../../shared/global-constants";
 
 
 export interface ItemsBundleViewProps {
@@ -46,7 +47,7 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
     const itemOptions: SelectionOptionInterface[] = itemList.map(itemName => (toSelectOption(itemName, getTranslation(itemName, 'name'))!));
     const selectedItems = heroItems?.map(itemName => (toSelectOption(itemName, getTranslation(itemName, 'name'))!));
 
-    const uuid = localStorage.getItem('descent-save-game-uuid')!;
+    const uuid = localStorage.getItem(LOCAL_STORAGE_SAVE_KEY)!;
     const {mutate, isLoading} = useSetGameSave()
     const dispatch = useGameSaveDispatchContext();
 
