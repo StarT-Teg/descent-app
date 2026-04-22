@@ -1,5 +1,5 @@
 import {ExcelDataRaw, OverlordCardsDataAdapted, TranslationDataAdaptedInterface} from "../../shared";
-import {floatClearing} from "../../helpers";
+import {convertStringToNumber, floatClearing} from "../../helpers";
 import {getTranslationData} from "../../helpers/translationHelpers";
 
 export const overlordDecksDataAdapted = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): OverlordCardsDataAdapted => {
@@ -10,7 +10,7 @@ export const overlordDecksDataAdapted = (data?: ExcelDataRaw, translation?: Tran
         if (!!row[0] && ![0, 1].includes(rowIndex)) {
             const className = row[0];
             const cardName = row[1];
-            const xpCost = Number(row[2]);
+            const xpCost = convertStringToNumber(row?.[2]);
             const quantity = Number(row[3]);
             const type = row[4];
             const text = row[5];

@@ -49,11 +49,14 @@ export const GoldButton = () => {
                 </div>
             )}
 
-            modalComponent={(onClose) => (
-                <ChangeGoldModal onCloseModal={onClose} onAddGold={handleGoldChange}
+            modalComponent={(onModalClose) => (
+                <ChangeGoldModal onCloseModal={() => {
+                    setLocalGoldState(gold)
+                    onModalClose()
+                }} onAddGold={handleGoldChange}
                                  onSaveAndClose={() => {
                                      onSaveAndDispatch();
-                                     onClose();
+                                     onModalClose();
                                  }
                                  }/>
             )}

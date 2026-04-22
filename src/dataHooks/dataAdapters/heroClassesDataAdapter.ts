@@ -1,5 +1,6 @@
 import {ExcelDataRaw, HeroClassesDataAdapted, TranslationDataAdaptedInterface,} from "../../shared";
 import {getTranslationData} from "../../helpers/translationHelpers";
+import {convertStringToNumber} from "../../helpers";
 
 export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): HeroClassesDataAdapted => {
 
@@ -15,7 +16,7 @@ export const heroClassesDataAdapter = (data?: ExcelDataRaw, translation?: Transl
             const archetype = row[0];
             const className = row[1];
             const skillName = row[2];
-            const xpCost = Number(row[3]);
+            const xpCost = convertStringToNumber(row?.[3]);
             const fatigueCost = row[4];
             const skillDescription = row[5];
             const br = row[6];

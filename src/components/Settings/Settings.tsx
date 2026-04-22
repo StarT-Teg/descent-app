@@ -57,7 +57,7 @@ export const Settings = () => {
     }
 
     const handleSendInviteLink = async () => {
-        const url = `${location.origin}?inviteUuid=${saveGameUuid}`
+        const url = `${String(window.location.origin)}?inviteUuid=${saveGameUuid}`
 
         if (navigator?.share) {
             try {

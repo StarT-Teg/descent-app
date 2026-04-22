@@ -7,3 +7,9 @@ export const floatClearing = (initialNumber?: any) => {
 
     return parseFloat(numberFormatted);
 }
+
+export const convertStringToNumber = (stringNumber: string | undefined) => {
+    const convertedNumber = Number(stringNumber)
+
+    return Number.isNaN(convertedNumber) ? 0 : convertedNumber
+}

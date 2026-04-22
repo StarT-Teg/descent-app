@@ -85,8 +85,8 @@ export const HeroSheetSkills = () => {
             <legend>{getControlTranslation('Skills')} - {availableXp}xp</legend>
 
             {heroAvailableSkills?.sort((skillA, skillB) => {
-                const skillAXp = heroClasses?.[heroClassName || '']?.skills?.[skillA].xpCost || 0;
-                const skillBXp = heroClasses?.[heroClassName || '']?.skills?.[skillB].xpCost || 0;
+                const skillAXp = heroClasses?.[heroClassName || '']?.skills?.[skillA]?.xpCost || 0;
+                const skillBXp = heroClasses?.[heroClassName || '']?.skills?.[skillB]?.xpCost || 0;
 
                 return skillAXp - skillBXp;
             })?.map((skillName: string, index) => {
