@@ -6,6 +6,6 @@ interface AttackTypeIconPropsInterface {
 }
 
 export const AttackTypeIcon = ({type, size = 35}: AttackTypeIconPropsInterface) => (
-    <img src={require(`../../../../assets/img/attackType/${type.toLowerCase()}.png`)}
+    <img src={require(`../../../../assets/img/attackType/${type.toLowerCase()}.webp`)}
          style={{width: `${size}px`, height: `${size}px`}} alt=""/>
 )

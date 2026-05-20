@@ -170,7 +170,7 @@ export const MonsterCard = ({monsterName}: MonsterCardPropsInterface) => {
 
                             </div>
                             <img className={styles.backgroundImg} id={imgId}
-                                 src={require('../../../../assets/img/monsterShowcase/monster-card-front.png')}
+                                 src={require('../../../../assets/img/monsterShowcase/monster-card-front.webp')}
                                  alt={''}/>
                         </div>
                     </div>
@@ -229,7 +229,7 @@ export const MonsterCard = ({monsterName}: MonsterCardPropsInterface) => {
                                 </div>
                             </div>
                             <img className={styles.backgroundImg}
-                                 src={require('../../../../assets/img/monsterShowcase/monster-card-back.png')}
+                                 src={require('../../../../assets/img/monsterShowcase/monster-card-back.webp')}
                                  alt={''}/>
                         </div>
                     </div>
