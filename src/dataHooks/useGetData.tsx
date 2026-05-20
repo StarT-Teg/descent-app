@@ -43,9 +43,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
                 const gameDataRangeList = gameDataRanges[gameDataName as GameDataEnum]
 
                 const dataCombined = gameDataRangeList.reduce((acc: string[][], rangeName) => {
-                    console.log('rangeName: ', rangeName)
                     const rangeData = responseData?.[rangeName]?.values
-                    console.log('rangeData: ', rangeData)
                     if (rangeData?.length) {
                         return [...acc, ...rangeData]
                     }
@@ -55,7 +53,6 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
 
                 responseDataFormatted[gameDataName] = {values: [...dataCombined]}
             }
-            console.log('responseDataFormatted: ', responseDataFormatted)
             return (
                 {
                     ...responseDataFormatted

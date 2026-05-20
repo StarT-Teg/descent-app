@@ -45,7 +45,6 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
                     }
                     return acc
                 }, []);
-            console.log('row[27]: ', row[0], missionName, row[27])
             const isOnlySmallMonsters = !!(row[27]?.trim())
             const cantChangeActMonsterList: string[] = getCleanArrayFromString(row?.[28]);
             const optionalUnits = getCleanArrayFromString(row?.[29]);
