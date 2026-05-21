@@ -1,0 +1,8 @@
+services:
+  descent-app:
+    build:
+      context: .
+      args:
+        REACT_APP_BASE_PATH: ${REACT_APP_BASE_PATH:-http://localhost:8080/}
+    ports:
+      - "8080:8080"
