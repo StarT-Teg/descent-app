@@ -89,4 +89,5 @@ export interface GameSavePicks {
     campaignProgressPicks?: CampaignProgressInterface;
     gold?: number;
     translation?: TranslationDataAdaptedInterface;
+    selectedExpansions?: string[];
 }

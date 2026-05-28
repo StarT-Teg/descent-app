@@ -12,7 +12,7 @@ import Select from "react-select";
 import {toSelectOption} from "../../helpers";
 import {useQuery, UseQueryResult} from "react-query";
 import {ExcelDataRaw, SelectionOptionInterface} from "../../shared";
-import {useGetControlTranslation} from "../../helpers/translationHelpers";
+import {ControlsNameEnum, useGetControlTranslation} from "../../helpers/translationHelpers";
 
 export const Settings = () => {
 
@@ -67,20 +67,10 @@ export const Settings = () => {
             }
         }
     }
-    //     () => {
-    //     const url = `${process.env.REACT_APP_BASE_PATH}?inviteUuid=${saveGameUuid}`
-    //
-    //     try {
-    //         // navigator.share({url}).then()
-    //         navigator.clipboard.writeText(url).then()
-    //     } catch (e) {
-    //         console.log('error:', e)
-    //     }
-    // }
 
-    // const handleExpansionsSettings = () => {
-    //     navigate('/expansions')
-    // }
+    const handleExpansionsSettings = () => {
+        navigate('/expansions');
+    };
 
     useEffect(() => {
         setSaveGameUuid(localStorage.getItem(LOCAL_STORAGE_SAVE_KEY))
@@ -100,9 +90,9 @@ export const Settings = () => {
                         </Button>
                     )}
 
-                    {/*<Button theme='outlineRed' onClick={handleExpansionsSettings}>*/}
-                    {/*    Select expansions*/}
-                    {/*</Button>*/}
+                    <Button theme='outlineRed' onClick={handleExpansionsSettings}>
+                        {getControlTranslation(ControlsNameEnum.selectExpansions)}
+                    </Button>
 
                     <Select
                         className='input'

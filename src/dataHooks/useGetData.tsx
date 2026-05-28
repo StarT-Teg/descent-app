@@ -10,7 +10,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
         itemsData: ['Items'],
         lieutenantsData: ['Lieutenants'],
         monstersData: ['monsters'],
-        overlordDecksData: ['verlord Deck'],
+        overlordDecksData: ['Overlord Deck'],
         relicsData: ['Overlord Relics'],
         familiars: ['Familiars'],
         translation: [],

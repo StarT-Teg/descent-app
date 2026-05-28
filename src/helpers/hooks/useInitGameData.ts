@@ -55,7 +55,7 @@ export const useInitGameData = () => {
             },
             actionType: DataReducerActionsEnum.update,
         });
-
+        console.log('overlordDecksData: ', overlordDecksData)
         dispatchOverlordData({
             payload: {
                 overlordCards: overlordDecksDataAdapted(overlordDecksData, translation),

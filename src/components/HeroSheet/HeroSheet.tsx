@@ -60,7 +60,7 @@ export default function HeroSheet() {
             newHeroPicks.heroClassName = '';
         }
 
-        if (!newHeroPicks.heroClassName) {
+        if (!newHeroPicks?.heroClassName) {
             newHeroPicks.heroClassName = '';
             newHeroPicks.heroSubclassName = '';
             newHeroPicks.heroSkills = [];
@@ -99,10 +99,10 @@ export default function HeroSheet() {
             setHeroAvailableSkills(undefined);
         }
 
-        if (!!playerPicks.heroClassName
-            && !!heroClasses[playerPicks.heroClassName]
-            && playerPicks.heroName
-            && heroClasses[playerPicks.heroClassName].archetype === heroes[playerPicks.heroName].type) {
+        if (!!playerPicks?.heroClassName
+            && !!heroClasses?.[playerPicks.heroClassName]
+            && playerPicks?.heroName
+            && heroClasses?.[playerPicks.heroClassName]?.archetype === heroes?.[playerPicks.heroName]?.type) {
 
             setHeroAvailableSkills(Object.keys(heroClasses[playerPicks.heroClassName].skills))
 
@@ -136,10 +136,10 @@ export default function HeroSheet() {
             setHeroAvailableSkills(undefined)
         }
 
-        if (!!playerPicks.heroSubclassName && !!heroClasses[playerPicks.heroSubclassName]) {
+        if (!!playerPicks.heroClassName && !!playerPicks.heroSubclassName && !!heroClasses[playerPicks.heroSubclassName]) {
             setHeroAvailableSkills(
-                Object.keys(heroClasses[playerPicks.heroClassName!].skills).concat(
-                    Object.keys(heroClasses[playerPicks.heroSubclassName].skills)
+                Object.keys(heroClasses?.[playerPicks.heroClassName]?.skills).concat(
+                    Object.keys(heroClasses?.[playerPicks.heroSubclassName]?.skills)
                 )
             )
         }

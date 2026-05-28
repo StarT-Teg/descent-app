@@ -16,6 +16,7 @@ export const ControlsNameEnum = {
     save: 'Save',
     basicDeck: 'Basic Deck',
     purchasedCards: 'Purchased Cards',
+    selectExpansions: 'Select expansions'
 }
 
 // TODO заменить контролы на енамы
@@ -69,6 +70,7 @@ const controlsTranslation: { [key in string]: { [key in string]: string } } = {
     [ControlsNameEnum.overlord]: {ru: 'Властелин'},
     [ControlsNameEnum.basicDeck]: {ru: 'Базовая Колода'},
     [ControlsNameEnum.purchasedCards]: {ru: 'Купленные Карты'},
+    [ControlsNameEnum.selectExpansions]: {ru: 'Выбрать дополнения'},
 }
 
 export const getTranslationData = (itemList: { [listKey: string]: string }, translation?: TranslationDataAdaptedInterface): { [p: string]: { [language in string]: string } | undefined } => {

@@ -11,7 +11,8 @@ export enum GameSaveReducerActionTypeEnum {
     changeLanguage = 'changeLanguage',
     changeCampaignProgressPicks = 'changeCampaignProgressPicks',
     changeCampaignProgressMissions = 'changeCampaignProgressMissions',
-    changeCampaignProgressComments = 'changeCampaignProgressComments'
+    changeCampaignProgressComments = 'changeCampaignProgressComments',
+    changeExpansions = 'changeExpansions',
 }
 
 interface setCampaignProgressComments {
@@ -64,6 +65,11 @@ interface setTranslation {
     payload?: TranslationDataAdaptedInterface;
 }
 
+interface setExpansions {
+    actionType: GameSaveReducerActionTypeEnum.changeExpansions;
+    payload: string[];
+}
+
 export type GameSaveReducerActions =
     setAllPicks
     | setHeroesPicks
@@ -74,7 +80,8 @@ export type GameSaveReducerActions =
     | setCampaignProgressComments
     | setGold
     | setTranslation
-    | setLanguage;
+    | setLanguage
+    | setExpansions;
 
 export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveReducerActions): GameSavePicks => {
 
@@ -113,6 +120,8 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
             return {...state, translation: payload};
         case GameSaveReducerActionTypeEnum.changeLanguage:
             return {...state, language: payload};
+        case GameSaveReducerActionTypeEnum.changeExpansions:
+            return {...state, selectedExpansions: payload};
         default:
             return state;
     }
