@@ -24,7 +24,7 @@ export const Settings = () => {
     const {getControlTranslation} = useGetControlTranslation()
 
     const {mutate: setSave, isLoading: saveIsLoading} = useSetGameSave()
-    const gameDataQuery: UseQueryResult<GameDataInterface> = useQuery({queryKey: ['get-data-request']})
+    const gameDataQuery: UseQueryResult<GameDataInterface> = useQuery({queryKey: ['get-data-request'], enabled: false})
 
     const navigate = useNavigate();
 
