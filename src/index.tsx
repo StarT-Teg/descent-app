@@ -8,23 +8,31 @@ import {createRoot} from 'react-dom/client';
 import {OverlordDataContextProvider} from "./context/overlord-data-context";
 import {GameSaveContextProvider} from "./context/game-save-context";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: Infinity,
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            refetchOnMount: false,
+            retry: false,
+        },
+    },
+});
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-    <React.StrictMode>
-        <HeroesDataContextProvider>
-            <GameSaveContextProvider>
-                <OverlordDataContextProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <BrowserRouter>
-                            <App/>
-                        </BrowserRouter>
-                    </QueryClientProvider>
-                </OverlordDataContextProvider>
-            </GameSaveContextProvider>
-        </HeroesDataContextProvider>
-</React.StrictMode>
+    <HeroesDataContextProvider>
+        <GameSaveContextProvider>
+            <OverlordDataContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    <BrowserRouter>
+                        <App/>
+                    </BrowserRouter>
+                </QueryClientProvider>
+            </OverlordDataContextProvider>
+        </GameSaveContextProvider>
+    </HeroesDataContextProvider>
 );
