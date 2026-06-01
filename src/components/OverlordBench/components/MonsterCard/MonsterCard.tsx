@@ -23,7 +23,7 @@ export const MonsterCard = ({monsterName}: MonsterCardPropsInterface) => {
 
     const swiper = useSwiper();
 
-    const {campaignPicks, overlordPicks, language} = useGameSaveContext();
+    const {campaignPicks, overlordPicks, language = ''} = useGameSaveContext();
     const {selectedAct} = campaignPicks;
     const {customActPicks} = overlordPicks;
 

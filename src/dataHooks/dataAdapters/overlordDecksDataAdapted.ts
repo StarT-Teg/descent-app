@@ -15,10 +15,11 @@ export const overlordDecksDataAdapted = (data?: ExcelDataRaw, translation?: Tran
             const type = row[4];
             const text = row[5];
             const br = floatClearing(row[6]);
+            const expansion = row?.[7]
             const translations: any = {...getTranslationData({name: cardName}, translation)}
 
             decksDataAdapted[cardName] = {
-                br, className, quantity, text, type, xpCost, cardName, translations
+                br, className, quantity, text, type, xpCost, cardName, translations, expansion
             }
         }
     })

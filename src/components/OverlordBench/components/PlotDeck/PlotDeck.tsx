@@ -14,7 +14,7 @@ import {InputLine} from "../../../shared/InputLine/InputLine";
 export const PlotDeck = () => {
 
     const {plotCards} = useOverlordDataContext();
-    const {overlordPicks, language} = useGameSaveContext();
+    const {overlordPicks, language = ''} = useGameSaveContext();
     const {getControlTranslation} = useGetControlTranslation()
     const dispatch = useGameSaveDispatchContext();
 

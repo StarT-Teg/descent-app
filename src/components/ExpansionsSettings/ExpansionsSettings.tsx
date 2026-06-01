@@ -5,11 +5,12 @@ import {useSetSaveAndUpdate} from '../../helpers/hooks/useSetSaveAndUpdate';
 import {Button} from '../shared';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import {
-    ALL_EXPANSION_IDS,
+    ALL_EXPANSION_NAMES,
     EXPANSION_CATEGORY_LABELS,
     ExpansionCategoryType,
+    expansionIdsToNames,
     EXPANSIONS_LIST,
-} from '../../shared/expansion-constants';
+} from '../../shared';
 import styles from './expansions-settings.module.css';
 import cn from 'classnames';
 import {JSX} from 'react/jsx-runtime';
@@ -39,20 +40,26 @@ export const ExpansionsSettings = () => {
     const {setSaveAndUpdate, isLoading} = useSetSaveAndUpdate();
     const navigate = useNavigate();
 
-    const [localSelected, setLocalSelected] = useState<string[]>(
-        selectedExpansions ?? ALL_EXPANSION_IDS,
-    );
+    // localSelected and context/backend store names.
+    // For backward compatibility: if saved values look like ids (not in ALL_EXPANSION_NAMES),
+    // convert them to names on first load.
+    const [localSelected, setLocalSelected] = useState<string[]>(() => {
+        if (!selectedExpansions) return ALL_EXPANSION_NAMES;
+        const firstItem = selectedExpansions[0];
+        const isId = firstItem !== undefined && !ALL_EXPANSION_NAMES.includes(firstItem);
+        return isId ? expansionIdsToNames(selectedExpansions) : selectedExpansions;
+    });
 
-    const handleToggle = (id: string) => {
+    const handleToggle = (name: string) => {
         setLocalSelected((prev) =>
-            prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id],
+            prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name],
         );
     };
 
-    const allSelected = localSelected.length === ALL_EXPANSION_IDS.length;
+    const allSelected = localSelected.length === ALL_EXPANSION_NAMES.length;
 
     const handleToggleAll = () => {
-        setLocalSelected(allSelected ? [] : ALL_EXPANSION_IDS);
+        setLocalSelected(allSelected ? [] : ALL_EXPANSION_NAMES);
     };
 
     const handleSave = () => {
@@ -86,12 +93,12 @@ export const ExpansionsSettings = () => {
                         <h2 className={styles.sectionTitle}>{EXPANSION_CATEGORY_LABELS[category]}</h2>
                         <div className={styles.grid}>
                             {items.map((expansionItem) => {
-                                const isSelected = localSelected.includes(expansionItem.id);
+                                const isSelected = localSelected.includes(expansionItem.name);
                                 return (
                                     <div
                                         key={expansionItem.id}
                                         className={cn(styles.card, {[styles.selected]: isSelected})}
-                                        onClick={() => handleToggle(expansionItem.id)}
+                                        onClick={() => handleToggle(expansionItem.name)}
                                         role="button"
                                         aria-pressed={isSelected}
                                     >

@@ -15,14 +15,18 @@ import {translationDataAdapted} from "../../dataHooks/dataAdapters/translationDa
 import {agentsDataAdapter} from "../../dataHooks/dataAdapters/agentsDataAdapter";
 import {plotCardsDataAdapted} from "../../dataHooks/dataAdapters/plotCardsDataAdapted";
 import {useGetData} from "../../dataHooks";
-import {useGetTranslation} from "../../dataHooks/useGetTranslation";
+import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
+import {LOCAL_STORAGE_LANGUAGE_KEY} from "../../shared";
+import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
 export const useInitGameData = () => {
-    const {data: translationData, isLoading: translationIsLoading} = useGetTranslation();
+    const {selectedExpansions} = useGameSaveContext();
+
     const {data: gameData, isLoading: dataIsLoading} = useGetData();
 
     const dispatchHeroesData = useHeroesDataDispatchContext();
     const dispatchOverlordData = useOverlordDataDispatchContext();
+    const dispatchGameSave = useGameSaveDispatchContext()
 
     useEffect(() => {
         if (!gameData) {
@@ -42,9 +46,24 @@ export const useInitGameData = () => {
             abilitiesData,
             agentsData,
             plotDeckData,
+            translationData
         } = gameData;
 
         const translation = translationDataAdapted(translationData);
+
+        const selectedLanguageFormStorage: string | null = localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY);
+        const firstLanguageFormData: string | undefined = translationData?.values?.[0]?.[0];
+
+        if (!selectedLanguageFormStorage) {
+            if (firstLanguageFormData) {
+                localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, firstLanguageFormData);
+            }
+        }
+
+        dispatchGameSave({
+            actionType: GameSaveReducerActionTypeEnum.changeLanguage,
+            payload: selectedLanguageFormStorage || firstLanguageFormData || '',
+        });
 
         dispatchHeroesData({
             payload: {
@@ -55,7 +74,7 @@ export const useInitGameData = () => {
             },
             actionType: DataReducerActionsEnum.update,
         });
-        console.log('overlordDecksData: ', overlordDecksData)
+
         dispatchOverlordData({
             payload: {
                 overlordCards: overlordDecksDataAdapted(overlordDecksData, translation),
@@ -69,7 +88,7 @@ export const useInitGameData = () => {
             },
             actionType: DataReducerActionsEnum.update,
         });
-    }, [translationData, gameData, dispatchHeroesData, dispatchOverlordData]);
+    }, [gameData, dispatchHeroesData, dispatchOverlordData, selectedExpansions]);
 
-    return {isLoading: dataIsLoading || translationIsLoading};
+    return {isLoading: dataIsLoading};
 };

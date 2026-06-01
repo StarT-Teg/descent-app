@@ -85,7 +85,7 @@ export interface GameSavePicks {
     heroesPicks: CurrentPlayersPicks;
     overlordPicks: CurrentOverlordPicks;
     campaignPicks: CampaignPicksInterface;
-    language: string;
+    language?: string;
     campaignProgressPicks?: CampaignProgressInterface;
     gold?: number;
     translation?: TranslationDataAdaptedInterface;

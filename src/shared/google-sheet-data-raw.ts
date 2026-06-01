@@ -25,6 +25,7 @@ export enum OverlordDeckDataParametersEnum {
     text = 'text',
     br = 'br',
     translations = 'translations',
+    expansion = 'expansion'
 }
 
 export enum LieutenantDataParametersEnum {
@@ -90,6 +91,7 @@ export enum ItemDataParametersEnum {
     surgeAbilities = 'surgeAbilities',
     br = 'br',
     translations = 'translations',
+    expansion = 'expansion'
 }
 
 export enum HeroParametersEnum {

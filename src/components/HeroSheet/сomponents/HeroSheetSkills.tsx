@@ -16,7 +16,7 @@ export const HeroSheetSkills = () => {
 
     const {campaignsData} = useOverlordDataContext();
     const {heroClasses} = useHeroesDataContext()
-    const {heroesPicks, language, campaignProgressPicks} = useGameSaveContext();
+    const {heroesPicks, language = '', campaignProgressPicks} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;

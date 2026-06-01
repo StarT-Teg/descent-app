@@ -29,7 +29,7 @@ export const CampaignMonsters = () => {
     } = useGetOverlordPicks();
 
     const {relics, monsters, lieutenants, campaignsData} = useOverlordDataContext()
-    const {overlordPicks, campaignPicks, language} = useGameSaveContext();
+    const {overlordPicks, campaignPicks, language = ''} = useGameSaveContext();
     const {pickedMonsters = [], customActPicks = [], excludedUnits = []} = overlordPicks;
 
     const {getControlTranslation} = useGetControlTranslation()

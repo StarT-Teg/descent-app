@@ -14,6 +14,7 @@ import LoadingSpinner from "../../../LoadingSpinner/LoadingSpinner";
 import {useGetControlTranslation} from "../../../../helpers/translationHelpers";
 import {InputLine} from "../../../shared/InputLine/InputLine";
 import {LOCAL_STORAGE_SAVE_KEY} from "../../../../shared/global-constants";
+import {useGetFilteredWithExpansionsList} from "../../../../helpers/hooks/useGetFilteredWithExpansionsList";
 
 
 export interface ItemsBundleViewProps {
@@ -33,10 +34,11 @@ export const HeroSheetItems = (props: ItemsBundleViewProps) => {
         heroPosition
     } = props;
 
+    const {getFilteredList} = useGetFilteredWithExpansionsList()
     const {items} = useHeroesDataContext();
     const {language} = useGameSaveContext()
 
-    const itemList = Object.keys(items)
+    const itemList = Object.keys(getFilteredList(items))
 
     const {getControlTranslation} = useGetControlTranslation()
 

@@ -1,5 +1,6 @@
 import {
     ExcelDataRaw,
+    GameSavePicks,
     LieutenantActData,
     LieutenantDataParametersEnum,
     LieutenantsDataAdapted,
@@ -8,10 +9,13 @@ import {
 import {floatClearing} from "../../helpers";
 import {getTranslationData} from "../../helpers/translationHelpers";
 
-export const lieutenantsDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface): LieutenantsDataAdapted => {
+export const lieutenantsDataAdapter = (data?: ExcelDataRaw, translation?: TranslationDataAdaptedInterface, availableExpansions?: GameSavePicks['selectedExpansions']): LieutenantsDataAdapted => {
 
     return data?.values?.reduce((acc: LieutenantsDataAdapted, row, rowIndex) => {
-        if (!!row[0] && ![0, 1].includes(rowIndex)) {
+        const expansion = row?.[3];
+        const inExpansion = !expansion || !availableExpansions?.length || availableExpansions.includes(expansion)
+
+        if (!!row[0] && ![0, 1].includes(rowIndex) && inExpansion) {
 
             const lieutenantName = row[0];
             const lieutenantAct = row[1];
@@ -62,7 +66,7 @@ export const lieutenantsDataAdapter = (data?: ExcelDataRaw, translation?: Transl
                     ...acc[lieutenantName],
 
                     [LieutenantDataParametersEnum.name]: lieutenantName,
-                    [LieutenantDataParametersEnum.expansion]: row[3],
+                    [LieutenantDataParametersEnum.expansion]: expansion,
                     [LieutenantDataParametersEnum.description]: row[4],
                     translation: {...getTranslationData({name: lieutenantName}, translation)},
                     ['act' + lieutenantAct]: lieutenant

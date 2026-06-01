@@ -13,11 +13,13 @@ import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../contex
 import {GameSaveReducerActionTypeEnum} from "../../../../context/game-save-context-reducer";
 import {ControlsNameEnum, useGetControlTranslation} from "../../../../helpers/translationHelpers";
 import {InputLine} from "../../../shared/InputLine/InputLine";
+import {useGetFilteredWithExpansionsList} from "../../../../helpers/hooks/useGetFilteredWithExpansionsList";
 
 export const OverlordDeck = () => {
 
+    const {getFilteredList} = useGetFilteredWithExpansionsList()
     const {overlordCards, campaignsData} = useOverlordDataContext();
-    const {overlordPicks, language, campaignProgressPicks, heroesPicks} = useGameSaveContext();
+    const {overlordPicks, language, campaignProgressPicks, heroesPicks, selectedExpansions} = useGameSaveContext();
     const dispatch = useGameSaveDispatchContext();
 
     const {purchasedCards} = overlordPicks;
@@ -111,6 +113,8 @@ export const OverlordDeck = () => {
     useEffect(() => {
         setOverlordCardOptions(
             Object.keys(overlordCards).reduce((acc: SelectionOptionInterface[], cardName) => {
+
+                getFilteredList(overlordCards)
                 const className = overlordCards[cardName][OverlordDeckDataParametersEnum.className];
                 const cardNameTranslated = getTranslation(cardName, 'name');
 

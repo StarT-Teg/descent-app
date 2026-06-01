@@ -67,8 +67,8 @@ export function useBrFunctions() {
             act = customActPicks?.includes(lieutenantName) ? selectedAct === 2 ? 'act1' : 'act2' : currentAct;
         }
 
-        const baseBr = lieutenants[lieutenantName]?.[act]?.br || 0;
-        const additionalBr = lieutenants[lieutenantName][act]?.stats?.[numberOfHeroes].br || 0;
+        const baseBr = lieutenants?.[lieutenantName]?.[act]?.br || 0;
+        const additionalBr = lieutenants?.[lieutenantName]?.[act]?.stats?.[numberOfHeroes]?.br || 0;
 
         return Math.round(baseBr + additionalBr);
     }

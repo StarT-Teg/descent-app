@@ -89,7 +89,12 @@ export const EXPANSIONS_LIST: ExpansionInterface[] = [
     {id: 'visions-of-dawn', name: 'Visions of Dawn', image: visionsOfDawnImg, category: 'hero-monster'},
     {id: 'bonds-of-the-wild', name: 'Bonds of the Wild', image: bondsOfTheWildImg, category: 'hero-monster'},
     {id: 'treaty-of-champions', name: 'Treaty of Champions', image: treatyOfChampionsImg, category: 'hero-monster'},
-    {id: 'stewards-of-the-secret', name: 'Stewards of the Secret', image: stewardsOfTheSecretImg, category: 'hero-monster'},
+    {
+        id: 'stewards-of-the-secret',
+        name: 'Stewards of the Secret',
+        image: stewardsOfTheSecretImg,
+        category: 'hero-monster'
+    },
     {id: 'shards-of-everdark', name: 'Shards of Everdark', image: shardsOfEverdarkImg, category: 'hero-monster'},
     // Co-Op Expansions
     {id: 'forgotten-souls', name: 'Forgotten Souls', image: forgottenSoulsImg, category: 'co-op'},
@@ -98,7 +103,21 @@ export const EXPANSIONS_LIST: ExpansionInterface[] = [
     {id: 'road-to-legend', name: 'Road to Legend', image: null, category: 'co-op'},
 ];
 
-export const ALL_EXPANSION_IDS: string[] = EXPANSIONS_LIST.map((e) => e.id);
+export const ALL_EXPANSION_NAMES: string[] = EXPANSIONS_LIST.map((e) => e.name);
+
+/** Convert array of ids → array of names */
+export const expansionIdsToNames = (ids: string[]): string[] =>
+    ids.reduce<string[]>((acc, id) => {
+        const found = EXPANSIONS_LIST.find((e) => e.id === id);
+        return found ? [...acc, found.name] : acc;
+    }, []);
+
+/** Convert array of names → array of ids */
+export const expansionNamesToIds = (names: string[]): string[] =>
+    names.reduce<string[]>((acc, name) => {
+        const found = EXPANSIONS_LIST.find((e) => e.name === name);
+        return found ? [...acc, found.id] : acc;
+    }, []);
 
 export const EXPANSION_CATEGORY_LABELS: Record<ExpansionCategoryType, string> = {
     'box': 'Box Expansions',

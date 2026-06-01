@@ -9,8 +9,11 @@ import {useParams} from "react-router-dom";
 import {useGameSaveContext, useGameSaveDispatchContext} from "../../../../context/game-save-context";
 import {useHeroesDataContext} from "../../../../context";
 import {toSelectOption} from "../../../../helpers";
+import {useGetFilteredWithExpansionsList} from "../../../../helpers/hooks/useGetFilteredWithExpansionsList";
 
 export const HeroSheetName = () => {
+
+    const {getFilteredList} = useGetFilteredWithExpansionsList()
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
@@ -28,7 +31,7 @@ export const HeroSheetName = () => {
         return heroes?.[name]?.translation?.name?.[language || ''] || name;
     }
 
-    const options: SelectionOptionInterface[] = Object.keys(heroes).sort().map(heroName => (toSelectOption(heroName, getNameTranslation(heroName || '')))!)
+    const options: SelectionOptionInterface[] = Object.keys(getFilteredList(heroes)).sort().map(heroName => (toSelectOption(heroName, getNameTranslation(heroName || '')))!)
     const selectedHeroNameAdapted: SelectionOptionInterface | null = toSelectOption(selectedHeroName, getNameTranslation(selectedHeroName || ''))
 
     const handleChangeHeroName = (heroName: string) => {

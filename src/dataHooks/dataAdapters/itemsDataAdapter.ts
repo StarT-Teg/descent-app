@@ -25,6 +25,7 @@ export const itemsDataAdapter = (data?: ExcelDataRaw, translation?: TranslationD
                 [ItemDataParametersEnum.traits]: row[11],
                 [ItemDataParametersEnum.surgeAbilities]: [row[13], row[15], row[17]].filter(str => !!str).join(';\n'),
                 [ItemDataParametersEnum.br]: row[22],
+                [ItemDataParametersEnum.expansion]: row[23],
                 [ItemDataParametersEnum.translations]: {
                     ...getTranslationData({name: itemName}, translation),
                 }

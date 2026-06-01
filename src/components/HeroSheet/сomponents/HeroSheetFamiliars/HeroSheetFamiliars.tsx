@@ -13,7 +13,7 @@ export const HeroSheetFamiliars = () => {
 
     const {playerRole} = useParams();
     const heroPlayerPosition = playerRole as HeroPlayersEnum;
-    const {heroesPicks, language} = useGameSaveContext();
+    const {heroesPicks, language = ''} = useGameSaveContext();
     const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
 
     const {familiars} = useHeroesDataContext()

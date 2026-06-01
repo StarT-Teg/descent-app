@@ -20,7 +20,7 @@ export enum GameDataEnum {
     campaignData = 'campaignData',
     familiars = 'familiars',
     abilitiesData = 'abilitiesData',
-    translation = 'translation',
+    translationData = 'translationData',
     agentsData = 'agentsData',
     plotDeckData = 'plotDeckData',
 }
@@ -106,6 +106,7 @@ export interface OverlordDeckSkill {
     [OverlordDeckDataParametersEnum.translations]: {
         name: { [key in string]: string }
     };
+    [OverlordDeckDataParametersEnum.expansion]?: string;
 }
 
 export interface LieutenantsDataAdapted {
@@ -248,6 +249,7 @@ export interface ItemsDataAdapted {
         [ItemDataParametersEnum.traits]?: string;
         [ItemDataParametersEnum.surgeAbilities]?: string;
         [ItemDataParametersEnum.br]: string;
+        [ItemDataParametersEnum.expansion]: string;
         [ItemDataParametersEnum.translations]: {
             name: { [key in string]: string }
         };

@@ -1,6 +1,6 @@
 import uuid from "react-uuid";
 import {INITIAL_GAME_PICKS, useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
-import {LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
+import {LOCAL_STORAGE_LANGUAGE_KEY, LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
 import {useNavigate} from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import React, {useEffect, useState} from "react";
@@ -8,27 +8,27 @@ import {useSetGameSave} from "../../dataHooks/useSetGameSave";
 import {Button} from "../shared";
 import styles from './create-game-party.module.css'
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
-import Select from "react-select";
+import Select, {SingleValue} from "react-select";
 import {toSelectOption} from "../../helpers";
 import {useQuery, UseQueryResult} from "react-query";
-import {ExcelDataRaw, SelectionOptionInterface} from "../../shared";
+import {GameDataInterface, SelectionOptionInterface} from "../../shared";
 import {ControlsNameEnum, useGetControlTranslation} from "../../helpers/translationHelpers";
 
 export const Settings = () => {
 
     const [saveGameUuid, setSaveGameUuid] = useState<string | null>(localStorage.getItem(LOCAL_STORAGE_SAVE_KEY));
 
-    const {language} = useGameSaveContext();
+    const {language: selectedLanguage} = useGameSaveContext();
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const {getControlTranslation} = useGetControlTranslation()
 
     const {mutate: setSave, isLoading: saveIsLoading} = useSetGameSave()
-    const translationQuery: UseQueryResult<ExcelDataRaw> = useQuery({queryKey: ['get-translation-request']})
+    const gameDataQuery: UseQueryResult<GameDataInterface> = useQuery({queryKey: ['get-data-request']})
 
     const navigate = useNavigate();
 
-    const languageOptions = translationQuery?.data?.values?.[0]?.reduce((acc: SelectionOptionInterface[], language: string) => {
+    const languageOptions = gameDataQuery?.data?.translationData?.values?.[0]?.reduce((acc: SelectionOptionInterface[], language: string) => {
         return ([...acc, toSelectOption(language)!])
     }, [])
 
@@ -72,6 +72,14 @@ export const Settings = () => {
         navigate('/expansions');
     };
 
+    const handleChangeLanguage = (language: SingleValue<SelectionOptionInterface>) => {
+        dispatchPlayersPick({
+            actionType: GameSaveReducerActionTypeEnum.changeLanguage,
+            payload: language?.value
+        })
+        localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, language?.value);
+    }
+
     useEffect(() => {
         setSaveGameUuid(localStorage.getItem(LOCAL_STORAGE_SAVE_KEY))
     }, [])
@@ -96,14 +104,9 @@ export const Settings = () => {
 
                     <Select
                         className='input'
-                        value={toSelectOption(language)}
+                        value={toSelectOption(selectedLanguage)}
                         options={languageOptions}
-                        onChange={(value) => {
-                            dispatchPlayersPick({
-                                actionType: GameSaveReducerActionTypeEnum.changeLanguage,
-                                payload: value?.value
-                            })
-                        }}
+                        onChange={handleChangeLanguage}
                         isClearable
                         isSearchable
                         name="select-hero-class"
