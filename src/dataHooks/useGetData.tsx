@@ -62,6 +62,7 @@ export const useGetData = (): UseQueryResult<GameDataInterface> => {
 
     return useQuery(['get-data-request'], query, {
         enabled: true,
+        staleTime: Infinity,
         keepPreviousData: true,
         refetchInterval: false,
         refetchOnMount: false,

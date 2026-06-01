@@ -15,13 +15,11 @@ import {translationDataAdapted} from "../../dataHooks/dataAdapters/translationDa
 import {agentsDataAdapter} from "../../dataHooks/dataAdapters/agentsDataAdapter";
 import {plotCardsDataAdapted} from "../../dataHooks/dataAdapters/plotCardsDataAdapted";
 import {useGetData} from "../../dataHooks";
-import {useGameSaveContext, useGameSaveDispatchContext} from "../../context/game-save-context";
+import {useGameSaveDispatchContext} from "../../context/game-save-context";
 import {LOCAL_STORAGE_LANGUAGE_KEY} from "../../shared";
 import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-reducer";
 
 export const useInitGameData = () => {
-    const {selectedExpansions} = useGameSaveContext();
-
     const {data: gameData, isLoading: dataIsLoading} = useGetData();
 
     const dispatchHeroesData = useHeroesDataDispatchContext();
@@ -88,7 +86,7 @@ export const useInitGameData = () => {
             },
             actionType: DataReducerActionsEnum.update,
         });
-    }, [gameData, dispatchHeroesData, dispatchOverlordData, selectedExpansions]);
+    }, [gameData, dispatchHeroesData, dispatchOverlordData, dispatchGameSave]);
 
     return {isLoading: dataIsLoading};
 };
