@@ -6,7 +6,7 @@ import {GameSaveReducerActionTypeEnum} from "../../context/game-save-context-red
 import {LOCAL_STORAGE_SAVE_KEY} from "../../shared/global-constants";
 import {useInviteUuid} from "./useInviteUuid";
 
-export const useInitSaveGame = (gameDataIsLoading: boolean) => {
+export const useInitSaveGame = () => {
     // Detect ?inviteUuid= on any route, persist to localStorage and strip from URL.
     const inviteUuid = useInviteUuid();
 
@@ -29,13 +29,7 @@ export const useInitSaveGame = (gameDataIsLoading: boolean) => {
     }, [inviteUuid]);
 
     // Fetch save data whenever the active UUID changes.
-    // Wait for game data to finish loading before navigating to avoid
-    // triggering a re-render that causes useGetData to fire a second request.
     useEffect(() => {
-        if (gameDataIsLoading) {
-            return;
-        }
-
         if (!saveGameUuid) {
             navigate('/settings');
             return;
@@ -54,7 +48,7 @@ export const useInitSaveGame = (gameDataIsLoading: boolean) => {
                 navigate('/settings');
             }
         });
-    }, [saveGameUuid, gameDataIsLoading]);
+    }, [saveGameUuid]);
 
     return {saveIsLoading};
 };

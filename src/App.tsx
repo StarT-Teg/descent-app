@@ -14,7 +14,7 @@ const CampaignProgress = React.lazy(() => import("./components/CampaignProgress/
 
 export const App = () => {
     const {isLoading: dataIsLoading} = useInitGameData();
-    const {saveIsLoading} = useInitSaveGame(dataIsLoading);
+    const {saveIsLoading} = useInitSaveGame();
 
     const isLoading = dataIsLoading || saveIsLoading;
 
