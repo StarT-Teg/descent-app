@@ -4,10 +4,10 @@ import {GameDataEnum, GameDataInterface} from "../shared";
 
 const gameDataRanges: Record<GameDataEnum, string[]> = {
     campaignData: ['Campaigns'],
-    heroClassesData: ['vote4Classes'],
-    heroesData: ['vote4Heroes'],
+    heroClassesData: ['vote4Classes!A:G'],
+    heroesData: ['vote4Heroes!A:N'],
     itemsData: ['Items'],
-    lieutenantsData: ['Lieutenants'],
+    lieutenantsData: ['Lieutenants!A:AL'],
     monstersData: ['monsters'],
     overlordDecksData: ['Overlord Deck!A:H'],
     relicsData: ['Overlord Relics'],
