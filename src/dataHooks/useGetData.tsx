@@ -59,7 +59,12 @@ const fetchGameData = () => axios
 export const useGetData = (): UseQueryResult<GameDataInterface> => {
     return useQuery(['get-data-request'], fetchGameData, {
         enabled: true,
+        staleTime: Infinity,
         keepPreviousData: true,
         refetchInterval: false,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        retry: false,
     });
 }
