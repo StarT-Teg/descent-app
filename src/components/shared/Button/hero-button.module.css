@@ -25,7 +25,7 @@
     background-size: 100%;
 
     border: 20px solid;
-    border-image: url('/src/assets/img/buttons/hero/border.png') 100 / 35px round;
+    border-image: url('/src/assets/img/buttons/hero/border.webp') 100 / 35px round;
 
 }
 
@@ -37,7 +37,7 @@
     border-left: 20px solid;
     border-right: 20px solid;
 
-    border-image: url('/src/assets/img/buttons/simble-border.png') 58 / 35px round;
+    border-image: url('/src/assets/img/buttons/simble-border.webp') 58 / 35px round;
 
     /*box-shadow: ;*/
     filter: drop-shadow(0 5px 20px rgba(22, 52, 91, 1));
@@ -53,7 +53,7 @@
     color: hsl(0, 0%, 100%);
     border: 16px solid;
 
-    border-image: url('/src/assets/img/buttons/outline-red.png') 40 / 30px round;
+    border-image: url('/src/assets/img/buttons/outline-red.webp') 40 / 30px round;
 
     filter: drop-shadow(0 5px 20px rgba(31, 59, 65, 1));
     background: radial-gradient(circle, rgba(31, 59, 65, 1) 0%, rgba(11, 20, 25, 1) 99%) padding-box;

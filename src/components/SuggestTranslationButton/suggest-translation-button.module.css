@@ -14,7 +14,7 @@
     box-sizing: border-box;
 
     border: 10px solid;
-    border-image: url('/src/assets/img/buttons/overlord/border.png') 100 / 35px round;
+    border-image: url('/src/assets/img/buttons/overlord/border.webp') 100 / 35px round;
     background-image: url('/src/assets/img/bg/spotsBG.webp');
     background-clip: padding-box;
     background-size: contain;
