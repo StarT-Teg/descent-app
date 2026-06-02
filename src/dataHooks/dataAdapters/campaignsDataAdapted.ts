@@ -48,6 +48,7 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
             const isOnlySmallMonsters = !!(row[27]?.trim())
             const cantChangeActMonsterList: string[] = getCleanArrayFromString(row?.[28]);
             const optionalUnits = getCleanArrayFromString(row?.[29]);
+            const winnerForInterlude = row?.[30]
 
             campaignsDataAdapted[campaignName] = {
                 ...campaignsDataAdapted[campaignName],
@@ -60,6 +61,7 @@ export const campaignsDataAdapted = (data?: ExcelDataRaw, translation?: Translat
                         missionType,
                         act2MissionNameHeroWin,
                         act2MissionNameOverlordWin,
+                        winnerForInterlude,
                         rewards: {
                             xpRewardHeroWin,
                             xpRewardHeroDefeat,

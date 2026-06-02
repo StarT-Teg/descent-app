@@ -103,7 +103,7 @@ export const GameSaveContextReducer = (state: GameSavePicks, action: GameSaveRed
                 ...state,
                 campaignProgressPicks: {
                     ...state?.campaignProgressPicks,
-                    availableMissions: {...state?.campaignProgressPicks?.availableMissions, ...payload}
+                    completedMissions: {...state?.campaignProgressPicks?.completedMissions, ...payload}
                 }
             };
         case GameSaveReducerActionTypeEnum.changeCampaignProgressComments:

@@ -16,15 +16,21 @@ export const CampaignProgressAdventure = ({missionName}: { missionName: string }
     const dispatch = useGameSaveDispatchContext();
     const {getControlTranslation} = useGetControlTranslation();
 
-    const selectedOption = toSelectOption(campaignProgressPicks?.availableMissions?.[missionName]);
+    const selectedOption = toSelectOption(campaignProgressPicks?.completedMissions?.[missionName]);
     const selectOptions: SelectionOptionInterface[] = toSelectOptionArray([{
         value: 'heroes',
         label: getControlTranslation(ControlsNameEnum.heroes)
     }, {value: 'overlord', label: getControlTranslation(ControlsNameEnum.overlord)}])!;
 
     const dispatchCampaignProgress = (selectValue: "overlord" | "heroes" | null) => {
+        const missionData = !!selectValue && !!campaignProgressPicks?.selectedCampaign ? campaignsData?.[campaignProgressPicks?.selectedCampaign]?.[missionName] : undefined
+        const missionsToExclude = !!selectValue ? (selectValue === "overlord" ? missionData?.act2MissionNameHeroWin : missionData?.act2MissionNameOverlordWin)?.split(',')?.reduce((missionsAcc, missionName) => ({
+            ...missionsAcc,
+            [missionName.trim()]: null
+        }), {}) : undefined;
+
         dispatch({
-            payload: {[missionName]: campaignProgressPicks?.availableMissions?.[missionName] === selectValue ? null : selectValue},
+            payload: {[missionName]: campaignProgressPicks?.completedMissions?.[missionName] === selectValue ? null : selectValue, ...missionsToExclude},
             actionType: GameSaveReducerActionTypeEnum.changeCampaignProgressMissions
         },)
     }

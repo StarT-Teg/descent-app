@@ -94,21 +94,21 @@ export const OverlordDeck = () => {
 
     useEffect(() => {
         setOverlordXP(
-            Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
+            Object.keys(campaignProgressPicks?.completedMissions || {})?.reduce((acc: number, missionName) => {
                 const heroesCoef = numberOfHeroes - 2;
 
-                if (campaignProgressPicks?.availableMissions?.[missionName] === 'overlord') {
+                if (campaignProgressPicks?.completedMissions?.[missionName] === 'overlord') {
                     return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordWin || 0) + heroesCoef;
                 }
 
-                if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
+                if (campaignProgressPicks?.completedMissions?.[missionName] === 'heroes') {
                     return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardOverlordDefeat || 0) + heroesCoef;
                 }
 
                 return acc;
             }, numberOfHeroes)
         )
-    }, [campaignProgressPicks?.availableMissions, numberOfHeroes])
+    }, [campaignProgressPicks?.completedMissions, numberOfHeroes])
 
     useEffect(() => {
         setOverlordCardOptions(

@@ -20,12 +20,12 @@ export const HeroSheetSkills = () => {
     const dispatchPlayersPick = useGameSaveDispatchContext();
 
     const playerPicks = heroesPicks[heroPlayerPosition] as HeroPlayerPicks;
-    const availableXp = Object.keys(campaignProgressPicks?.availableMissions || {})?.reduce((acc: number, missionName) => {
-        if (!campaignProgressPicks?.availableMissions?.[missionName]) {
+    const availableXp = Object.keys(campaignProgressPicks?.completedMissions || {})?.reduce((acc: number, missionName) => {
+        if (!campaignProgressPicks?.completedMissions?.[missionName]) {
             return acc;
         }
 
-        if (campaignProgressPicks?.availableMissions?.[missionName] === 'heroes') {
+        if (campaignProgressPicks?.completedMissions?.[missionName] === 'heroes') {
             return acc + (campaignsData?.[campaignProgressPicks?.selectedCampaign || '']?.[missionName]?.rewards?.xpRewardHeroWin || 0)
         }
 

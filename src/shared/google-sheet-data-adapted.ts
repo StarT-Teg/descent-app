@@ -43,6 +43,7 @@ export interface MissionDataAdapted {
     [CampaignsDataParametersEnum.campaignName]: string,
     [CampaignsDataParametersEnum.act]: number,
     [CampaignsDataParametersEnum.missionName]: string,
+    [CampaignsDataParametersEnum.winnerForInterlude]?: string;
     [CampaignsDataParametersEnum.translation]?: {
         campaignName?: { [key in string]?: string },
         missionName?: { [key in string]?: string },

@@ -13,7 +13,8 @@ export enum CampaignsDataParametersEnum {
     openGroupsTraits = 'openGroupsTraits',
     isOnlySmallMonsters = 'isOnlySmallMonsters',
     cantChangeActMonsterList = 'cantChangeActMonsterList',
-    translation = 'translation'
+    translation = 'translation',
+    winnerForInterlude = 'winnerForInterlude',
 }
 
 export enum OverlordDeckDataParametersEnum {
