@@ -14,17 +14,23 @@
     src: local('DescentSymbols'), url(/src/assets/fonts/symbols.ttf) format('truetype');
 }
 
+html,
 body {
-    background: url('assets/img/bg.webp');
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: url('assets/img/bg.webp') no-repeat center center;
+    background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-
-    margin: 0;
 }
 
 #root {
     max-width: 100vw;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 p {
@@ -35,7 +41,7 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .grid-container {
