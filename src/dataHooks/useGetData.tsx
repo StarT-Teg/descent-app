@@ -8,7 +8,7 @@ const gameDataRanges: Record<GameDataEnum, string[]> = {
     heroesData: ['vote4Heroes!A:N'],
     itemsData: ['Items'],
     lieutenantsData: ['Lieutenants!A:AL'],
-    monstersData: ['monsters'],
+    monstersData: ['Monsters'],
     overlordDecksData: ['Overlord Deck!A:H'],
     relicsData: ['Overlord Relics'],
     familiars: ['Familiars'],

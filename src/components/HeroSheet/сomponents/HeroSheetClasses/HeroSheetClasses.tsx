@@ -109,7 +109,7 @@ export const HeroSheetClasses = (props: ClassesBundleViewProps) => {
                                 handleChangeSubclassName(!!value ? value.value : '')
                             }}
                             isClearable
-                            isSearchable
+                            isSearchable={subclassOptions?.length > 7}
                             name="select-hero-subclass"
                             placeholder={''}
                         />

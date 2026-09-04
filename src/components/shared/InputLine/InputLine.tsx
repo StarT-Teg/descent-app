@@ -48,7 +48,7 @@ export const InputLine = ({
         <div
             onClick={onClick}
             className={classNames(styles.inputWrapper, extraStyles?.inputWrapper)}>
-            <span className={classNames(styles.input, extraStyles?.input)}>{inputValue}</span>
+            <div className={classNames(styles.input, extraStyles?.input)}>{inputValue}</div>
         </div>
 
         {!!monsterCardProps && (

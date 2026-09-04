@@ -144,6 +144,7 @@ export const OverlordDeck = () => {
                     isClearable
                     name="basic-deck"
                     placeholder={getControlTranslation('Choose basic deck')}
+                    isSearchable={false}
                 />
             </fieldset>
 

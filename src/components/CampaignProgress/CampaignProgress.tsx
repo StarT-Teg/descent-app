@@ -144,6 +144,7 @@ export const CampaignProgress = () => {
                     isClearable
                     name="select-campaign"
                     placeholder={getControlTranslation('Campaign')}
+                    isSearchable={availableCampaigns?.length > 7}
                 />
             </fieldset>
 

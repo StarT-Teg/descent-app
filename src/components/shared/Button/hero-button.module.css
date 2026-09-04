@@ -9,8 +9,11 @@
 
     transition: all 100ms;
 
-    max-height: 78px;
+    /*max-height: 78px;*/
     width: 100%;
+
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .buttonText {
@@ -41,12 +44,12 @@
 
     /*box-shadow: ;*/
     filter: drop-shadow(0 5px 20px rgba(22, 52, 91, 1));
-    background: radial-gradient(circle, rgba(53, 61, 173, 1) 30%, rgba(22, 52, 91, 1) 100%) padding-box;
+    background: radial-gradient(ellipse, rgba(53, 61, 173, 1) 30%, rgba(22, 52, 91, 1) 100%) border-box padding-box;
 }
 
 .red {
     filter: drop-shadow(0 5px 20px rgba(32, 2, 4, 1));
-    background: radial-gradient(circle, rgba(133, 19, 12, 1) 30%, rgba(32, 2, 4, 1) 100%) padding-box;
+    background: radial-gradient(ellipse, rgba(133, 19, 12, 1) 30%, rgba(32, 2, 4, 1) 100%) border-box padding-box;
 }
 
 .outlineRed {
@@ -56,7 +59,7 @@
     border-image: url('/src/assets/img/buttons/outline-red.webp') 40 / 30px round;
 
     filter: drop-shadow(0 5px 20px rgba(31, 59, 65, 1));
-    background: radial-gradient(circle, rgba(31, 59, 65, 1) 0%, rgba(11, 20, 25, 1) 99%) padding-box;
+    background: radial-gradient(ellipse, rgba(31, 59, 65, 1) 0%, rgba(11, 20, 25, 1) 99%) border-box padding-box;
 }
 
 .bgImage {

@@ -108,8 +108,8 @@ export const Settings = () => {
                         options={languageOptions}
                         onChange={handleChangeLanguage}
                         isClearable
-                        isSearchable
-                        name="select-hero-class"
+                        isSearchable={false}
+                        name="select-language"
                         isDisabled={!languageOptions?.length || languageOptions.length <= 1}
                     />
 

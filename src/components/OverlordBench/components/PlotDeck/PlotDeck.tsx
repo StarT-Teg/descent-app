@@ -71,8 +71,9 @@ export const PlotDeck = () => {
                         onPlotDeckPick(option?.value)
                     }}
                     isClearable
-                    name="basic-deck"
+                    name="plot-deck"
                     placeholder={getControlTranslation('Choose Plot Deck')}
+                    isSearchable={plotDeckOptions?.length > 7}
                 />
 
                 <SuggestTranslationButton stringToTranslate={overlordPicks?.plotDeck}/>

@@ -138,6 +138,7 @@ export const CampaignSetup = () => {
                     isClearable
                     name="select-campaign"
                     placeholder={getControlTranslation(ControlsNameEnum.campaign)}
+                    isSearchable={false}
                 />
 
                 <SuggestTranslationButton stringToTranslate={campaignPicks?.selectedCampaign}
@@ -154,6 +155,7 @@ export const CampaignSetup = () => {
                 isClearable
                 name="select-act"
                 placeholder={getControlTranslation('Act')}
+                isSearchable={false}
             />
 
             <div className={styles.listRow}>
@@ -167,6 +169,7 @@ export const CampaignSetup = () => {
                     isClearable
                     name="select-mission"
                     placeholder={getControlTranslation('Mission')}
+                    isSearchable={!!availableMissions?.length && availableMissions?.length > 7}
                 />
                 <SuggestTranslationButton stringToTranslate={campaignPicks?.selectedMission}
                                           disabled={!campaignPicks?.selectedMission}/>
@@ -181,8 +184,9 @@ export const CampaignSetup = () => {
                         dispatchCampaignPicks({selectedEncounter: value?.value})
                     }}
                     isClearable
-                    name="select-mission"
+                    name="select-encounter"
                     placeholder={getControlTranslation('Encounter')}
+                    isSearchable={false}
                 />
             )}
 

@@ -177,6 +177,7 @@ export const CampaignMonsters = () => {
                                             isClearable
                                             name={`${lieutenantName}-relic-select`}
                                             placeholder={getControlTranslation('Relic')}
+                                            isSearchable={availableRelics?.length > 7}
                                         />
 
                                         <SuggestTranslationButton stringToTranslate={pickedRelic}/>
